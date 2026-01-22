@@ -30,7 +30,7 @@
     <!-- Google Fonts - Optimized Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
     
     <!-- Google tag (gtag.js) - Optimized Loading -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-168B265DQC"></script>
@@ -747,6 +747,32 @@
             color: white;
         }
         
+        /* Hero Credential Quote */
+        .hero-credential-inline {
+            margin-top: 40px;
+            position: relative;
+            padding-left: 60px;
+        }
+        
+        .hero-credential-inline .quote-mark {
+            position: absolute;
+            left: 0;
+            top: -15px;
+            font-family: 'Playfair Display', serif;
+            font-size: 100px;
+            color: #d4af37;
+            line-height: 1;
+            opacity: 0.4;
+        }
+        
+        .hero-credential-inline .credential-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e3a8a;
+            line-height: 1.5;
+        }
+        
         h3 {
             font-size: 28px;
             color: #1e3a8a;
@@ -1332,20 +1358,22 @@
         .publication-list-new {
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 20px;
         }
         
         .publication-item {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
             transition: all 0.3s;
         }
         
+        .publication-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
         .publication-item:hover {
-            transform: translateX(8px);
-            box-shadow: 0 8px 20px rgba(30, 58, 138, 0.15);
+            padding-left: 12px;
         }
         
         .pub-title {
@@ -1428,9 +1456,50 @@
             flex-direction: column;
         }
         
+        .post-card.twitter-post {
+            background: #000000;
+            color: white;
+        }
+        
+        .post-card.twitter-post .post-title {
+            color: white;
+        }
+        
+        .post-card.twitter-post .post-excerpt {
+            color: #b0b0b0;
+        }
+        
+        .post-card.twitter-post .post-platform {
+            color: white;
+        }
+        
+        .post-card.twitter-post .post-date {
+            color: #808080;
+        }
+        
+        .post-card.twitter-post .post-engagement {
+            color: #909090;
+        }
+        
+        .post-card.twitter-post .post-link {
+            color: white;
+        }
+        
+        .post-card.twitter-post .post-meta {
+            border-top-color: #333333;
+        }
+        
+        .post-card.linkedin-post {
+            border-left: 4px solid #0A66C2;
+        }
+        
         .post-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 20px rgba(30, 58, 138, 0.15);
+        }
+        
+        .post-card.twitter-post:hover {
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
         }
         
         .post-header {
@@ -2052,8 +2121,11 @@
                     PHYSICIAN | EDUCATOR | RESEARCHER
                 </div>
                 
-                <div style="margin-top: 40px; color: #4a5568; font-size: 17px; line-height: 1.8;">
-                    Triple board-certified physician advancing the field of obesity medicine through clinical research, evidence-based guideline development, and medical education.
+                <div class="hero-credential-inline">
+                    <div class="quote-mark">"</div>
+                    <div class="credential-text">
+                        Triple board-certified physician advancing the field of obesity medicine through clinical research, evidence-based guideline development, and medical education.
+                    </div>
                 </div>
             </div>
             
@@ -2303,6 +2375,18 @@
                 <a href="press.html" class="press-logo">
                     <img src="https://1000logos.net/wp-content/uploads/2017/06/Reuters-Logo.png" alt="Reuters" width="140" height="auto" loading="lazy" style="max-width: 140px; height: auto;">
                 </a>
+                <a href="press.html" class="press-logo">
+                    <img src="https://www.cblawyers.com/wp-content/uploads/2022/07/STAT-News-Logo-e1513381264810.jpeg" alt="STAT News" width="120" height="auto" loading="lazy" style="max-width: 120px; height: auto;">
+                </a>
+                <a href="press.html" class="press-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/CNBC_logo.svg/200px-CNBC_logo.svg.png" alt="CNBC" width="120" height="auto" loading="lazy" style="max-width: 120px; height: auto;">
+                </a>
+                <a href="press.html" class="press-logo">
+                    <img src="https://i.insider.com/6570dfb30ec98e92f74ce847?width=600&format=jpeg" alt="Business Insider" width="140" height="auto" loading="lazy" style="max-width: 140px; height: auto;">
+                </a>
+                <a href="press.html" class="press-logo">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiz2TbCXAG6WsLFBjS_izRWT1OkD8gUS5z7w&s" alt="New York Post" width="120" height="auto" loading="lazy" style="max-width: 120px; height: auto;">
+                </a>
             </div>
             
             <div class="press-cta fade-in-element delay-2">
@@ -2375,26 +2459,6 @@
                     <div class="pub-journal">The Lancet Diabetes & Endocrinology | March 2025</div>
                     <div class="pub-authors">Orandi B, et al. (including Weintraub MA)</div>
                 </div>
-                
-                <div class="publication-item">
-                    <h3 class="pub-title">
-                        <a href="https://pubmed.ncbi.nlm.nih.gov/36993733/" target="_blank">
-                            Sodium-Glucose Cotransporter-2 Inhibitors for Hyperglycemia in Phosphoinositide 3-kinase Pathway Inhibition
-                        </a>
-                    </h3>
-                    <div class="pub-journal">Breast Cancer Research and Treatment | August 2023</div>
-                    <div class="pub-authors">Weintraub MA, Liu D, DeMatteo R, Goncalves M, Flory J</div>
-                </div>
-                
-                <div class="publication-item">
-                    <h3 class="pub-title">
-                        <a href="https://pubmed.ncbi.nlm.nih.gov/39099569/" target="_blank">
-                            Nasal Resistance and Inflammation: Mechanisms for Obstructive Sleep Apnea from Chronic Rhinosinusitis
-                        </a>
-                    </h3>
-                    <div class="pub-journal">Journal of Clinical Sleep Medicine | October 2024</div>
-                    <div class="pub-authors">Ayappa I, et al. (including Weintraub MA)</div>
-                </div>
             </div>
             
             <div class="publication-cta fade-in-element delay-2" style="text-align: center; margin-top: 40px;">
@@ -2412,7 +2476,7 @@
             
             <div class="posts-grid">
                 <!-- Post 1 -->
-                <div class="post-card fade-in-element delay-2">
+                <div class="post-card linkedin-post fade-in-element delay-2">
                     <div class="post-header">
                         <div class="post-platform">
                             <svg width="20" height="20" fill="#0A66C2" viewBox="0 0 24 24">
@@ -2438,7 +2502,7 @@
                 </div>
 
                 <!-- Post 2 -->
-                <div class="post-card fade-in-element delay-3">
+                <div class="post-card twitter-post fade-in-element delay-3">
                     <div class="post-header">
                         <div class="post-platform">
                             <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
@@ -2464,7 +2528,7 @@
                 </div>
 
                 <!-- Post 3 -->
-                <div class="post-card fade-in-element delay-4">
+                <div class="post-card linkedin-post fade-in-element delay-4">
                     <div class="post-header">
                         <div class="post-platform">
                             <svg width="20" height="20" fill="#0A66C2" viewBox="0 0 24 24">
@@ -2490,7 +2554,7 @@
                 </div>
 
                 <!-- Post 4 -->
-                <div class="post-card fade-in-element delay-5">
+                <div class="post-card twitter-post fade-in-element delay-5">
                     <div class="post-header">
                         <div class="post-platform">
                             <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
