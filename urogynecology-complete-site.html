@@ -27,6 +27,10 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'DM Sans', sans-serif;
             color: var(--neutral-dark);
@@ -89,6 +93,35 @@
             cursor: pointer;
         }
 
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-dark);
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
         .nav-links {
             display: flex;
             gap: 35px;
@@ -113,10 +146,26 @@
             cursor: pointer;
             padding: 0;
             font-family: inherit;
+            position: relative;
+        }
+
+        .nav-links a::after, .nav-links button::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-coral);
+            transition: width 0.3s ease;
         }
 
         .nav-links a:hover, .nav-links button:hover {
             color: var(--primary-medium);
+        }
+
+        .nav-links a:hover::after, .nav-links button:hover::after {
+            width: 100%;
         }
 
         /* Dropdown */
@@ -167,6 +216,46 @@
         .dropdown-content a:hover {
             background: var(--primary-light);
             color: var(--primary-dark);
+        }
+
+        /* Mobile Menu Styles */
+        .mobile-dropdown {
+            display: none;
+            padding-left: 20px;
+            background: var(--neutral-light);
+        }
+
+        .mobile-dropdown.active {
+            display: block;
+        }
+
+        .mobile-dropdown a {
+            display: block;
+            padding: 12px 15px;
+            color: var(--neutral-dark);
+            text-decoration: none;
+            font-size: 14px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .nav-links > li > button.mobile-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .nav-links > li > button.mobile-toggle::after {
+            content: '▾';
+            transition: transform 0.3s ease;
+        }
+
+        .nav-links > li > button.mobile-toggle.active::after {
+            transform: rotate(180deg);
+        }
+
+        .desktop-arrow {
+            display: inline;
         }
 
         /* Page Content Container */
@@ -363,6 +452,33 @@
             background: linear-gradient(135deg, #FFFFFF 0%, #FCE4EC 100%);
             padding: 80px 20px 60px;
             text-align: center;
+            position: relative;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-medium);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: var(--white);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .back-button:hover {
+            background: var(--primary-light);
+            transform: translateX(-3px);
+        }
+
+        .back-button::before {
+            content: '←';
+            font-size: 18px;
         }
 
         .inner-hero h1 {
@@ -469,6 +585,688 @@
             left: 0;
             color: var(--accent-coral);
             font-weight: bold;
+        }
+
+        /* Conditions & Treatments Section on Homepage */
+        .conditions-treatments-section {
+            background: var(--neutral-light);
+            padding: 100px 20px;
+        }
+
+        .section-header-large {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            text-align: center;
+        }
+
+        .section-header-large h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 42px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .section-header-large p {
+            font-size: 18px;
+            color: var(--neutral-medium);
+        }
+
+        .subsection-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .subsection-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .subsection-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--white);
+            padding: 12px 30px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .badge-icon {
+            font-size: 24px;
+        }
+
+        .badge-text {
+            font-family: 'Crimson Pro', serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .modern-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .modern-card {
+            position: relative;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 30px 25px;
+            text-decoration: none;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .modern-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-coral), var(--accent-rose));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modern-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .modern-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(194, 24, 91, 0.15);
+            border-color: var(--primary-light);
+        }
+
+        .card-gradient {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle at top right, var(--primary-light) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .modern-card:hover .card-gradient {
+            opacity: 1;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-number {
+            font-family: 'Crimson Pro', serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-coral);
+            margin-bottom: 12px;
+            opacity: 0.7;
+        }
+
+        .modern-card h4 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+            line-height: 1.3;
+            transition: color 0.3s ease;
+        }
+
+        .modern-card:hover h4 {
+            color: var(--accent-coral);
+        }
+
+        .modern-card p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--neutral-medium);
+            margin: 0;
+        }
+
+        /* Treatment cards with different accent */
+        .treatment-card::before {
+            background: linear-gradient(90deg, var(--primary-medium), var(--primary-dark));
+        }
+
+        .treatment-card:hover {
+            box-shadow: 0 12px 35px rgba(139, 21, 56, 0.15);
+        }
+
+        .treatment-card .card-number {
+            color: var(--primary-medium);
+        }
+
+        .treatment-card:hover h4 {
+            color: var(--primary-medium);
+        }
+
+        /* Why Choose Section */
+        .why-choose-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 35px 30px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+            border-color: var(--accent-coral);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .feature-icon-professional {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-light) 0%, rgba(252, 228, 236, 0.3) 100%);
+            border-radius: 16px;
+            color: var(--accent-coral);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .feature-icon-professional::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            padding: 2px;
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-rose));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feature-card:hover .feature-icon-professional::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover .feature-icon-professional {
+            background: linear-gradient(135deg, var(--accent-coral) 0%, var(--accent-rose) 100%);
+            color: var(--white);
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .feature-icon-professional svg {
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover .feature-icon-professional svg {
+            transform: scale(1.1);
+        }
+
+        .feature-card:nth-child(1) .feature-icon-professional,
+        .feature-card:nth-child(2) .feature-icon-professional,
+        .feature-card:nth-child(3) .feature-icon-professional,
+        .feature-card:nth-child(4) .feature-icon-professional,
+        .feature-card:nth-child(5) .feature-icon-professional,
+        .feature-card:nth-child(6) .feature-icon-professional {
+            animation: none;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Scroll-triggered animations */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .scroll-animate.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .stagger-item.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Fade in from left */
+        .fade-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-left.animate-in {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Fade in from right */
+        .fade-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-right.animate-in {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Scale in animation */
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .scale-in.animate-in {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Button ripple effect */
+        .btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(0);
+            animation: ripple-animation 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Hover glow effect for cards */
+        .modern-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(233, 30, 99, 0.1) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .modern-card:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .modern-card .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Feature card pulse on hover */
+        .feature-card:hover .feature-icon {
+            animation: pulse 0.6s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Phone number pulse animation */
+        .phone-number {
+            position: relative;
+        }
+
+        .phone-number::before {
+            content: '📞';
+            margin-right: 8px;
+            display: inline-block;
+            animation: ring 2s ease-in-out infinite;
+        }
+
+        @keyframes ring {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            10%, 30% {
+                transform: rotate(-10deg);
+            }
+            20%, 40% {
+                transform: rotate(10deg);
+            }
+            50% {
+                transform: rotate(0deg);
+            }
+        }
+
+        /* Smooth section transitions */
+        section {
+            transition: opacity 0.3s ease;
+        }
+
+        /* CTA section pulse */
+        .cta-section .btn-primary {
+            animation: subtle-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes subtle-pulse {
+            0%, 100% {
+                box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+            }
+            50% {
+                box-shadow: 0 4px 25px rgba(233, 30, 99, 0.5);
+            }
+        }
+
+        /* Logo bounce on page load */
+        .logo {
+            animation: bounce-in 0.6s ease-out;
+        }
+
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Back button slide in */
+        .back-button {
+            animation: slide-in-left 0.5s ease-out;
+        }
+
+        @keyframes slide-in-left {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Hamburger menu animation */
+        .hamburger:hover span {
+            background: var(--accent-coral);
+        }
+
+        /* Card number animation */
+        .modern-card:hover .card-number {
+            transform: scale(1.2);
+            color: var(--primary-dark);
+        }
+
+        .card-number {
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        /* Feature card styles */
+            font-family: 'Crimson Pro', serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--neutral-medium);
+            margin: 0;
+        }
+
+        /* Call to Action Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-medium) 0%, var(--primary-dark) 100%);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-section h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 42px;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 35px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-large {
+            padding: 18px 45px;
+            font-size: 16px;
+        }
+
+        .cta-section .btn-secondary {
+            background: var(--white);
+            color: var(--primary-dark);
+            border: 2px solid var(--white);
+        }
+
+        .cta-section .btn-secondary:hover {
+            background: transparent;
+            color: var(--white);
+        }
+
+        /* About Page Styles */
+        .about-hero {
+            background: linear-gradient(135deg, var(--primary-light) 0%, #FFFFFF 100%);
+        }
+
+        .about-subtitle {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-coral);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .about-main-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 42px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            line-height: 1.2;
+            margin-bottom: 30px;
+        }
+
+        .about-cta {
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* Awards Section */
+        .awards-section {
+            padding: 100px 20px;
+            background: var(--neutral-light);
+        }
+
+        .awards-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .awards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .award-card {
+            background: var(--white);
+            padding: 30px 25px;
+            border-radius: 12px;
+            border: 2px solid var(--neutral-light);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .award-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-coral), var(--accent-rose));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .award-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .award-card:hover {
+            border-color: var(--accent-coral);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(194, 24, 91, 0.12);
+        }
+
+        .award-year {
+            font-family: 'Crimson Pro', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-coral);
+            margin-bottom: 12px;
+        }
+
+        .award-card h4 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .award-card p {
+            font-size: 14px;
+            color: var(--neutral-medium);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .timeline-header h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 42px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+
+        .timeline-header p {
+            font-size: 18px;
+            color: var(--neutral-medium);
         }
 
         /* Info Box */
@@ -617,19 +1415,267 @@
                 grid-template-columns: 1fr;
                 gap: 40px;
             }
+
+            .why-choose-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .modern-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .awards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
+            .hero {
+                height: auto;
+                padding: 60px 0;
+            }
+
             .hero-title {
                 font-size: 38px;
             }
 
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .inner-hero h1 {
+                font-size: 36px;
+            }
+
+            /* Mobile Navigation */
+            .hamburger {
+                display: flex;
+            }
+
+            .desktop-arrow {
+                display: none;
+            }
+
             .nav-links {
                 display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                flex-direction: column;
+                gap: 0;
+                padding: 0;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                max-height: calc(100vh - 70px);
+                overflow-y: auto;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links > li {
+                width: 100%;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .nav-links a, 
+            .nav-links button {
+                display: block;
+                width: 100%;
+                text-align: left;
+                padding: 18px 20px;
+                font-size: 15px;
+            }
+
+            .dropdown {
+                position: static;
+            }
+
+            .dropdown-content {
+                display: none !important;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
             }
 
             .form-row {
                 grid-template-columns: 1fr;
+            }
+
+            .appointment-form {
+                padding: 30px 20px;
+            }
+
+            .content-section {
+                padding: 60px 20px;
+            }
+
+            .content-section h2 {
+                font-size: 32px;
+            }
+
+            .content-section h3 {
+                font-size: 22px;
+            }
+
+            .services-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .section-header-large h2 {
+                font-size: 32px;
+            }
+
+            .column-header {
+                padding: 25px 20px;
+            }
+
+            .column-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 28px;
+            }
+
+            .column-header h3 {
+                font-size: 24px;
+            }
+
+            .service-item {
+                padding: 16px 18px;
+            }
+
+            .service-name {
+                font-size: 15px;
+            }
+
+            .modern-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .modern-card {
+                padding: 25px 20px;
+            }
+
+            .modern-card h4 {
+                font-size: 17px;
+            }
+
+            .why-choose-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .feature-card {
+                padding: 30px 25px;
+            }
+
+            .cta-section {
+                padding: 60px 20px;
+            }
+
+            .cta-section h2 {
+                font-size: 32px;
+            }
+
+            .cta-section p {
+                font-size: 18px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-large {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 32px;
+            }
+
+            .top-bar-content {
+                flex-direction: column;
+                gap: 5px;
+                text-align: center;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .inner-hero h1 {
+                font-size: 28px;
+            }
+
+            .inner-hero {
+                padding: 60px 20px 40px;
+            }
+
+            .conditions-treatments-section {
+                padding: 60px 20px;
+            }
+
+            .section-header-large {
+                margin-bottom: 40px;
+            }
+
+            .service-name {
+                font-size: 14px;
+            }
+
+            .service-arrow {
+                font-size: 18px;
+            }
+
+            .modern-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .subsection-wrapper {
+                margin-top: 60px !important;
+            }
+
+            .badge-text {
+                font-size: 18px;
+            }
+
+            .about-main-title {
+                font-size: 32px;
+            }
+
+            .about-cta {
+                flex-direction: column;
+            }
+
+            .about-cta .btn {
+                width: 100%;
+            }
+
+            .awards-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .timeline-header h2 {
+                font-size: 32px;
+            }
+
+            .awards-section {
+                padding: 60px 20px;
             }
         }
     </style>
@@ -647,11 +1693,16 @@
     <nav>
         <div class="nav-content">
             <div class="logo" onclick="showPage('home')">Central NJ Urogynecology</div>
-            <ul class="nav-links">
-                <li><a href="#" onclick="showPage('home'); return false;">Home</a></li>
-                <li><a href="#" onclick="showPage('about'); return false;">About</a></li>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" onclick="showPage('home'); closeMobileMenu(); return false;">Home</a></li>
+                <li><a href="#" onclick="showPage('about'); closeMobileMenu(); return false;">About</a></li>
                 <li class="dropdown">
-                    <button>Conditions ▾</button>
+                    <button onclick="toggleMobileDropdown('conditionsDropdown', event)" class="mobile-toggle">Conditions</button>
                     <div class="dropdown-content">
                         <a href="#" onclick="showPage('pelvic-organ-prolapse'); return false;">Pelvic Organ Prolapse</a>
                         <a href="#" onclick="showPage('urinary-leakage'); return false;">Urinary Leakage</a>
@@ -666,9 +1717,23 @@
                         <a href="#" onclick="showPage('recurrent-uti'); return false;">Recurrent UTIs</a>
                         <a href="#" onclick="showPage('bph'); return false;">Benign Prostatic Hyperplasia (BPH)</a>
                     </div>
+                    <div class="mobile-dropdown" id="conditionsDropdown">
+                        <a href="#" onclick="showPage('pelvic-organ-prolapse'); closeMobileMenu(); return false;">Pelvic Organ Prolapse</a>
+                        <a href="#" onclick="showPage('urinary-leakage'); closeMobileMenu(); return false;">Urinary Leakage</a>
+                        <a href="#" onclick="showPage('stress-urinary-incontinence'); closeMobileMenu(); return false;">Stress Urinary Incontinence</a>
+                        <a href="#" onclick="showPage('overactive-bladder'); closeMobileMenu(); return false;">Overactive Bladder</a>
+                        <a href="#" onclick="showPage('vaginal-fistula'); closeMobileMenu(); return false;">Vaginal Fistula</a>
+                        <a href="#" onclick="showPage('urethral-diverticulum'); closeMobileMenu(); return false;">Urethral Diverticulum</a>
+                        <a href="#" onclick="showPage('maternal-pelvic-floor-trauma'); closeMobileMenu(); return false;">Maternal Pelvic Floor Trauma</a>
+                        <a href="#" onclick="showPage('genitourinary-syndrome'); closeMobileMenu(); return false;">Genitourinary Syndrome of Menopause</a>
+                        <a href="#" onclick="showPage('mesh-complications'); closeMobileMenu(); return false;">Mesh Complications</a>
+                        <a href="#" onclick="showPage('urinary-retention'); closeMobileMenu(); return false;">Urinary Retention</a>
+                        <a href="#" onclick="showPage('recurrent-uti'); closeMobileMenu(); return false;">Recurrent UTIs</a>
+                        <a href="#" onclick="showPage('bph'); closeMobileMenu(); return false;">Benign Prostatic Hyperplasia (BPH)</a>
+                    </div>
                 </li>
                 <li class="dropdown">
-                    <button>Treatments ▾</button>
+                    <button onclick="toggleMobileDropdown('treatmentsDropdown', event)" class="mobile-toggle">Treatments</button>
                     <div class="dropdown-content">
                         <a href="#" onclick="showPage('robotic-surgery'); return false;">Robotic Surgery</a>
                         <a href="#" onclick="showPage('vaginal-surgery'); return false;">Vaginal Surgery</a>
@@ -679,8 +1744,18 @@
                         <a href="#" onclick="showPage('bladder-botox'); return false;">Bladder Botox</a>
                         <a href="#" onclick="showPage('tibial-nerve-stimulation'); return false;">Posterior Tibial Nerve Stimulation</a>
                     </div>
+                    <div class="mobile-dropdown" id="treatmentsDropdown">
+                        <a href="#" onclick="showPage('robotic-surgery'); closeMobileMenu(); return false;">Robotic Surgery</a>
+                        <a href="#" onclick="showPage('vaginal-surgery'); closeMobileMenu(); return false;">Vaginal Surgery</a>
+                        <a href="#" onclick="showPage('prolapse-surgery'); closeMobileMenu(); return false;">Prolapse Surgery</a>
+                        <a href="#" onclick="showPage('midurethral-sling'); closeMobileMenu(); return false;">Midurethral Sling</a>
+                        <a href="#" onclick="showPage('urethral-bulking'); closeMobileMenu(); return false;">Urethral Bulking</a>
+                        <a href="#" onclick="showPage('sacral-neuromodulation'); closeMobileMenu(); return false;">Sacral Neuromodulation</a>
+                        <a href="#" onclick="showPage('bladder-botox'); closeMobileMenu(); return false;">Bladder Botox</a>
+                        <a href="#" onclick="showPage('tibial-nerve-stimulation'); closeMobileMenu(); return false;">Posterior Tibial Nerve Stimulation</a>
+                    </div>
                 </li>
-                <li><a href="#" onclick="showPage('appointments'); return false;">Appointments</a></li>
+                <li><a href="#" onclick="showPage('appointments'); closeMobileMenu(); return false;">Appointments</a></li>
             </ul>
         </div>
     </nav>
@@ -754,11 +1829,312 @@
                 </div>
             </div>
         </section>
+
+        <!-- Conditions & Treatments Section -->
+        <section class="conditions-treatments-section">
+            <div class="section-header-large">
+                <h2>Conditions We Treat & Treatments We Offer</h2>
+                <p>Comprehensive care for a wide range of pelvic floor disorders</p>
+            </div>
+
+            <!-- Conditions Subsection -->
+            <div class="subsection-wrapper">
+                <div class="subsection-header">
+                    <div class="subsection-badge">
+                        <span class="badge-icon">🩺</span>
+                        <span class="badge-text">Conditions We Treat</span>
+                    </div>
+                </div>
+
+                <div class="modern-grid">
+                    <a href="#" onclick="showPage('pelvic-organ-prolapse'); return false;" class="modern-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">01</div>
+                            <h4>Pelvic Organ Prolapse</h4>
+                            <p>Comprehensive surgical and non-surgical treatments for prolapse</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('stress-urinary-incontinence'); return false;" class="modern-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">02</div>
+                            <h4>Stress Urinary Incontinence</h4>
+                            <p>Advanced solutions for bladder leakage during physical activity</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('overactive-bladder'); return false;" class="modern-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">03</div>
+                            <h4>Overactive Bladder</h4>
+                            <p>Modern therapies for urgency and frequency symptoms</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('urinary-leakage'); return false;" class="modern-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">04</div>
+                            <h4>Urinary Leakage</h4>
+                            <p>Personalized treatment for involuntary urine loss</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('vaginal-fistula'); return false;" class="modern-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">05</div>
+                            <h4>Vaginal Fistula</h4>
+                            <p>Expert repair of complex fistulas</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('urethral-diverticulum'); return false;" class="modern-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">06</div>
+                            <h4>Urethral Diverticulum</h4>
+                            <p>Specialized surgical treatment</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('maternal-pelvic-floor-trauma'); return false;" class="modern-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">07</div>
+                            <h4>Maternal Pelvic Floor Trauma</h4>
+                            <p>Comprehensive postpartum care</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('genitourinary-syndrome'); return false;" class="modern-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">08</div>
+                            <h4>Genitourinary Syndrome</h4>
+                            <p>Treatment for menopause-related symptoms</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('mesh-complications'); return false;" class="modern-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">09</div>
+                            <h4>Mesh Complications</h4>
+                            <p>Expert management and revision surgery</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('urinary-retention'); return false;" class="modern-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">10</div>
+                            <h4>Urinary Retention</h4>
+                            <p>Treatment for incomplete bladder emptying</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('recurrent-uti'); return false;" class="modern-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">11</div>
+                            <h4>Recurrent UTIs</h4>
+                            <p>Addressing underlying causes of infections</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('bph'); return false;" class="modern-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">12</div>
+                            <h4>Benign Prostatic Hyperplasia</h4>
+                            <p>Treatment for enlarged prostate in men</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Treatments Subsection -->
+            <div class="subsection-wrapper" style="margin-top: 80px;">
+                <div class="subsection-header">
+                    <div class="subsection-badge">
+                        <span class="badge-icon">⚕️</span>
+                        <span class="badge-text">Treatment Options</span>
+                    </div>
+                </div>
+
+                <div class="modern-grid">
+                    <a href="#" onclick="showPage('robotic-surgery'); return false;" class="modern-card treatment-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">01</div>
+                            <h4>Robotic Surgery</h4>
+                            <p>Minimally invasive precision procedures</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('vaginal-surgery'); return false;" class="modern-card treatment-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">02</div>
+                            <h4>Vaginal Surgery</h4>
+                            <p>No external incisions, faster recovery</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('prolapse-surgery'); return false;" class="modern-card treatment-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">03</div>
+                            <h4>Prolapse Surgery</h4>
+                            <p>Restoring normal organ position</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('midurethral-sling'); return false;" class="modern-card treatment-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">04</div>
+                            <h4>Midurethral Sling</h4>
+                            <p>Effective treatment for stress incontinence</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('urethral-bulking'); return false;" class="modern-card treatment-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">05</div>
+                            <h4>Urethral Bulking</h4>
+                            <p>Minimally invasive injection therapy</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('sacral-neuromodulation'); return false;" class="modern-card treatment-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">06</div>
+                            <h4>Sacral Neuromodulation</h4>
+                            <p>Advanced nerve stimulation therapy</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('bladder-botox'); return false;" class="modern-card treatment-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">07</div>
+                            <h4>Bladder Botox</h4>
+                            <p>Relaxing overactive bladder muscles</p>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="showPage('tibial-nerve-stimulation'); return false;" class="modern-card treatment-card">
+                        <div class="card-gradient"></div>
+                        <div class="card-content">
+                            <div class="card-number">08</div>
+                            <h4>Tibial Nerve Stimulation</h4>
+                            <p>Non-surgical bladder control therapy</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Dr. Tabakin Section -->
+        <section class="content-section" style="background: white;">
+            <div class="section-header-large">
+                <h2>Why Choose Dr. Tabakin</h2>
+                <p>Exceptional care backed by expertise and compassion</p>
+            </div>
+
+            <div class="why-choose-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-professional">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                        </svg>
+                    </div>
+                    <h3>Expert Training</h3>
+                    <p>Fellowship-trained in urogynecology and reconstructive pelvic surgery at prestigious institutions including Northwell Health</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-professional">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                    </div>
+                    <h3>Research Leader</h3>
+                    <p>Over 80 peer-reviewed publications and regular presentations at national conferences, staying at the forefront of medical advances</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-professional">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                    </div>
+                    <h3>Academic Excellence</h3>
+                    <p>Assistant Professor of Surgery at Rutgers Robert Wood Johnson Medical School, combining clinical practice with teaching</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-professional">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                    </div>
+                    <h3>Compassionate Care</h3>
+                    <p>Patient-centered approach focused on your unique needs, comfort, and quality of life improvements</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-professional">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                            <path d="M2 12h20"/>
+                        </svg>
+                    </div>
+                    <h3>Comprehensive Solutions</h3>
+                    <p>Full range of non-surgical and surgical treatment options, from conservative management to advanced procedures</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-professional">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <h3>Local Expertise</h3>
+                    <p>A proud New Jersey native providing world-class care right here in your community</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2>Ready to Improve Your Quality of Life?</h2>
+                <p>Schedule a consultation with Dr. Tabakin to discuss your treatment options</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary btn-large" onclick="showPage('appointments')">Schedule an Appointment</button>
+                    <a href="tel:732-235-7775" class="btn btn-secondary btn-large">Call 732-235-7775</a>
+                </div>
+            </div>
+        </section>
     </div>
 
     <!-- ABOUT PAGE -->
     <div id="about" class="page-content">
-        <div class="inner-hero">
+        <div class="inner-hero about-hero">
+            <a href="#" onclick="showPage('home'); return false;" class="back-button">Back to Home</a>
             <h1>Meet Dr. Alexandra Tabakin</h1>
             <p>Fellowship-trained urologist and urogynecologist serving Central New Jersey</p>
         </div>
@@ -770,6 +2146,9 @@
                          alt="Dr. Alexandra Tabakin">
                 </div>
                 <div>
+                    <div class="about-subtitle">About Dr. Tabakin</div>
+                    <h2 class="about-main-title">Combining Expertise with Compassionate Care</h2>
+                    
                     <p>
                         Dr. Alexandra Tabakin is a fellowship-trained urologist and urogynecologist dedicated to caring for patients throughout central New Jersey. She practices at Rutgers Robert Wood Johnson Medical School, where she serves as an Assistant Professor of Surgery in the Division of Urology. A proud New Jersey native, Dr. Tabakin is honored to provide compassionate, expert care to patients in her own community.
                     </p>
@@ -782,35 +2161,101 @@
                     <p>
                         Dr. Tabakin is a prolific researcher with over 80 peer reviewed publications and abstracts. She regularly presents at national urology and urogynecology conferences.
                     </p>
+
+                    <!-- CTA Buttons -->
+                    <div class="about-cta">
+                        <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
+                        <a href="tel:732-235-7775" class="btn btn-secondary">Call 732-235-7775</a>
+                    </div>
                 </div>
             </div>
 
-            <div class="credentials-box">
+            <!-- Education Section -->
+            <div class="credentials-box" style="margin-top: 60px;">
                 <h3>Education and Training</h3>
                 <div class="credential-item">Medical School: Rutgers Robert Wood Johnson Medical School, New Brunswick, NJ - Doctor of Medicine</div>
                 <div class="credential-item">Residency in Urology: Rutgers Robert Wood Johnson Medical School, New Brunswick, NJ</div>
                 <div class="credential-item">Fellowship in Urogynecology and Reconstructive Pelvic Surgery: Northwell Health - North Shore University Hospital and Long Island Jewish Medical Center, New Hyde Park, NY</div>
             </div>
+        </section>
 
-            <h2>Honors and Awards</h2>
-            <ul>
-                <li>Best Overall Conference Video, Society of Urodynamics Female Pelvic Medicine & Urogenital Reconstruction, 2025</li>
-                <li>Rutgers Robert Wood Johnson Medical School Urology Leadership and Service Award, 2022</li>
-                <li>American Urological Association New York Section Chief Debate Overall Champion, 2022</li>
-                <li>Humanism and Excellence in Teaching Award, 2018</li>
-                <li>Glasgow-Rubin Citation for Academic Achievement, 2017</li>
-                <li>Alpha Omega Alpha Honor Medical Society, 2016</li>
-                <li>Gold Humanism Honor Society, 2016</li>
-                <li>Henry Rutgers Scholar Award, 2013</li>
-                <li>The Duncan and Nancy MacMillan Award for Research Excellence, 2013</li>
-                <li>Phi Beta Kappa, 2012</li>
-            </ul>
+        <!-- Awards Grid -->
+        <section class="awards-section">
+            <div class="awards-container">
+                <div class="timeline-header">
+                    <h2>Honors & Awards</h2>
+                    <p>Recognized for excellence in clinical care, research, and teaching</p>
+                </div>
+
+                <div class="awards-grid">
+                    <div class="award-card">
+                        <div class="award-year">2025</div>
+                        <h4>Best Overall Conference Video</h4>
+                        <p>Society of Urodynamics Female Pelvic Medicine & Urogenital Reconstruction</p>
+                    </div>
+
+                    <div class="award-card">
+                        <div class="award-year">2022</div>
+                        <h4>Urology Leadership and Service Award</h4>
+                        <p>Rutgers Robert Wood Johnson Medical School</p>
+                    </div>
+
+                    <div class="award-card">
+                        <div class="award-year">2022</div>
+                        <h4>Overall Champion, Chief Debate</h4>
+                        <p>American Urological Association New York Section</p>
+                    </div>
+
+                    <div class="award-card">
+                        <div class="award-year">2018</div>
+                        <h4>Humanism and Excellence in Teaching Award</h4>
+                        <p>Rutgers Robert Wood Johnson Medical School</p>
+                    </div>
+
+                    <div class="award-card">
+                        <div class="award-year">2017</div>
+                        <h4>Glasgow-Rubin Citation for Academic Achievement</h4>
+                        <p>Rutgers University</p>
+                    </div>
+
+                    <div class="award-card">
+                        <div class="award-year">2016</div>
+                        <h4>Alpha Omega Alpha Honor Medical Society</h4>
+                        <p>National Medical Honor Society</p>
+                    </div>
+
+                    <div class="award-card">
+                        <div class="award-year">2016</div>
+                        <h4>Gold Humanism Honor Society</h4>
+                        <p>Recognizing compassionate patient care</p>
+                    </div>
+
+                    <div class="award-card">
+                        <div class="award-year">2013</div>
+                        <h4>Henry Rutgers Scholar Award</h4>
+                        <p>Rutgers University highest academic honor</p>
+                    </div>
+
+                    <div class="award-card">
+                        <div class="award-year">2013</div>
+                        <h4>MacMillan Award for Research Excellence</h4>
+                        <p>The Duncan and Nancy MacMillan Award</p>
+                    </div>
+
+                    <div class="award-card">
+                        <div class="award-year">2012</div>
+                        <h4>Phi Beta Kappa</h4>
+                        <p>National Honor Society</p>
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
 
     <!-- PELVIC ORGAN PROLAPSE PAGE -->
     <div id="pelvic-organ-prolapse" class="page-content">
         <div class="inner-hero">
+            <a href="#" onclick="showPage('home'); return false;" class="back-button">Back to Home</a>
             <h1>Pelvic Organ Prolapse</h1>
             <p>Comprehensive treatment for pelvic organ prolapse</p>
         </div>
@@ -1239,11 +2684,73 @@
             }
         }
 
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const hamburger = document.querySelector('.hamburger');
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const hamburger = document.querySelector('.hamburger');
+            navLinks.classList.remove('active');
+            hamburger.classList.remove('active');
+            
+            // Close all mobile dropdowns
+            document.querySelectorAll('.mobile-dropdown').forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+            document.querySelectorAll('.mobile-toggle').forEach(btn => {
+                btn.classList.remove('active');
+            });
+        }
+
+        function toggleMobileDropdown(dropdownId, event) {
+            // Only handle on mobile
+            if (window.innerWidth > 768) {
+                return;
+            }
+            
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const dropdown = document.getElementById(dropdownId);
+            const button = event.currentTarget;
+            
+            // Close other dropdowns
+            document.querySelectorAll('.mobile-dropdown').forEach(d => {
+                if (d.id !== dropdownId) {
+                    d.classList.remove('active');
+                }
+            });
+            document.querySelectorAll('.mobile-toggle').forEach(btn => {
+                if (btn !== button) {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Toggle current dropdown
+            dropdown.classList.toggle('active');
+            button.classList.toggle('active');
+        }
+
         function handleFormSubmit(event) {
             event.preventDefault();
             alert('Thank you for your appointment request! We will contact you shortly to confirm your appointment.');
             event.target.reset();
         }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const nav = document.querySelector('nav');
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
 
         // Set initial page
         showPage('home');
