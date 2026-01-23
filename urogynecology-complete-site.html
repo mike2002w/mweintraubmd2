@@ -587,169 +587,421 @@
             font-weight: bold;
         }
 
-        /* Conditions & Treatments Section on Homepage */
+
+        /* Conditions & Treatments Section - Side by Side Layout */
         .conditions-treatments-section {
             background: var(--neutral-light);
             padding: 100px 20px;
         }
 
-        .section-header-large {
+        .services-side-by-side {
             max-width: 1200px;
-            margin: 0 auto 60px;
-            text-align: center;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
         }
 
-        .section-header-large h2 {
+        .service-column {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-column:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Conditions Column - Blue Theme */
+        .conditions-column {
+            border-top: 6px solid #2196F3;
+        }
+
+        .conditions-column .column-header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #E3F2FD;
+        }
+
+        .conditions-column .column-header-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: #2196F3;
+            font-size: 36px;
+            box-shadow: 0 4px 20px rgba(33, 150, 243, 0.15);
+        }
+
+        .conditions-column .column-eyebrow {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #2196F3;
+            margin-bottom: 12px;
+        }
+
+        .conditions-column .column-title {
             font-family: 'Crimson Pro', serif;
-            font-size: 42px;
-            font-weight: 600;
-            color: var(--primary-dark);
-            margin-bottom: 15px;
+            font-size: 36px;
+            font-weight: 700;
+            color: #1976D2;
+            margin-bottom: 12px;
             line-height: 1.2;
         }
 
-        .section-header-large p {
-            font-size: 18px;
+        .conditions-column .column-description {
+            font-size: 15px;
             color: var(--neutral-medium);
-        }
-
-        .subsection-wrapper {
-            max-width: 1200px;
+            line-height: 1.6;
+            max-width: 90%;
             margin: 0 auto;
         }
 
-        .subsection-header {
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .subsection-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--white);
-            padding: 12px 30px;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        }
-
-        .badge-icon {
-            font-size: 24px;
-        }
-
-        .badge-text {
-            font-family: 'Crimson Pro', serif;
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--primary-dark);
-        }
-
-        .modern-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-        }
-
-        .modern-card {
-            position: relative;
-            background: var(--white);
-            border-radius: 16px;
-            padding: 30px 25px;
+        .conditions-column .service-link {
+            display: block;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            background: #F5F5F5;
+            border-radius: 10px;
             text-decoration: none;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid transparent;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            color: var(--neutral-dark);
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
-        .modern-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent-coral), var(--accent-rose));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .conditions-column .service-link:hover {
+            background: #E3F2FD;
+            border-left-color: #2196F3;
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
         }
 
-        .modern-card:hover::before {
-            transform: scaleX(1);
+        /* Treatments Column - Pink Theme */
+        .treatments-column {
+            border-top: 6px solid var(--accent-coral);
         }
 
-        .modern-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 35px rgba(194, 24, 91, 0.15);
-            border-color: var(--primary-light);
+        .treatments-column .column-header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid var(--primary-light);
         }
 
-        .card-gradient {
-            position: absolute;
-            top: 0;
-            right: 0;
+        .treatments-column .column-header-icon {
             width: 80px;
             height: 80px;
-            background: radial-gradient(circle at top right, var(--primary-light) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            background: linear-gradient(135deg, var(--accent-coral) 0%, var(--accent-rose) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--white);
+            font-size: 36px;
+            box-shadow: 0 4px 20px rgba(233, 30, 99, 0.3);
         }
 
-        .modern-card:hover .card-gradient {
-            opacity: 1;
+        .treatments-column .column-eyebrow {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-coral);
+            margin-bottom: 12px;
         }
 
-        .card-content {
+        .treatments-column .column-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .treatments-column .column-description {
+            font-size: 15px;
+            color: var(--neutral-medium);
+            line-height: 1.6;
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        .treatments-column .service-link {
+            display: block;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            background: var(--primary-light);
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--neutral-dark);
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .treatments-column .service-link:hover {
+            background: linear-gradient(135deg, var(--primary-light) 0%, #F8BBD0 100%);
+            border-left-color: var(--accent-coral);
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(233, 30, 99, 0.2);
+        }
+
+        .service-link-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .service-link-description {
+            font-size: 13px;
+            color: var(--neutral-medium);
+            line-height: 1.4;
+        }
+
+        /* ===== SIDE-BY-SIDE TWO COLUMN SERVICES LAYOUT ===== */
+        
+        .two-column-services {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
             position: relative;
             z-index: 2;
         }
 
-        .card-number {
-            font-family: 'Crimson Pro', serif;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--accent-coral);
-            margin-bottom: 12px;
-            opacity: 0.7;
+        .services-column {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
         }
 
-        .modern-card h4 {
+        .services-column:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .conditions-column {
+            border: 3px solid #2196F3;
+        }
+
+        .treatments-column {
+            background: linear-gradient(135deg, #FCE4EC 0%, #FFFFFF 100%);
+            border: 3px solid var(--accent-coral);
+        }
+
+        .column-header-modern {
+            text-align: center;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .column-icon-badge {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .conditions-badge {
+            background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+            color: #1976D2;
+        }
+
+        .treatments-badge {
+            background: linear-gradient(135deg, #FCE4EC, #F8BBD0);
+            color: var(--accent-coral);
+        }
+
+        .services-column:hover .column-icon-badge {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .column-header-modern h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .conditions-column h3 {
+            color: #1976D2;
+        }
+
+        .treatments-column h3 {
+            color: var(--primary-dark);
+        }
+
+        .column-header-modern p {
+            font-size: 15px;
+            color: var(--neutral-medium);
+        }
+
+        .column-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .service-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: transparent;
+            transition: background 0.3s ease;
+        }
+
+        .conditions-card {
+            border-color: #E3F2FD;
+        }
+
+        .conditions-card:hover {
+            border-color: #2196F3;
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.15);
+        }
+
+        .conditions-card:hover::before {
+            background: #2196F3;
+        }
+
+        .treatments-card {
+            border-color: #FCE4EC;
+            background: #FAFAFA;
+        }
+
+        .treatments-card:hover {
+            border-color: var(--accent-coral);
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.15);
+            background: var(--white);
+        }
+
+        .treatments-card:hover::before {
+            background: var(--accent-coral);
+        }
+
+        .card-number-small {
+            font-family: 'Crimson Pro', serif;
+            font-size: 16px;
+            font-weight: 700;
+            min-width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .conditions-card .card-number-small {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+
+        .treatments-card .card-number-small {
+            background: #FCE4EC;
+            color: var(--accent-coral);
+        }
+
+        .service-card h4 {
             font-family: 'Crimson Pro', serif;
             font-size: 18px;
             font-weight: 600;
-            color: var(--primary-dark);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             line-height: 1.3;
             transition: color 0.3s ease;
         }
 
-        .modern-card:hover h4 {
+        .conditions-card h4 {
+            color: #1976D2;
+        }
+
+        .treatments-card h4 {
+            color: var(--primary-dark);
+        }
+
+        .conditions-card:hover h4 {
+            color: #0D47A1;
+        }
+
+        .treatments-card:hover h4 {
             color: var(--accent-coral);
         }
 
-        .modern-card p {
+        .service-card p {
             font-size: 14px;
             line-height: 1.5;
             color: var(--neutral-medium);
             margin: 0;
         }
 
-        /* Treatment cards with different accent */
-        .treatment-card::before {
-            background: linear-gradient(90deg, var(--primary-medium), var(--primary-dark));
+        /* Responsive for two-column services */
+        @media (max-width: 1024px) {
+            .services-side-by-side {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
         }
 
-        .treatment-card:hover {
-            box-shadow: 0 12px 35px rgba(139, 21, 56, 0.15);
-        }
+        @media (max-width: 768px) {
+            .service-link {
+                padding: 14px 16px;
+            }
 
-        .treatment-card .card-number {
-            color: var(--primary-medium);
-        }
+            .service-column {
+                padding: 30px 20px;
+            }
 
-        .treatment-card:hover h4 {
-            color: var(--primary-medium);
+            .column-title {
+                font-size: 28px !important;
+            }
+
+            .column-header-icon {
+                width: 70px !important;
+                height: 70px !important;
+            }
+
+            .column-eyebrow {
+                font-size: 11px !important;
+            }
         }
 
         /* Why Choose Section */
@@ -846,6 +1098,151 @@
             50% {
                 transform: translateY(-10px);
             }
+        }
+
+        /* ===== OPTION B: BACKGROUND PATTERNS & DECORATIVE ELEMENTS ===== */
+        
+        /* Subtle dot pattern background */
+        .pattern-dots {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(233, 30, 99, 0.08) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        /* Geometric pattern */
+        .pattern-geometric {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(30deg, rgba(233, 30, 99, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(233, 30, 99, 0.03) 87.5%, rgba(233, 30, 99, 0.03)),
+                linear-gradient(150deg, rgba(233, 30, 99, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(233, 30, 99, 0.03) 87.5%, rgba(233, 30, 99, 0.03)),
+                linear-gradient(30deg, rgba(233, 30, 99, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(233, 30, 99, 0.03) 87.5%, rgba(233, 30, 99, 0.03)),
+                linear-gradient(150deg, rgba(233, 30, 99, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(233, 30, 99, 0.03) 87.5%, rgba(233, 30, 99, 0.03));
+            background-size: 80px 140px;
+            background-position: 0 0, 0 0, 40px 70px, 40px 70px;
+            pointer-events: none;
+        }
+
+        /* Decorative circles */
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .circle-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--accent-coral) 0%, transparent 70%);
+            top: -200px;
+            right: -100px;
+        }
+
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--accent-rose) 0%, transparent 70%);
+            bottom: -150px;
+            left: -100px;
+        }
+
+        .circle-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--primary-medium) 0%, transparent 70%);
+            top: 50%;
+            left: 10%;
+            opacity: 0.05;
+        }
+
+        /* Floating shapes */
+        .floating-shape {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.06;
+        }
+
+        .shape-square {
+            width: 60px;
+            height: 60px;
+            background: var(--accent-coral);
+            transform: rotate(45deg);
+            top: 20%;
+            right: 15%;
+            animation: float-slow 6s ease-in-out infinite;
+        }
+
+        .shape-triangle {
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 70px solid var(--primary-medium);
+            top: 60%;
+            left: 5%;
+            animation: float-slow 8s ease-in-out infinite 1s;
+        }
+
+        @keyframes float-slow {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        /* Decorative lines */
+        .decorative-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-coral), transparent);
+            opacity: 0.2;
+        }
+
+        .line-top {
+            top: 100px;
+            left: 0;
+            right: 0;
+            width: 60%;
+            margin: 0 auto;
+        }
+
+        /* Add subtle texture overlay */
+        .texture-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23E91E63' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        /* Apply patterns to sections */
+        .hero {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .conditions-treatments-section {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-section {
+            position: relative;
+            overflow: hidden;
         }
 
         /* Scroll-triggered animations */
@@ -1267,6 +1664,151 @@
         .timeline-header p {
             font-size: 18px;
             color: var(--neutral-medium);
+        }
+
+        /* Option B: Background Patterns & Decorative Elements */
+        
+        /* Subtle dot pattern background */
+        .pattern-dots {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(233, 30, 99, 0.08) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        /* Geometric pattern */
+        .pattern-geometric {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(30deg, rgba(233, 30, 99, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(233, 30, 99, 0.03) 87.5%, rgba(233, 30, 99, 0.03)),
+                linear-gradient(150deg, rgba(233, 30, 99, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(233, 30, 99, 0.03) 87.5%, rgba(233, 30, 99, 0.03)),
+                linear-gradient(30deg, rgba(233, 30, 99, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(233, 30, 99, 0.03) 87.5%, rgba(233, 30, 99, 0.03)),
+                linear-gradient(150deg, rgba(233, 30, 99, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(233, 30, 99, 0.03) 87.5%, rgba(233, 30, 99, 0.03));
+            background-size: 80px 140px;
+            background-position: 0 0, 0 0, 40px 70px, 40px 70px;
+            pointer-events: none;
+        }
+
+        /* Decorative circles */
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .circle-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--accent-coral) 0%, transparent 70%);
+            top: -200px;
+            right: -100px;
+        }
+
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--accent-rose) 0%, transparent 70%);
+            bottom: -150px;
+            left: -100px;
+        }
+
+        .circle-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--primary-medium) 0%, transparent 70%);
+            top: 50%;
+            left: 10%;
+            opacity: 0.05;
+        }
+
+        /* Floating shapes */
+        .floating-shape {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.06;
+        }
+
+        .shape-square {
+            width: 60px;
+            height: 60px;
+            background: var(--accent-coral);
+            transform: rotate(45deg);
+            top: 20%;
+            right: 15%;
+            animation: float-slow 6s ease-in-out infinite;
+        }
+
+        .shape-triangle {
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 70px solid var(--primary-medium);
+            top: 60%;
+            left: 5%;
+            animation: float-slow 8s ease-in-out infinite 1s;
+        }
+
+        @keyframes float-slow {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        /* Decorative lines */
+        .decorative-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-coral), transparent);
+            opacity: 0.2;
+        }
+
+        .line-top {
+            top: 100px;
+            left: 0;
+            right: 0;
+            width: 60%;
+            margin: 0 auto;
+        }
+
+        /* Add subtle texture overlay */
+        .texture-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23E91E63' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        /* Apply patterns to sections */
+        .hero {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .conditions-treatments-section {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-section {
+            position: relative;
+            overflow: hidden;
         }
 
         /* Info Box */
@@ -1764,6 +2306,9 @@
     <div id="home" class="page-content active">
         <!-- Hero Section -->
         <section class="hero">
+            <div class="pattern-dots"></div>
+            <div class="decorative-circle circle-1"></div>
+            <div class="floating-shape shape-square"></div>
             <div class="hero-pattern"></div>
             <div class="hero-content">
                 <div class="hero-text">
@@ -1807,6 +2352,8 @@
 
         <!-- About Preview Section -->
         <section class="content-section">
+            <div class="texture-overlay"></div>
+            <div class="decorative-circle circle-2"></div>
             <div class="two-column">
                 <div class="doctor-image-container">
                     <img src="https://static.wixstatic.com/media/a530f6_b1ea9a836f57421881b0a657270052d9~mv2.jpeg/v1/fill/w_400,h_600,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a530f6_b1ea9a836f57421881b0a657270052d9~mv2.jpeg" 
@@ -1832,211 +2379,142 @@
 
         <!-- Conditions & Treatments Section -->
         <section class="conditions-treatments-section">
+            <div class="pattern-geometric"></div>
+            <div class="decorative-circle circle-3"></div>
+            <div class="floating-shape shape-triangle"></div>
             <div class="section-header-large">
                 <h2>Conditions We Treat & Treatments We Offer</h2>
                 <p>Comprehensive care for a wide range of pelvic floor disorders</p>
             </div>
 
-            <!-- Conditions Subsection -->
-            <div class="subsection-wrapper">
-                <div class="subsection-header">
-                    <div class="subsection-badge">
-                        <span class="badge-icon">🩺</span>
-                        <span class="badge-text">Conditions We Treat</span>
+            <!-- Side-by-Side Two Column Layout -->
+            <div class="services-side-by-side">
+                <!-- Conditions Column (LEFT - Blue Theme) -->
+                <div class="service-column conditions-column">
+                    <div class="column-header">
+                        <div class="column-header-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                            </svg>
+                        </div>
+                        <div class="column-eyebrow">What We Treat</div>
+                        <h3 class="column-title">Conditions</h3>
+                        <p class="column-description">Expert diagnosis and comprehensive care for pelvic floor disorders</p>
                     </div>
-                </div>
 
-                <div class="modern-grid">
-                    <a href="#" onclick="showPage('pelvic-organ-prolapse'); return false;" class="modern-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">01</div>
-                            <h4>Pelvic Organ Prolapse</h4>
-                            <p>Comprehensive surgical and non-surgical treatments for prolapse</p>
-                        </div>
+                    <a href="#" onclick="showPage('pelvic-organ-prolapse'); return false;" class="service-link">
+                        <span class="service-link-title">Pelvic Organ Prolapse</span>
+                        <span class="service-link-description">Comprehensive surgical and non-surgical treatments</span>
                     </a>
 
-                    <a href="#" onclick="showPage('stress-urinary-incontinence'); return false;" class="modern-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">02</div>
-                            <h4>Stress Urinary Incontinence</h4>
-                            <p>Advanced solutions for bladder leakage during physical activity</p>
-                        </div>
+                    <a href="#" onclick="showPage('stress-urinary-incontinence'); return false;" class="service-link">
+                        <span class="service-link-title">Stress Urinary Incontinence</span>
+                        <span class="service-link-description">Advanced solutions for bladder leakage during physical activity</span>
                     </a>
 
-                    <a href="#" onclick="showPage('overactive-bladder'); return false;" class="modern-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">03</div>
-                            <h4>Overactive Bladder</h4>
-                            <p>Modern therapies for urgency and frequency symptoms</p>
-                        </div>
+                    <a href="#" onclick="showPage('overactive-bladder'); return false;" class="service-link">
+                        <span class="service-link-title">Overactive Bladder</span>
+                        <span class="service-link-description">Modern therapies for urgency and frequency symptoms</span>
                     </a>
 
-                    <a href="#" onclick="showPage('urinary-leakage'); return false;" class="modern-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">04</div>
-                            <h4>Urinary Leakage</h4>
-                            <p>Personalized treatment for involuntary urine loss</p>
-                        </div>
+                    <a href="#" onclick="showPage('urinary-leakage'); return false;" class="service-link">
+                        <span class="service-link-title">Urinary Leakage</span>
+                        <span class="service-link-description">Personalized treatment for involuntary urine loss</span>
                     </a>
 
-                    <a href="#" onclick="showPage('vaginal-fistula'); return false;" class="modern-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">05</div>
-                            <h4>Vaginal Fistula</h4>
-                            <p>Expert repair of complex fistulas</p>
-                        </div>
+                    <a href="#" onclick="showPage('vaginal-fistula'); return false;" class="service-link">
+                        <span class="service-link-title">Vaginal Fistula</span>
+                        <span class="service-link-description">Expert repair of complex fistulas</span>
                     </a>
 
-                    <a href="#" onclick="showPage('urethral-diverticulum'); return false;" class="modern-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">06</div>
-                            <h4>Urethral Diverticulum</h4>
-                            <p>Specialized surgical treatment</p>
-                        </div>
+                    <a href="#" onclick="showPage('urethral-diverticulum'); return false;" class="service-link">
+                        <span class="service-link-title">Urethral Diverticulum</span>
+                        <span class="service-link-description">Specialized surgical treatment</span>
                     </a>
 
-                    <a href="#" onclick="showPage('maternal-pelvic-floor-trauma'); return false;" class="modern-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">07</div>
-                            <h4>Maternal Pelvic Floor Trauma</h4>
-                            <p>Comprehensive postpartum care</p>
-                        </div>
+                    <a href="#" onclick="showPage('maternal-pelvic-floor-trauma'); return false;" class="service-link">
+                        <span class="service-link-title">Maternal Pelvic Floor Trauma</span>
+                        <span class="service-link-description">Comprehensive postpartum care</span>
                     </a>
 
-                    <a href="#" onclick="showPage('genitourinary-syndrome'); return false;" class="modern-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">08</div>
-                            <h4>Genitourinary Syndrome</h4>
-                            <p>Treatment for menopause-related symptoms</p>
-                        </div>
+                    <a href="#" onclick="showPage('genitourinary-syndrome'); return false;" class="service-link">
+                        <span class="service-link-title">Genitourinary Syndrome</span>
+                        <span class="service-link-description">Treatment for menopause-related symptoms</span>
                     </a>
 
-                    <a href="#" onclick="showPage('mesh-complications'); return false;" class="modern-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">09</div>
-                            <h4>Mesh Complications</h4>
-                            <p>Expert management and revision surgery</p>
-                        </div>
+                    <a href="#" onclick="showPage('mesh-complications'); return false;" class="service-link">
+                        <span class="service-link-title">Mesh Complications</span>
+                        <span class="service-link-description">Expert management and revision surgery</span>
                     </a>
 
-                    <a href="#" onclick="showPage('urinary-retention'); return false;" class="modern-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">10</div>
-                            <h4>Urinary Retention</h4>
-                            <p>Treatment for incomplete bladder emptying</p>
-                        </div>
+                    <a href="#" onclick="showPage('urinary-retention'); return false;" class="service-link">
+                        <span class="service-link-title">Urinary Retention</span>
+                        <span class="service-link-description">Treatment for incomplete bladder emptying</span>
                     </a>
 
-                    <a href="#" onclick="showPage('recurrent-uti'); return false;" class="modern-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">11</div>
-                            <h4>Recurrent UTIs</h4>
-                            <p>Addressing underlying causes of infections</p>
-                        </div>
+                    <a href="#" onclick="showPage('recurrent-uti'); return false;" class="service-link">
+                        <span class="service-link-title">Recurrent UTIs</span>
+                        <span class="service-link-description">Addressing underlying causes of infections</span>
                     </a>
 
-                    <a href="#" onclick="showPage('bph'); return false;" class="modern-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">12</div>
-                            <h4>Benign Prostatic Hyperplasia</h4>
-                            <p>Treatment for enlarged prostate in men</p>
-                        </div>
+                    <a href="#" onclick="showPage('bph'); return false;" class="service-link">
+                        <span class="service-link-title">Benign Prostatic Hyperplasia</span>
+                        <span class="service-link-description">Treatment for enlarged prostate in men</span>
                     </a>
                 </div>
-            </div>
 
-            <!-- Treatments Subsection -->
-            <div class="subsection-wrapper" style="margin-top: 80px;">
-                <div class="subsection-header">
-                    <div class="subsection-badge">
-                        <span class="badge-icon">⚕️</span>
-                        <span class="badge-text">Treatment Options</span>
+                <!-- Treatments Column (RIGHT - Pink Theme) -->
+                <div class="service-column treatments-column">
+                    <div class="column-header">
+                        <div class="column-header-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        </div>
+                        <div class="column-eyebrow">How We Help</div>
+                        <h3 class="column-title">Treatments</h3>
+                        <p class="column-description">Advanced surgical and non-surgical solutions tailored to you</p>
                     </div>
-                </div>
 
-                <div class="modern-grid">
-                    <a href="#" onclick="showPage('robotic-surgery'); return false;" class="modern-card treatment-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">01</div>
-                            <h4>Robotic Surgery</h4>
-                            <p>Minimally invasive precision procedures</p>
-                        </div>
+                    <a href="#" onclick="showPage('robotic-surgery'); return false;" class="service-link">
+                        <span class="service-link-title">Robotic Surgery</span>
+                        <span class="service-link-description">Minimally invasive precision procedures</span>
                     </a>
 
-                    <a href="#" onclick="showPage('vaginal-surgery'); return false;" class="modern-card treatment-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">02</div>
-                            <h4>Vaginal Surgery</h4>
-                            <p>No external incisions, faster recovery</p>
-                        </div>
+                    <a href="#" onclick="showPage('vaginal-surgery'); return false;" class="service-link">
+                        <span class="service-link-title">Vaginal Surgery</span>
+                        <span class="service-link-description">No external incisions, faster recovery</span>
                     </a>
 
-                    <a href="#" onclick="showPage('prolapse-surgery'); return false;" class="modern-card treatment-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">03</div>
-                            <h4>Prolapse Surgery</h4>
-                            <p>Restoring normal organ position</p>
-                        </div>
+                    <a href="#" onclick="showPage('prolapse-surgery'); return false;" class="service-link">
+                        <span class="service-link-title">Prolapse Surgery</span>
+                        <span class="service-link-description">Restoring normal organ position</span>
                     </a>
 
-                    <a href="#" onclick="showPage('midurethral-sling'); return false;" class="modern-card treatment-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">04</div>
-                            <h4>Midurethral Sling</h4>
-                            <p>Effective treatment for stress incontinence</p>
-                        </div>
+                    <a href="#" onclick="showPage('midurethral-sling'); return false;" class="service-link">
+                        <span class="service-link-title">Midurethral Sling</span>
+                        <span class="service-link-description">Effective treatment for stress incontinence</span>
                     </a>
 
-                    <a href="#" onclick="showPage('urethral-bulking'); return false;" class="modern-card treatment-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">05</div>
-                            <h4>Urethral Bulking</h4>
-                            <p>Minimally invasive injection therapy</p>
-                        </div>
+                    <a href="#" onclick="showPage('urethral-bulking'); return false;" class="service-link">
+                        <span class="service-link-title">Urethral Bulking</span>
+                        <span class="service-link-description">Minimally invasive injection therapy</span>
                     </a>
 
-                    <a href="#" onclick="showPage('sacral-neuromodulation'); return false;" class="modern-card treatment-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">06</div>
-                            <h4>Sacral Neuromodulation</h4>
-                            <p>Advanced nerve stimulation therapy</p>
-                        </div>
+                    <a href="#" onclick="showPage('sacral-neuromodulation'); return false;" class="service-link">
+                        <span class="service-link-title">Sacral Neuromodulation</span>
+                        <span class="service-link-description">Advanced nerve stimulation therapy</span>
                     </a>
 
-                    <a href="#" onclick="showPage('bladder-botox'); return false;" class="modern-card treatment-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">07</div>
-                            <h4>Bladder Botox</h4>
-                            <p>Relaxing overactive bladder muscles</p>
-                        </div>
+                    <a href="#" onclick="showPage('bladder-botox'); return false;" class="service-link">
+                        <span class="service-link-title">Bladder Botox</span>
+                        <span class="service-link-description">Relaxing overactive bladder muscles</span>
                     </a>
 
-                    <a href="#" onclick="showPage('tibial-nerve-stimulation'); return false;" class="modern-card treatment-card">
-                        <div class="card-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-number">08</div>
-                            <h4>Tibial Nerve Stimulation</h4>
-                            <p>Non-surgical bladder control therapy</p>
-                        </div>
+                    <a href="#" onclick="showPage('tibial-nerve-stimulation'); return false;" class="service-link">
+                        <span class="service-link-title">Tibial Nerve Stimulation</span>
+                        <span class="service-link-description">Non-surgical bladder control therapy</span>
                     </a>
                 </div>
             </div>
