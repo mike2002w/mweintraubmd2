@@ -9,12 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Balanced color palette - less intense red */
-            --primary-dark: #8B1538;
-            --primary-medium: #C2185B;
-            --primary-light: #FCE4EC;
-            --accent-coral: #E91E63;
-            --accent-rose: #F48FB1;
+            /* Purple color palette */
+            --primary-dark: #6A1B9A;
+            --primary-medium: #8E24AA;
+            --primary-light: #E1BEE7;
+            --accent-coral: #9C27B0;
+            --accent-rose: #BA68C8;
             --neutral-dark: #2C3E50;
             --neutral-medium: #5A6C7D;
             --neutral-light: #FAFAFA;
@@ -384,67 +384,37 @@
             color: var(--white);
         }
 
-        .hero-visual {
+        .hero-image {
             position: relative;
-            height: 450px;
             opacity: 0;
             animation: fadeInRight 1s ease 0.4s forwards;
-        }
-
-        .visual-card {
-            position: absolute;
-            background: var(--white);
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .card-1 {
-            top: 0;
-            left: 0;
-            width: 280px;
-            z-index: 3;
-        }
-
-        .card-2 {
-            top: 80px;
-            right: 0;
-            width: 260px;
-            z-index: 2;
-        }
-
-        .card-3 {
-            bottom: 0;
-            left: 40px;
-            width: 240px;
-            z-index: 1;
-        }
-
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--accent-coral), var(--primary-medium));
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 15px;
-            color: var(--white);
-            font-size: 24px;
         }
 
-        .card-title {
-            font-family: 'Crimson Pro', serif;
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--primary-dark);
-            margin-bottom: 10px;
+        .hero-image img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 15px 50px rgba(156, 39, 176, 0.3);
+            transition: transform 0.3s ease;
         }
 
-        .card-description {
-            font-size: 14px;
-            color: var(--neutral-medium);
-            line-height: 1.6;
+        .hero-image img:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Video preview container (replaces doctor image in About section) */
+        .video-preview-container {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(156, 39, 176, 0.2);
+            width: 100%;
+            max-width: 550px;
+            margin: 0 auto;
         }
 
         /* Inner Page Hero */
@@ -541,9 +511,9 @@
         /* Two Column Layout */
         .two-column {
             display: grid;
-            grid-template-columns: 400px 1fr;
-            gap: 80px;
-            align-items: start;
+            grid-template-columns: 550px 1fr;
+            gap: 50px;
+            align-items: center;
             margin-bottom: 60px;
         }
 
@@ -1002,6 +972,83 @@
             .column-eyebrow {
                 font-size: 11px !important;
             }
+
+            .video-title {
+                font-size: 22px;
+            }
+
+            .btn-video {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Video Player Styling */
+        .video-section {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #FAFAFA 0%, #FFFFFF 100%);
+            border-radius: 16px;
+        }
+
+        .video-label {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-coral);
+            margin-bottom: 15px;
+        }
+
+        .video-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 30px;
+        }
+
+        .video-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-container iframe {
+            border: none;
+            display: block;
+        }
+
+        /* Watch Video Button on Homepage */
+        .btn-video {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-rose));
+            color: var(--white);
+            padding: 16px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-video:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(233, 30, 99, 0.4);
+        }
+
+        .btn-video::before {
+            content: '▶';
+            font-size: 14px;
         }
 
         /* Why Choose Section */
@@ -1944,13 +1991,22 @@
                 grid-template-columns: 1fr;
             }
 
-            .hero-visual {
-                display: none;
+            .hero-image {
+                margin-top: 40px;
+            }
+
+            .hero-image img {
+                max-width: 350px;
             }
 
             .two-column {
                 grid-template-columns: 1fr;
-                gap: 50px;
+                gap: 30px;
+            }
+
+            .video-preview-container {
+                width: 100%;
+                max-width: 100%;
             }
 
             .footer-content {
@@ -2254,10 +2310,6 @@
                         <a href="#" onclick="showPage('urethral-diverticulum'); return false;">Urethral Diverticulum</a>
                         <a href="#" onclick="showPage('maternal-pelvic-floor-trauma'); return false;">Maternal Pelvic Floor Trauma</a>
                         <a href="#" onclick="showPage('genitourinary-syndrome'); return false;">Genitourinary Syndrome of Menopause</a>
-                        <a href="#" onclick="showPage('mesh-complications'); return false;">Mesh Complications</a>
-                        <a href="#" onclick="showPage('urinary-retention'); return false;">Urinary Retention</a>
-                        <a href="#" onclick="showPage('recurrent-uti'); return false;">Recurrent UTIs</a>
-                        <a href="#" onclick="showPage('bph'); return false;">Benign Prostatic Hyperplasia (BPH)</a>
                     </div>
                     <div class="mobile-dropdown" id="conditionsDropdown">
                         <a href="#" onclick="showPage('pelvic-organ-prolapse'); closeMobileMenu(); return false;">Pelvic Organ Prolapse</a>
@@ -2268,10 +2320,6 @@
                         <a href="#" onclick="showPage('urethral-diverticulum'); closeMobileMenu(); return false;">Urethral Diverticulum</a>
                         <a href="#" onclick="showPage('maternal-pelvic-floor-trauma'); closeMobileMenu(); return false;">Maternal Pelvic Floor Trauma</a>
                         <a href="#" onclick="showPage('genitourinary-syndrome'); closeMobileMenu(); return false;">Genitourinary Syndrome of Menopause</a>
-                        <a href="#" onclick="showPage('mesh-complications'); closeMobileMenu(); return false;">Mesh Complications</a>
-                        <a href="#" onclick="showPage('urinary-retention'); closeMobileMenu(); return false;">Urinary Retention</a>
-                        <a href="#" onclick="showPage('recurrent-uti'); closeMobileMenu(); return false;">Recurrent UTIs</a>
-                        <a href="#" onclick="showPage('bph'); closeMobileMenu(); return false;">Benign Prostatic Hyperplasia (BPH)</a>
                     </div>
                 </li>
                 <li class="dropdown">
@@ -2324,28 +2372,9 @@
                         <button class="btn btn-secondary" onclick="showPage('about')">Meet Dr. Tabakin</button>
                     </div>
                 </div>
-                <div class="hero-visual">
-                    <div class="visual-card card-1">
-                        <div class="card-icon">🔬</div>
-                        <div class="card-title">Research-Driven</div>
-                        <div class="card-description">
-                            Treatment approaches backed by the latest clinical evidence and academic research
-                        </div>
-                    </div>
-                    <div class="visual-card card-2">
-                        <div class="card-icon">🏥</div>
-                        <div class="card-title">Academic Excellence</div>
-                        <div class="card-description">
-                            Fellowship-trained at prestigious institutions including Northwell Health
-                        </div>
-                    </div>
-                    <div class="visual-card card-3">
-                        <div class="card-icon">💙</div>
-                        <div class="card-title">Compassionate Care</div>
-                        <div class="card-description">
-                            Personalized treatment plans tailored to your unique needs and goals
-                        </div>
-                    </div>
+                <div class="hero-image">
+                    <img src="https://static.wixstatic.com/media/a530f6_b1ea9a836f57421881b0a657270052d9~mv2.jpeg/v1/fill/w_400,h_600,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a530f6_b1ea9a836f57421881b0a657270052d9~mv2.jpeg" 
+                         alt="Dr. Alexandra Tabakin">
                 </div>
             </div>
         </section>
@@ -2355,9 +2384,10 @@
             <div class="texture-overlay"></div>
             <div class="decorative-circle circle-2"></div>
             <div class="two-column">
-                <div class="doctor-image-container">
-                    <img src="https://static.wixstatic.com/media/a530f6_b1ea9a836f57421881b0a657270052d9~mv2.jpeg/v1/fill/w_400,h_600,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/a530f6_b1ea9a836f57421881b0a657270052d9~mv2.jpeg" 
-                         alt="Dr. Alexandra Tabakin">
+                <div class="video-preview-container">
+                    <div style="padding:56.25% 0 0 0;position:relative;">
+                        <iframe src="https://player.vimeo.com/video/1158218957?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;" title="Dr. Alexandra Tabakin - About Me"></iframe>
+                    </div>
                 </div>
                 <div>
                     <h2>Meet Dr. Tabakin</h2>
@@ -2394,7 +2424,10 @@
                     <div class="column-header">
                         <div class="column-header-icon">
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                                <path d="M4.5 3h15M6 3v18M18 3v18"/>
+                                <circle cx="18" cy="15" r="2"/>
+                                <circle cx="12" cy="15" r="1"/>
+                                <path d="M18 15c0-3-2-5-6-5s-6 2-6 5"/>
                             </svg>
                         </div>
                         <div class="column-eyebrow">What We Treat</div>
@@ -2440,26 +2473,6 @@
                     <a href="#" onclick="showPage('genitourinary-syndrome'); return false;" class="service-link">
                         <span class="service-link-title">Genitourinary Syndrome</span>
                         <span class="service-link-description">Treatment for menopause-related symptoms</span>
-                    </a>
-
-                    <a href="#" onclick="showPage('mesh-complications'); return false;" class="service-link">
-                        <span class="service-link-title">Mesh Complications</span>
-                        <span class="service-link-description">Expert management and revision surgery</span>
-                    </a>
-
-                    <a href="#" onclick="showPage('urinary-retention'); return false;" class="service-link">
-                        <span class="service-link-title">Urinary Retention</span>
-                        <span class="service-link-description">Treatment for incomplete bladder emptying</span>
-                    </a>
-
-                    <a href="#" onclick="showPage('recurrent-uti'); return false;" class="service-link">
-                        <span class="service-link-title">Recurrent UTIs</span>
-                        <span class="service-link-description">Addressing underlying causes of infections</span>
-                    </a>
-
-                    <a href="#" onclick="showPage('bph'); return false;" class="service-link">
-                        <span class="service-link-title">Benign Prostatic Hyperplasia</span>
-                        <span class="service-link-description">Treatment for enlarged prostate in men</span>
                     </a>
                 </div>
 
@@ -2617,6 +2630,19 @@
             <p>Fellowship-trained urologist and urogynecologist serving Central New Jersey</p>
         </div>
         
+        <!-- Video Section -->
+        <section class="content-section" style="padding-top: 60px;">
+            <div class="video-section">
+                <div class="video-label">Get to Know Dr. Tabakin</div>
+                <h3 class="video-title">A Personal Introduction</h3>
+                <div class="video-container">
+                    <div style="padding:56.25% 0 0 0;position:relative;">
+                        <iframe src="https://player.vimeo.com/video/1158218957?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Dr. Alexandra Tabakin - About Me"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
         <section class="content-section">
             <div class="two-column">
                 <div class="doctor-image-container">
@@ -2739,6 +2765,15 @@
         </div>
         
         <section class="content-section">
+            <!-- Video Section -->
+            <div class="video-section" style="margin-bottom: 40px;">
+                <div class="video-container">
+                    <div style="padding:75% 0 0 0;position:relative;">
+                        <iframe src="https://player.vimeo.com/video/1158242883?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;" title="Dr. Tabakin Pelvic Organ Prolapse Introduction"></iframe>
+                    </div>
+                </div>
+            </div>
+            
             <h2>What is pelvic organ prolapse?</h2>
             <p>Pelvic organ prolapse refers to any of the pelvic organs— bladder, uterus, vagina or rectum—dropping from their normal position and causing pressure or creating a vaginal bulge.</p>
 
@@ -2791,6 +2826,15 @@
                 </ul>
             </div>
 
+            <!-- Second Video - Treatment Options -->
+            <div class="video-section" style="margin: 40px 0;">
+                <div class="video-container">
+                    <div style="padding:56.25% 0 0 0;position:relative;">
+                        <iframe src="https://player.vimeo.com/video/1158223779?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;" title="POP Treatment Options"></iframe>
+                    </div>
+                </div>
+            </div>
+
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -2825,32 +2869,32 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>First Name *</label>
-                            <input type="text" required>
+                            <input type="text" name="firstName" required>
                         </div>
                         <div class="form-group">
                             <label>Last Name *</label>
-                            <input type="text" required>
+                            <input type="text" name="lastName" required>
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <label>Phone *</label>
-                        <input type="tel" required>
+                        <input type="tel" name="phone" required>
                     </div>
                     
                     <div class="form-group">
                         <label>Email *</label>
-                        <input type="email" required>
+                        <input type="email" name="email" required>
                     </div>
                     
                     <div class="form-group">
                         <label>Birthday *</label>
-                        <input type="date" required>
+                        <input type="date" name="birthday" required>
                     </div>
                     
                     <div class="form-group">
                         <label>Appointment Reason *</label>
-                        <textarea required></textarea>
+                        <textarea name="reason" required></textarea>
                     </div>
                     
                     <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Request</button>
@@ -2865,7 +2909,44 @@
             <h1>Urinary Leakage</h1>
         </div>
         <section class="content-section">
-            <p>Urinary leakage, also known as urinary incontinence, is the involuntary loss of urine. This common condition affects millions of women and can significantly impact quality of life.</p>
+            <!-- Video Section -->
+            <div class="video-section" style="margin-bottom: 40px;">
+                <div class="video-container">
+                    <div style="padding:56.25% 0 0 0;position:relative;">
+                        <iframe src="https://player.vimeo.com/video/1158238522?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;" title="Urinary incontinence"></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <h2>What is urinary incontinence?</h2>
+            <p>Urinary incontinence (UI) is the uncontrollable leakage of urine. This can be caused by nerve or muscle dysfunction of the bladder, loss of support of the urethra and/or bladder, or weakened urinary sphincter.</p>
+            
+            <h2>What causes urinary incontinence, and how common is it?</h2>
+            <p>Approximately 30 percent of women in the U.S. suffer from urinary incontinence, which can affect women of all ages. Some women may be at increased risk for urinary incontinence due to:</p>
+            <ul>
+                <li>Pregnancy and childbirth (your risk increases with the number of children you have)</li>
+                <li>Menopause or aging</li>
+                <li>Being overweight or obese</li>
+                <li>Diabetes</li>
+                <li>Stroke</li>
+                <li>Prior hysterectomy (removal of uterus)</li>
+                <li>Smoking</li>
+            </ul>
+            
+            <h2>What are the types of urinary incontinence?</h2>
+            <ul>
+                <li><strong>Stress urinary incontinence:</strong> occurs most commonly when there is a weakness in urethral support or in the urinary sphincter. As a result, certain activities—such as sneezing, coughing, laughing, bending or exercising—places pressure on the bladder and causes urine to leak involuntarily.</li>
+                <li><strong>Urge urinary incontinence (also known as overactive bladder):</strong> the sudden urge to urinate, often with little or no warning. Your bladder muscles may be too active and squeeze to pass urine before you can get to the bathroom.</li>
+                <li><strong>Mixed incontinence:</strong> a combination of having stress urinary incontinence and urge urinary incontinence.</li>
+                <li><strong>Overflow incontinence:</strong> when you are unable to empty your bladder and the urine overflows or leaks out. Symptoms include frequent urination of small amounts or a constant drip.</li>
+            </ul>
+            
+            <h2>How is urinary incontinence diagnosed?</h2>
+            <p>In order to determine the type of urinary incontinence that you have, your doctor will first ask for your medical history. You should be prepared to share details of any pregnancies and deliveries you've had, as well as if you're experiencing menopause, since these can all be major causes of urinary incontinence. Your doctor will also perform a physical examination. They may also request a urinalysis to test for signs of infection or blood in your urine, or ask you to urinate in a container to measure the amount of urine you produce.</p>
+            
+            <h2>How is urinary incontinence treated?</h2>
+            <p>Treatment for urinary incontinence depends on what type of urinary incontinence you have. Generally, patients may be offered non-surgical options (such as lifestyle modifications or physical therapy) or surgical options. Based on your history, examination, lifestyle, and goals, you and your doctor will come up with a personalized plan.</p>
+            
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -2875,7 +2956,36 @@
             <h1>Stress Urinary Incontinence</h1>
         </div>
         <section class="content-section">
-            <p>Stress urinary incontinence occurs when physical movement or activity puts pressure on your bladder, causing urine leakage. This can happen during exercise, coughing, sneezing, or laughing.</p>
+            <!-- Video Section -->
+            <div class="video-section" style="margin-bottom: 40px;">
+                <div class="video-container">
+                    <div style="padding:56.25% 0 0 0;position:relative;">
+                        <iframe src="https://player.vimeo.com/video/1158237530?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;" title="SUI Treatment Options"></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <h2>What is stress urinary incontinence?</h2>
+            <p>Stress urinary incontinence means leakage of urine with activities like coughing, laughing, or sneezing. This type of urinary leakage occurs because of general wear and tear over time to the pelvic muscles. The urethra (the tube through which you urinate) looses its support from the pelvic floor muscles, causing urine to leak with activities.</p>
+            
+            <h2>How is stress urinary incontinence treated?</h2>
+            <p>The treatment for stress urinary incontinence depends on your type of prolapse, severity of symptoms, lifestyle, and treatment goals. There are non-surgical and surgical options. Your doctor will help you select the best option for you.</p>
+            
+            <p><strong>Non-surgical options include:</strong></p>
+            <ul>
+                <li>Observation</li>
+                <li>Lifestyle modifications (weight loss, anti-cough medications, etc.)</li>
+                <li>Pelvic floor physical therapy</li>
+                <li>Pessary</li>
+                <li>Intra-vaginal inserts</li>
+            </ul>
+            
+            <p><strong>Surgical options include:</strong></p>
+            <ul>
+                <li>Urethral Bulking Agent</li>
+                <li>Mid-urethral Sling</li>
+            </ul>
+            
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -2885,7 +2995,33 @@
             <h1>Overactive Bladder</h1>
         </div>
         <section class="content-section">
-            <p>Overactive bladder is characterized by a sudden, urgent need to urinate that may be difficult to control. This condition may also involve frequent urination and waking up multiple times at night to urinate.</p>
+            <h2>What is overactive bladder?</h2>
+            <p>Overactive bladder is a group of symptoms including bothersome urinary urgency, frequency, and waking up to urinate in the middle of the night. Some patients may also have leakage of urine or loss of urine control associated with the urge to urinate.</p>
+            
+            <h2>What causes OAB and how common is it?</h2>
+            <p>Approximately 20-40 percent of women in the U.S. suffer from overactive bladder, which can affect women of all ages. Some women may be at increased risk for urinary incontinence due to:</p>
+            <ul>
+                <li>Pregnancy and childbirth</li>
+                <li>Menopause or aging</li>
+                <li>Being overweight or obese</li>
+                <li>Diabetes</li>
+                <li>Stroke or other neurologic diseases</li>
+                <li>Prior hysterectomy (removal of uterus)</li>
+                <li>Smoking</li>
+            </ul>
+            
+            <h2>How is overactive bladder diagnosed?</h2>
+            <p>First, your doctor will perform a history and physical examination. While a patient history often is sufficient for a diagnosis, your doctor may request other tests including a urine test, urodynamics, or cystoscopy.</p>
+            
+            <h2>How is overactive bladder treated?</h2>
+            <p>Treating overactive bladder requires a personalized approach. Your doctor will work with you to create a treatment plan tailored to your needs.</p>
+            
+            <p>Conservative treatment for overactive bladder include behavioral modifications, such as dietary and fluid changes, and pelvic floor physical therapy.</p>
+            
+            <p>Pharmacologic treatment includes the addition of medications such as beta-3 agonists or anti-cholinergic drugs.</p>
+            
+            <p>Minimally-invasive treatment involves ambulatory procedures including <a href="#" onclick="showPage('bladder-botox'); return false;">bladder botox</a>, <a href="#" onclick="showPage('sacral-neuromodulation'); return false;">sacral neuromodulation</a>, <a href="#" onclick="showPage('tibial-nerve-stimulation'); return false;">implantable tibial nerve stimulation</a> and posterior tibial nerve stimulation.</p>
+            
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -2895,7 +3031,22 @@
             <h1>Vaginal Fistula</h1>
         </div>
         <section class="content-section">
-            <p>A vaginal fistula is an abnormal connection between the vagina and another organ, such as the bladder, urethra, or rectum. This can result in involuntary leakage of urine or stool through the vagina.</p>
+            <h2>What is a vaginal fistula?</h2>
+            <p>A vaginal fistula is an abnormal opening between the vagina and another organ. A vesicovaginal fistula is an abnormal connection between the bladder and the vagina; a rectovaginal fistula is an abnormal opening between the rectum and the vagina; an enterovaginal fistula is an abnormal opening between the small bowels and the vagina. These openings may result in incontinence.</p>
+            
+            <h2>What are the symptoms of a vaginal fistula?</h2>
+            <p>The symptoms of a vaginal fistula are urine or feces being released through the vagina. Women who have a vaginal fistula may feel embarrassed by the condition, as it can cause vaginal leakage and unpleasant smells.</p>
+            
+            <h2>What are the causes of a vaginal fistula?</h2>
+            <p>The most common cause of vaginal fistulas is prolonged labor. Fistulas can also be caused by urologic or pelvic surgery, an infection or cancer. Sometimes, conditions like Crohn's disease or diverticulitis can lead to a vaginal fistula. Accidents and traumatic injuries can also lead to a vaginal fistula.</p>
+            
+            <h2>How is a vaginal fistula treated?</h2>
+            <p>Nonsurgical treatment may be an option for some patients with this condition. For vaginal fistulas that are detected early and are less than half a centimeter in size, a catheter can often be inserted to see if the fistula will repair itself. Small, uncomplicated rectovaginal fistulas can sometimes be treated with a plug that is placed in the rectum. This is often used to treat patients who are not good surgical candidates.</p>
+            
+            <p>Vaginal fistulas are typically repaired surgically through the vagina. This procedure has the lowest risk of complication. However, depending on the location and complexity of the fistula, it may be necessary to perform the surgery through the abdomen. Repairing fistula through the abdomen can be done via robotic surgery, which typically minimizes the size of the incision and the amount of pain for the patient.</p>
+            
+            <p>If a patient presents with a clean fistula and is in good health, the success rate of fistula surgery is high. The procedure, like any surgery, does carry the risk of bleeding, infection and damage to surrounding organs.</p>
+            
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -2905,7 +3056,43 @@
             <h1>Urethral Diverticulum</h1>
         </div>
         <section class="content-section">
-            <p>A urethral diverticulum is a pouch or pocket that forms along the urethra. This condition can cause pain, recurrent urinary tract infections, and difficulties with urination.</p>
+            <h2>What is a urethral diverticulum?</h2>
+            <p>A urethral diverticulum (UD) is a condition that causes a "pocket," or an outpouching, along the urethra (the tube that connects the bladder to the outside of the body and allows for urination). Urethral diverticulum is rare, but is more common in women between the ages of 40 and 70.</p>
+            
+            <h2>What are the symptoms of a urethral diverticulum?</h2>
+            <p>Not everyone who has a urethral diverticulum will experience symptoms. However, some symptoms of a urethral diverticulum may include:</p>
+            <ul>
+                <li>Urinary urgency or frequency</li>
+                <li>Recurring urinary tract infections</li>
+                <li>Pain with urination (dysuria)</li>
+                <li>Pain with sexual intercourse (dyspareunia)</li>
+                <li>Blood in the urine</li>
+                <li>Leaking urine</li>
+                <li>Non-urine discharge</li>
+                <li>Feeling or incomplete bladder emptying after urination</li>
+                <li>Bladder pain</li>
+            </ul>
+            
+            <h2>What causes a urethral diverticulum?</h2>
+            <p>While urethral diverticulum isn't common, various factors increase the chances of having this condition. This includes frequent urinary tract infections and trauma to the area, such as obstetric trauma during delivery, including vaginal tears caused by the use of forceps or a vacuum.</p>
+            
+            <p>A urethral diverticulum can be caused by an infection of the glands that are connected to the urethra. The glands can fill with fluid or materials, which will cause the outpouching. Over time, urine may collect in that area, causing the pouch to increase in size.</p>
+            
+            <h2>How is a urethral diverticulum diagnosed?</h2>
+            <p>In women, a urethral diverticulum looks like a fist-like protrusion on the top of the vaginal wall and can be detected by your doctor during a physical exam.</p>
+            
+            <p>Because not all UDs have symptoms, a urethral diverticulum may be found during a routine exam or test for another condition. It may take some time before a urethral diverticulum is properly diagnosed.</p>
+            
+            <p>Other tools used to diagnose a UD include:</p>
+            <ul>
+                <li>MRI (magnetic resonance imaging)</li>
+                <li>Ultrasound</li>
+                <li>Tests that measure urinary tract function</li>
+            </ul>
+            
+            <h2>How is a urethral diverticulum treated?</h2>
+            <p>Urethral diverticulum is treated by a urethral diverticulectomy, in which the protrusion on the urethra is surgically removed. In some instances, the surgeon may be able to drain the contents of the sac rather than removing the UD completely. After your surgery, you will most likely need a course of antibiotics and to use a catheter for several weeks while you heal from the procedure.</p>
+            
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -2915,7 +3102,39 @@
             <h1>Maternal Pelvic Floor Trauma</h1>
         </div>
         <section class="content-section">
-            <p>Childbirth can cause trauma to the pelvic floor muscles and tissues. This may result in various conditions including prolapse, incontinence, and pelvic pain.</p>
+            <h2>What is maternal pelvic floor trauma?</h2>
+            <p>The pelvic floor muscles support the pelvic organs, which include the bladder, bowel and uterus in women. Maternal pelvic floor trauma—sometimes referred to as childbirth injury—can occur during pregnancy or delivery and encompasses a variety of complications. Stress from pregnancy and vaginal delivery puts pressure on the pelvic floor muscles, weakening them and causing conditions such as prolapse, incontinence, pelvic pain, pain with intercourse or vaginal fistula.</p>
+            
+            <h2>What are symptoms of maternal pelvic floor trauma?</h2>
+            <p>Issues stemming from maternal pelvic floor trauma can develop throughout a woman's lifetime.</p>
+            
+            <p>Symptoms for this condition can vary, and may include one or more of the following:</p>
+            <ul>
+                <li>Urinary problems—these include urine leakage when coughing, sneezing or laughing (stress incontinence).</li>
+                <li>Bowel problems—fecal incontinence from maternal pelvic floor trauma results in losing stool involuntarily.</li>
+                <li>Prolapse—women who have a prolapse will have symptoms that include pelvic pressure and a pelvic organ that bulges out of the vagina.</li>
+                <li>Pain—some women experience pain with intercourse as a result of tears or cuts to the vagina and perineum during childbirth.</li>
+            </ul>
+            
+            <h2>What causes maternal pelvic floor trauma?</h2>
+            <p>Common factors that can increase the risk of maternal pelvic floor trauma include:</p>
+            <ul>
+                <li>Pregnancy</li>
+                <li>Vaginal birth</li>
+                <li>Advanced maternal age</li>
+                <li>Delivery with forceps or vacuum</li>
+                <li>Prolonged pushing (second stage) during labor</li>
+                <li>Obesity</li>
+                <li>Delivering a large baby</li>
+                <li>Deep, excessive vaginal tears</li>
+            </ul>
+            
+            <h2>How is maternal pelvic floor trauma diagnosed?</h2>
+            <p>Pelvic floor trauma can often be diagnosed via a physical examination by your gynecologist, urogynecologist, or urologist. Depending on your symptoms and medical history, your doctor may order additional tests, such as urodynamic testing or cystoscopy (bladder testing), to properly diagnose your condition.</p>
+            
+            <h2>How is maternal pelvic floor trauma treated?</h2>
+            <p>Treatment for maternal pelvic floor trauma depends on the nature of the injury. Behavioral modification is often the first step, and physical therapy is frequently recommended to help retrain and strengthen the muscles as part of a treatment plan.</p>
+            
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -2925,7 +3144,30 @@
             <h1>Genitourinary Syndrome of Menopause</h1>
         </div>
         <section class="content-section">
-            <p>Genitourinary syndrome of menopause (GSM) involves changes to the vulva, vagina, and urinary tract due to decreased estrogen levels. Symptoms may include vaginal dryness, burning, irritation, and urinary symptoms.</p>
+            <h2>What is genitourinary syndrome of menopause?</h2>
+            <p>According to the North American Menopause Society, genitourinary syndrome of menopause (GSM) is a condition describing the symptoms and signs of decreased estrogen on the female genitourinary tract, including the vagina, labia, urethra, and bladder.</p>
+            
+            <h2>What are the symptoms of genitourinary syndrome of menopause?</h2>
+            <p>There are many symptoms of GSM, many of which mimic those of urinary tract infections. The most common symptoms include:</p>
+            <ul>
+                <li>Vaginal dryness</li>
+                <li>Vaginal burning and irritation</li>
+                <li>Burning with urination</li>
+                <li>Urinary frequency and urgency</li>
+                <li>Recurrent urinary tract infections (UTIs)</li>
+                <li>Pain and dryness with sexual activity</li>
+            </ul>
+            
+            <h2>How is genitourinary syndrome of menopause diagnosed?</h2>
+            <p>Your doctor can generally diagnose genitourinary syndrome of menopause with a history and pelvic examination. The patient history can help your doctor identify symptoms while the pelvic examination may identify findings consistent with GSM and eliminate other pathologic conditions that may cause similar symptoms.</p>
+            
+            <h2>How is genitourinary syndrome of menopause treated?</h2>
+            <p>There are number of treatment options for genitourinary syndrome of menopause.</p>
+            
+            <p>Non-hormonal treatments include vaginal lubricants or moisturizers. Many of these are over-the-counter. Your doctor can make specific recommendations to you.</p>
+            
+            <p>Hormonal treatments include vaginal estrogen, administered as either a cream or tablet with an applicator or a vaginal ring. Once prescribed, vaginal estrogen should be used as lifelong therapy. Vaginal estrogen, which is different than oral estrogen, acts locally in the vagina with only a small amount absorbed into the bloodstream. If used regularly, estrogen bloodstream levels are similar to those of postmenopausal patients not using vaginal estrogen. There are a multitude of high-quality studies demonstrating that vaginal estrogen does not increase your risk of blood clots, breast cancer, or uterine cancer. However, many studies have shown that vaginal estrogen is very effective at reducing symptoms of GSM and recurrent UTIs.</p>
+            
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -3042,7 +3284,15 @@
             <h1>Robotic Surgery</h1>
         </div>
         <section class="content-section">
-            <p>Robotic surgery offers minimally invasive treatment options for various pelvic floor disorders. This advanced surgical technique provides enhanced precision, smaller incisions, less pain, and faster recovery times compared to traditional open surgery.</p>
+            <h2>What is robotic surgery?</h2>
+            <p>Robotic-assisted surgery is a form of minimally invasive surgery, performed through a few small incisions. During robotic-assisted surgery, your surgeon controls the da Vinci surgical system through a special console in the room.</p>
+            
+            <h2>What makes robotic surgery different than open surgery?</h2>
+            <p>The da Vinci's vision capabilities give your surgeon a highly magnified, crystal-clear, 3D view while operating, so he or she can see the fine details of your surgery. Your surgeon uses tiny instruments that fit through small incisions to make precise movements and access hard-to-reach places beyond the limits of the human hand.</p>
+            
+            <h2>What are the benefits of robotic surgery to patients?</h2>
+            <p>Robotic surgery has been associated with shorter length of hospital stay, fewer complications, and lower blood loss.</p>
+            
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -3052,7 +3302,21 @@
             <h1>Vaginal Surgery</h1>
         </div>
         <section class="content-section">
-            <p>Vaginal surgery is performed through the vagina without any external incisions. This approach is often used for prolapse repair and offers the benefits of no visible scars and typically faster recovery.</p>
+            <h2>Vaginal Hysterectomy</h2>
+            <p>This method involves the surgeon removing the uterus entirely through your vagina. It does not require any incisions, but cannot be done if your uterus is too large to be safely removed through the vagina.</p>
+            
+            <h2>Uterosacral Ligament Suspension</h2>
+            <p>During a uterosacral suspension, a vaginal hysterectomy is first performed to remove the uterus. Then, the top of the vagina is lifted with sutures and attached to ligaments in the pelvis, returning the vagina to its normal position.</p>
+            
+            <h2>Sacrospinous Ligament Fixation</h2>
+            <p>A sacrospinous suspension, also known as a sacrospinous ligament fixation, is a surgery that is performed to restore support to vaginal walls that have been affected by prolapse, or a bulging that occurs in the vagina. During this procedure, an incision is made in the vagina, and the vagina is lifted up and reattached to the sacrospinous ligament (a connective tissue in the body that is attached to the lower pelvis, bottom of the spine and tailbone) with stitches.</p>
+            
+            <h2>Cystocele Repair (Dropped Bladder)</h2>
+            <p>This type of surgery lifts the bladder back into place by placing stitches in the top part of the vagina. A cystocele repair is commonly performed at the same time as a mid-urethral sling insertion for stress urinary incontinence.</p>
+            
+            <h2>Rectocele Repair</h2>
+            <p>This type of surgery lifts the rectum back into place by placing stitches in the back part of the vagina.</p>
+            
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -3062,7 +3326,24 @@
             <h1>Prolapse Surgery</h1>
         </div>
         <section class="content-section">
-            <p>Prolapse surgery aims to restore the normal position of pelvic organs that have dropped or prolapsed. Various surgical techniques are available depending on the type and severity of prolapse.</p>
+            <!-- Video Section -->
+            <div class="video-section" style="margin-bottom: 40px;">
+                <div class="video-container">
+                    <div style="padding:56.25% 0 0 0;position:relative;">
+                        <iframe src="https://player.vimeo.com/video/1158237550?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;" title="Post-Operative Instructions after Pelvic Organ Prolapse Procedure"></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <h2>How is prolapse surgery performed?</h2>
+            <p>Prolapse surgery can either be performed <a href="#" onclick="showPage('vaginal-surgery'); return false;">vaginally</a> or through a <a href="#" onclick="showPage('robotic-surgery'); return false;">robotic (laparoscopic)</a> approach. Your doctor will help you make an informed decision regarding the best type of surgery for you.</p>
+            
+            <h2>Is mesh used in surgery for prolapse?</h2>
+            <p>Mesh may or may not be used during prolapse surgery depending on the type of prolapse you have and the surgical approach your doctor performs. Your doctor will discuss surgical options with and without mesh to ensure you are well-informed.</p>
+            
+            <h2>Will I have you stay over night after surgery?</h2>
+            <p>Length of stay depends on what type of surgery you undergo. Some surgeries are done as an outpatient (go home the same day), while others require a one night overnight stay in the hospital.</p>
+            
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -3072,7 +3353,24 @@
             <h1>Midurethral Sling</h1>
         </div>
         <section class="content-section">
-            <p>A midurethral sling is a surgical procedure to treat stress urinary incontinence. A narrow strip of mesh is placed under the urethra to provide support and prevent urine leakage during physical activities.</p>
+            <h2>What is a mid-urethral sling?</h2>
+            <p>The tube connected to the bladder that allows you to urinate is called the urethra. When the support tissue below the urethra weakens, pressure from activities like coughing, sneezing and exercising cause the urethra to move up and down, opening it and allowing urine to leak out. This is known as stress incontinence.</p>
+            
+            <p>A mid-urethral sling is a mesh device surgically placed underneath the urethra to act as a supportive "hammock" so when you cough, sneeze or laugh, the urethra stays straight, in place and closed to prevent leakage. It's a minimally invasive procedure with a high success rate, and is therefore widely considered to be one of the best options when treating stress incontinence surgically.</p>
+            
+            <h2>Why is a mid-urethral sling performed?</h2>
+            <p>A mid-urethral sling is the most common surgical option for treating stress incontinence in women. The mesh does not break down in the body, which means the device holds steady over time. The procedure is minimally invasive, can be performed in about 15 to 30 minutes, and is done through a small incision in the vagina.</p>
+            
+            <p>Women who have a history of pelvic radiation or who may potentially need pelvic radiation in the future are not good candidates for a mid-urethral sling. If you've had issues with a mesh procedure before, your physicians would take this into account when considering whether to use this type of sling.</p>
+            
+            <h2>What should I expect after mid-urethral sling surgery?</h2>
+            <p>During the surgery, a small incision is made on the vaginal skin directly under the urethra. The sling is placed between the urethra and vagina, then the sling is brought up behind the pubic bone and secured. You won't be able to feel or see the mesh sling once it's in place. The incision inside the vagina is closed with stitches that dissolve over time.</p>
+            
+            <p>After the procedure, most patients are able to go home the same day. You might experience soreness, but you should be able to return to work and do normal activities within two to three weeks. Within a month of surgery, your stress incontinence symptoms should be resolved.</p>
+            
+            <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
+        </section>
+    </div>
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -3082,7 +3380,21 @@
             <h1>Urethral Bulking</h1>
         </div>
         <section class="content-section">
-            <p>Urethral bulking is a minimally invasive procedure where a bulking agent is injected around the urethra to help it close more effectively and reduce stress urinary incontinence.</p>
+            <h2>What is a urethral bulking agent?</h2>
+            <p>A urethral bulking agents is a gel-like or permanent filler-like substance that is injected into the urethra (channel through which you urinate) in order to prevent urine from leaking out.</p>
+            
+            <h2>Who may be a good candidate for a urethral bulking agent?</h2>
+            <p>Urethral bulking agents are used to treat stress urinary incontinence, which is leakage with activities such as laughing, coughing, or sneezing. This procedure will not treat urinary leakage from overactive bladder or urge incontinence. Typically, urethral bulking agents are used for women who:</p>
+            <ul>
+                <li>Have mild stress urinary incontinence</li>
+                <li>May want to consider future pregnancies</li>
+                <li>Women who do not want surgery with general anesthesia</li>
+                <li>Women who are not good candidates for surgery requiring anesthesia</li>
+            </ul>
+            
+            <h2>Where is a urethral bulking agent injection performed?</h2>
+            <p>Generally, we perform urethral bulking agent injections in the office under local anesthesia. Patients go home the same day and can immediately return back to their activities.</p>
+            
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -3092,7 +3404,34 @@
             <h1>Sacral Neuromodulation</h1>
         </div>
         <section class="content-section">
-            <p>Sacral neuromodulation involves implanting a small device that sends mild electrical pulses to the nerves that control the bladder and pelvic floor. This treatment is effective for overactive bladder and urinary retention.</p>
+            <h2>What is SNM?</h2>
+            <p>SNM is a clinically proven solution for treating symptoms of overactive bladder (including urinary urgency incontinence), bowel (fecal) incontinence and non-obstructive urinary retention.</p>
+            
+            <h2>What are the benefits of choosing SNM for my symptoms of overactive bladder, non-obstructive urinary retention, or fecal incontinence?</h2>
+            <ul>
+                <li>Small Size: Safely delivers therapy with a miniaturized implant</li>
+                <li>Long-Term Therapy: Designed to provide long-term symptom relief</li>
+                <li>Full-Body MRI: Eligible for full-body MRI under approved conditions</li>
+            </ul>
+            
+            <h2>How does SNM work?</h2>
+            <p>Sacral neuromodulation provides gentle stimulation to the nerves that control the bladder and bowel, which can restore normal control and result in symptom improvement.</p>
+            
+            <p><strong>The Evaluation Step:</strong> To see if SNM is right for you, you will undergo a short period of therapy using a temporary system. The evaluation period allows you to experience the level of symptom relief the therapy may provide before you commit to long-term therapy.</p>
+            
+            <p><strong>Long-term Therapy:</strong> If you and your doctor determine that SNM is right for you, you will have an outpatient procedure where the miniaturized SNM implant is placed just beneath the skin in the upper part of your buttock.</p>
+            
+            <h2>Who is a good candidate for SNM?</h2>
+            <p>Your doctor will help you decide if SNM is a good therapy for you. SNM is an approved treatment for patients suffering with:</p>
+            <ul>
+                <li>Overactive bladder: the urgent need to urinate which may result in frequent urination and/or incontinence (leakage) episodes</li>
+                <li>Urinary frequency: the need to urinate 8 or more times a day, which may or may not be associated with urgency</li>
+                <li>Urinary urgency incontinence (UUI): the urgent need to urinate or trouble holding urine before making it to the restroom</li>
+                <li>Fecal (bowel) incontinence: involuntary loss of stool which may or may not be associated with urgency</li>
+                <li>Non-obstructive urinary retention (UR): the inability to completely empty the bladder which may result in trouble urinating or frequent small voids</li>
+                <li>SNM may be indicated for patients who have failed conservative treatments, such as lifestyle changes, physical therapy, or medications.</li>
+            </ul>
+            
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -3102,7 +3441,22 @@
             <h1>Bladder Botox</h1>
         </div>
         <section class="content-section">
-            <p>Botox injections into the bladder muscle can help treat overactive bladder by relaxing the bladder, increasing its capacity, and reducing urgency and frequency of urination.</p>
+            <h2>What is botox, and why is it used in the bladder?</h2>
+            <p>Onabotulinum Toxin A, more commonly referred to as botox, can be used to treat both overactive bladder or neurogenic bladder.</p>
+            <ul>
+                <li>For overactive bladder patients, it is traditionally used after patients have not experienced symptoms relief with behavioral modifications and medications.</li>
+                <li>For patients with neurogenic bladder, botox injections can help relax the bladder and increase bladder capacity in order to protect the kidneys.</li>
+            </ul>
+            
+            <h2>How does bladder botox work?</h2>
+            <p>Botox is a neurotoxin that can be used to disrupt the activity of certain nerves. Injecting botox into the bladder helps to relax the bladder so that it doesn't contract as frequently. As a result, patients with overactive bladder experience less urinary frequency, urgency, and leakage episodes.</p>
+            
+            <h2>Where and how is this procedure performed?</h2>
+            <p>We perform the injections in our office as an outpatient procedure. When you arrive for your appointment, we will check your urine to ensure you don't have an infection prior to beginning. A numbing medication will be instilled into your bladder for several minutes. Then, a small camera called a cystoscope is inserted into the bladder. Then, your doctor will inject to the botox into several locations throughout the bladder-this takes about 5 minutes. You may have some minor burning with urination or blood in the urine for a few days following the procedure.</p>
+            
+            <h2>How often will I require botox injections in my bladder?</h2>
+            <p>The benefits from botox last anywhere from approximately 3 months to 1 year, with most patients needing re-injections every 6-8 months.</p>
+            
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -3112,7 +3466,25 @@
             <h1>Posterior Tibial Nerve Stimulation</h1>
         </div>
         <section class="content-section">
-            <p>Posterior tibial nerve stimulation (PTNS) is a non-surgical treatment for overactive bladder. It involves stimulating the tibial nerve near the ankle with mild electrical impulses to improve bladder control.</p>
+            <h2>What is PTNS?</h2>
+            <p>Percutaneous tibial nerve stimulation (PTNS) is an FDA-approved method of treating an overactive bladder. It is similar to electrical stimulation of the pelvic floor, but does not require a device to be inserted into the vagina. Because the tibial nerve shares some of the same nerve supply as the bladder, when this nerve is stimulated in the ankle, it can help regulate bladder function. During PTNS, a very small, fine needle (similar to an acupuncture needle) is inserted into the ankle. A low-dose nerve stimulator (similar to a TENS unit used in physical therapy) is attached; it provides a mild electrical current to stimulate the nerve ending in the ankle. This electrical pulse then blocks nerve signals that are causing the bladder to be overactive. The procedure has been proven to be safe and effective in many high-level studies.</p>
+            
+            <h2>Why is PTNS done?</h2>
+            <p>PTNS is used to treat overactive bladder. Symptoms of overactive bladder may include:</p>
+            <ul>
+                <li>The urge to urinate frequently</li>
+                <li>Nighttime trips to the bathroom</li>
+                <li>A strong urge to go to the bathroom that cannot be suppressed</li>
+                <li>Urine leakage associated with urgency symptoms</li>
+            </ul>
+            <p>An overactive bladder can occur in people of all ages, from young children to adults, but is more likely to increase with age.</p>
+            
+            <h2>How should I prepare for PTNS?</h2>
+            <p>PTNS is performed in your doctor's office on an outpatient basis. You can expect to spend around 30 minutes receiving the treatment, which is not painful. In order to have the best results, you will need to repeat the treatment every 7-10 days for a total of 8-12 treatments. Some patients return for a single maintenance session every few months. While this involves several visits, obtaining good results without medications and without a more invasive option is appealing to many women.</p>
+            
+            <h2>What should I expect after PTNS treatment?</h2>
+            <p>PTNS is well tolerated by most people. You can expect to see a marked improvement in your bladder control and a reduction in the urgent need to urinate after completing the series of percutaneous tibial nerve stimulation treatments. You may need to have an additional PTNS session after a certain period of time. This timing varies by individual but may be anywhere from several months to a year after the initial series of treatments.</p>
+            
             <button class="btn btn-primary" onclick="showPage('appointments')">Schedule a Consultation</button>
         </section>
     </div>
@@ -3215,8 +3587,44 @@
 
         function handleFormSubmit(event) {
             event.preventDefault();
-            alert('Thank you for your appointment request! We will contact you shortly to confirm your appointment.');
-            event.target.reset();
+            
+            // Get form data
+            const form = event.target;
+            const formData = {
+                firstName: form.querySelector('input[type="text"]').value,
+                lastName: form.querySelectorAll('input[type="text"]')[1].value,
+                phone: form.querySelector('input[type="tel"]').value,
+                email: form.querySelector('input[type="email"]').value,
+                birthday: form.querySelector('input[type="date"]').value,
+                reason: form.querySelector('textarea').value
+            };
+            
+            // Disable submit button
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            // Send to Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbxBtLj1e5GjEPBxlB6M786DpzWBsdlcGQu6flKJPRqs2vv-N4OfAeY8XP84QZzJud_x/exec', {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(() => {
+                alert('Thank you for your appointment request! We will contact you shortly to confirm your appointment.');
+                form.reset();
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Request';
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('There was an error submitting your request. Please call us at 732-235-7775 to schedule your appointment.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Request';
+            });
         }
 
         // Close mobile menu when clicking outside
