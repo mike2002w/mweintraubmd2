@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 60" role="img" aria-label="CME — Continuing Medical Education">
+  <circle cx="30" cy="30" r="18" fill="none" stroke="#042F33" stroke-width="2"/>
+  <path d="M30 20 L30 40 M20 30 L40 30" stroke="#14B8A6" stroke-width="3" stroke-linecap="round"/>
+  <text x="96" y="28" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="900" fill="#042F33" text-anchor="middle" letter-spacing="2">CME</text>
+  <text x="96" y="46" font-family="Arial, Helvetica, sans-serif" font-size="7" font-weight="600" fill="#64748b" text-anchor="middle" letter-spacing="0.5">CONTINUING MEDICAL EDUCATION</text>
+</svg>
