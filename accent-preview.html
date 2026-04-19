@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accent Color Preview — pick one</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f1f5f9;
+            color: #1a202c;
+            line-height: 1.5;
+            padding: 40px 20px 80px;
+        }
+        .page-header {
+            max-width: 1400px;
+            margin: 0 auto 32px;
+            padding: 0 16px;
+        }
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1e3a8a;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+        .page-header p {
+            font-size: 15px;
+            color: #4a5568;
+            max-width: 760px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        @media (min-width: 1200px) {
+            .grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        .card {
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-label {
+            padding: 18px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            background: #fafbfc;
+        }
+        .card-label-name {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #718096;
+            margin-bottom: 4px;
+        }
+        .card-label-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a202c;
+        }
+        .card-label-hex {
+            display: inline-block;
+            margin-left: 10px;
+            font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+            font-size: 13px;
+            padding: 2px 8px;
+            background: #f1f5f9;
+            border-radius: 4px;
+            color: #4a5568;
+            vertical-align: middle;
+        }
+        .swatch {
+            height: 8px;
+            width: 100%;
+        }
+        .preview-block {
+            padding: 32px 24px;
+            flex: 1;
+        }
+        /* Sample hero chunk */
+        .sample-name {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1e3a8a;
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+            margin-bottom: 10px;
+        }
+        .sample-divider {
+            width: 50px;
+            height: 3px;
+            margin: 14px 0 16px;
+        }
+        .sample-subtitle {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .sample-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 22px;
+        }
+        .sample-chip {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 5px 10px;
+            border-radius: 4px;
+            border-width: 1px;
+            border-style: solid;
+        }
+        .sample-para {
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 20px;
+            line-height: 1.55;
+        }
+        .sample-cta {
+            display: inline-block;
+            padding: 12px 22px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            color: white;
+            text-decoration: none;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            transition: opacity 0.2s;
+        }
+        .sample-cta:hover { opacity: 0.9; }
+        .sample-cta-ghost {
+            display: inline-block;
+            padding: 11px 21px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            background: white;
+            text-decoration: none;
+            border-width: 2px;
+            border-style: solid;
+            margin-bottom: 8px;
+        }
+        .sample-section-header {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1e3a8a;
+            padding-bottom: 10px;
+            border-bottom-width: 3px;
+            border-bottom-style: solid;
+            margin: 28px 0 14px;
+        }
+        .sample-link {
+            font-weight: 700;
+            text-decoration: none;
+            border-bottom: 2px solid currentColor;
+            padding-bottom: 1px;
+        }
+        .read-note {
+            margin-top: 22px;
+            padding: 14px 16px;
+            background: #f8fafc;
+            border-left: 3px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+        .read-note strong { color: #1a202c; }
+
+        /* ---------- Palette: Warm Clay (#C4613D) ---------- */
+        .p-clay .swatch { background: #C4613D; }
+        .p-clay .sample-divider { background: #C4613D; }
+        .p-clay .sample-subtitle { color: #C4613D; }
+        .p-clay .sample-chip { color: #C4613D; background: #FBECE5; border-color: #F5D4C4; }
+        .p-clay .sample-cta { background: #C4613D; }
+        .p-clay .sample-cta-ghost { color: #C4613D; border-color: #C4613D; }
+        .p-clay .sample-section-header { border-bottom-color: #C4613D; }
+        .p-clay .sample-link { color: #C4613D; }
+
+        /* ---------- Palette: Muted Teal (#1F6F73) ---------- */
+        .p-teal .swatch { background: #1F6F73; }
+        .p-teal .sample-divider { background: #1F6F73; }
+        .p-teal .sample-subtitle { color: #1F6F73; }
+        .p-teal .sample-chip { color: #1F6F73; background: #E2F0F1; border-color: #B9D9DB; }
+        .p-teal .sample-cta { background: #1F6F73; }
+        .p-teal .sample-cta-ghost { color: #1F6F73; border-color: #1F6F73; }
+        .p-teal .sample-section-header { border-bottom-color: #1F6F73; }
+        .p-teal .sample-link { color: #1F6F73; }
+
+        /* ---------- Palette: Deep Mustard (#C9962A) ---------- */
+        .p-mustard .swatch { background: #C9962A; }
+        .p-mustard .sample-divider { background: #C9962A; }
+        .p-mustard .sample-subtitle { color: #B07F17; }
+        .p-mustard .sample-chip { color: #8F6610; background: #FBF1D5; border-color: #E8D394; }
+        .p-mustard .sample-cta { background: #C9962A; }
+        .p-mustard .sample-cta-ghost { color: #8F6610; border-color: #C9962A; }
+        .p-mustard .sample-section-header { border-bottom-color: #C9962A; }
+        .p-mustard .sample-link { color: #8F6610; }
+
+        /* ---------- Palette: Rich Burgundy (#7A2E3F) ---------- */
+        .p-burgundy .swatch { background: #7A2E3F; }
+        .p-burgundy .sample-divider { background: #7A2E3F; }
+        .p-burgundy .sample-subtitle { color: #7A2E3F; }
+        .p-burgundy .sample-chip { color: #7A2E3F; background: #F6E6EA; border-color: #D9B0BA; }
+        .p-burgundy .sample-cta { background: #7A2E3F; }
+        .p-burgundy .sample-cta-ghost { color: #7A2E3F; border-color: #7A2E3F; }
+        .p-burgundy .sample-section-header { border-bottom-color: #7A2E3F; }
+        .p-burgundy .sample-link { color: #7A2E3F; }
+
+        .decide {
+            max-width: 1400px;
+            margin: 48px auto 0;
+            padding: 24px 28px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .decide h2 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1a202c;
+            margin-bottom: 10px;
+        }
+        .decide p {
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <h1>Accent color — side-by-side preview</h1>
+        <p>Each card applies the candidate accent to the elements where it would actually live: the
+        <em>Endocrinology · Obesity Medicine</em> subtitle, credential chips, primary CTA buttons,
+        section header underline, and text links. Navy (<code>#1e3a8a</code>) stays as the dominant color;
+        the accent is the supporting 10-15%.</p>
+    </header>
+
+    <section class="grid" aria-label="Accent color candidates">
+
+        <!-- ============ Warm Clay ============ -->
+        <div class="card p-clay">
+            <div class="swatch"></div>
+            <div class="card-label">
+                <div class="card-label-name">Option 1</div>
+                <div class="card-label-title">Warm Clay <span class="card-label-hex">#C4613D</span></div>
+            </div>
+            <div class="preview-block">
+                <div class="sample-name">Michael<br>Weintraub, MD</div>
+                <div class="sample-divider"></div>
+                <div class="sample-subtitle">Endocrinology · Obesity Medicine</div>
+                <div class="sample-chips">
+                    <span class="sample-chip">NEJM Faculty</span>
+                    <span class="sample-chip">Endocrine Society Co-Chair</span>
+                    <span class="sample-chip">NYU Langone</span>
+                </div>
+                <p class="sample-para">Triple board-certified physician advancing obesity medicine through clinical research and evidence-based guideline development.</p>
+                <a href="#" class="sample-cta">Contact for Media</a>
+                <a href="#" class="sample-cta-ghost">Industry Inquiries</a>
+                <h3 class="sample-section-header">Publications</h3>
+                <p class="sample-para">See the <a href="#" class="sample-link">full publication list</a> including recent work in Lancet Diabetes & Endocrinology.</p>
+                <div class="read-note"><strong>Reads:</strong> warm, human, Mediterranean-editorial. Softens the navy — approachable without losing authority.</div>
+            </div>
+        </div>
+
+        <!-- ============ Muted Teal ============ -->
+        <div class="card p-teal">
+            <div class="swatch"></div>
+            <div class="card-label">
+                <div class="card-label-name">Option 2</div>
+                <div class="card-label-title">Muted Teal <span class="card-label-hex">#1F6F73</span></div>
+            </div>
+            <div class="preview-block">
+                <div class="sample-name">Michael<br>Weintraub, MD</div>
+                <div class="sample-divider"></div>
+                <div class="sample-subtitle">Endocrinology · Obesity Medicine</div>
+                <div class="sample-chips">
+                    <span class="sample-chip">NEJM Faculty</span>
+                    <span class="sample-chip">Endocrine Society Co-Chair</span>
+                    <span class="sample-chip">NYU Langone</span>
+                </div>
+                <p class="sample-para">Triple board-certified physician advancing obesity medicine through clinical research and evidence-based guideline development.</p>
+                <a href="#" class="sample-cta">Contact for Media</a>
+                <a href="#" class="sample-cta-ghost">Industry Inquiries</a>
+                <h3 class="sample-section-header">Publications</h3>
+                <p class="sample-para">See the <a href="#" class="sample-link">full publication list</a> including recent work in Lancet Diabetes & Endocrinology.</p>
+                <div class="read-note"><strong>Reads:</strong> modern, sophisticated, biotech-adjacent. Safe-but-distinctive — plays well with navy.</div>
+            </div>
+        </div>
+
+        <!-- ============ Deep Mustard ============ -->
+        <div class="card p-mustard">
+            <div class="swatch"></div>
+            <div class="card-label">
+                <div class="card-label-name">Option 3</div>
+                <div class="card-label-title">Deep Mustard <span class="card-label-hex">#C9962A</span></div>
+            </div>
+            <div class="preview-block">
+                <div class="sample-name">Michael<br>Weintraub, MD</div>
+                <div class="sample-divider"></div>
+                <div class="sample-subtitle">Endocrinology · Obesity Medicine</div>
+                <div class="sample-chips">
+                    <span class="sample-chip">NEJM Faculty</span>
+                    <span class="sample-chip">Endocrine Society Co-Chair</span>
+                    <span class="sample-chip">NYU Langone</span>
+                </div>
+                <p class="sample-para">Triple board-certified physician advancing obesity medicine through clinical research and evidence-based guideline development.</p>
+                <a href="#" class="sample-cta">Contact for Media</a>
+                <a href="#" class="sample-cta-ghost">Industry Inquiries</a>
+                <h3 class="sample-section-header">Publications</h3>
+                <p class="sample-para">See the <a href="#" class="sample-link">full publication list</a> including recent work in Lancet Diabetes & Endocrinology.</p>
+                <div class="read-note"><strong>Reads:</strong> premium, editorial, faculty-confident. Evokes FT / Economist-style seriousness.</div>
+            </div>
+        </div>
+
+        <!-- ============ Rich Burgundy ============ -->
+        <div class="card p-burgundy">
+            <div class="swatch"></div>
+            <div class="card-label">
+                <div class="card-label-name">Option 4</div>
+                <div class="card-label-title">Rich Burgundy <span class="card-label-hex">#7A2E3F</span></div>
+            </div>
+            <div class="preview-block">
+                <div class="sample-name">Michael<br>Weintraub, MD</div>
+                <div class="sample-divider"></div>
+                <div class="sample-subtitle">Endocrinology · Obesity Medicine</div>
+                <div class="sample-chips">
+                    <span class="sample-chip">NEJM Faculty</span>
+                    <span class="sample-chip">Endocrine Society Co-Chair</span>
+                    <span class="sample-chip">NYU Langone</span>
+                </div>
+                <p class="sample-para">Triple board-certified physician advancing obesity medicine through clinical research and evidence-based guideline development.</p>
+                <a href="#" class="sample-cta">Contact for Media</a>
+                <a href="#" class="sample-cta-ghost">Industry Inquiries</a>
+                <h3 class="sample-section-header">Publications</h3>
+                <p class="sample-para">See the <a href="#" class="sample-link">full publication list</a> including recent work in Lancet Diabetes & Endocrinology.</p>
+                <div class="read-note"><strong>Reads:</strong> authoritative, institutional, faculty-hall. Serious without being somber — if used sparingly.</div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="decide">
+        <h2>How to pick</h2>
+        <p>1. Scan all four. Which card feels <em>most like you</em> when you imagine a journalist or pharma scout landing on it?</p>
+        <p>2. Don't over-think contrast or readability — each palette is already tuned for AA contrast.</p>
+        <p>3. Tell me the number (1, 2, 3, or 4). I'll roll the accent into the live site across the CTAs, subtitle, chips, section headers, and link-hover states.</p>
+        <p style="margin-top: 14px; font-size: 13px; color: #64748b;">Reminder: this preview page is standalone — it won't ship to production. You can delete it anytime.</p>
+    </section>
+</body>
+</html>
