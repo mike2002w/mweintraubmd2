@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="PraWHIjHHTYuLBGGTl2gYxESYMesRnWOwNk9ytu2cSk" />
     <meta name="description" content="Dr. Michael A. Weintraub - Board-certified endocrinologist and obesity medicine specialist. Co-Chair of Endocrine Society Guidelines, NEJM Faculty, clinical researcher.">
-    <meta name="keywords" content="obesity medicine, endocrinology, GLP-1, diabetes, weight management, clinical research">
     <meta name="author" content="Dr. Michael A. Weintraub">
     
     <!-- Canonical URL -->
@@ -23,87 +22,107 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://michaelweintraubmd.com/images/weintraub-headshot-800.jpg">
 
-    <!-- Structured data: Physician -->
+    <!-- Structured data: Physician + practice clinic -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Physician",
-      "@id": "https://michaelweintraubmd.com/#michaelweintraub",
-      "name": "Michael A. Weintraub, MD",
-      "givenName": "Michael",
-      "familyName": "Weintraub",
-      "honorificSuffix": "MD",
-      "jobTitle": "Endocrinologist & Obesity Medicine Specialist",
-      "description": "Triple board-certified physician (endocrinology, internal medicine, obesity medicine). Co-Chair of the Endocrine Society guideline on pharmacologic management of obesity, NEJM Faculty, and clinical researcher focused on GLP-1 therapies and metabolic disease.",
-      "url": "https://michaelweintraubmd.com/",
-      "image": "https://michaelweintraubmd.com/images/weintraub-headshot-800.jpg",
-      "email": "michaelweintraubmd@gmail.com",
-      "medicalSpecialty": ["Endocrine", "InternalMedicine"],
-      "knowsAbout": [
-        "Obesity Medicine",
-        "Obesity Pharmacotherapy",
-        "GLP-1 Receptor Agonists",
-        "Type 2 Diabetes",
-        "Metabolic Health",
-        "Weight Management",
-        "Endocrinology",
-        "Thyroid Disorders",
-        "Adrenal Disorders",
-        "Pituitary Disorders"
-      ],
-      "alumniOf": [
-        {"@type": "CollegeOrUniversity", "name": "University of Pennsylvania", "sameAs": "https://www.upenn.edu/"},
-        {"@type": "CollegeOrUniversity", "name": "The Wharton School", "sameAs": "https://www.wharton.upenn.edu/"},
-        {"@type": "CollegeOrUniversity", "name": "Rutgers Robert Wood Johnson Medical School", "sameAs": "https://rwjms.rutgers.edu/"},
-        {"@type": "Hospital", "name": "Thomas Jefferson University Hospital"},
-        {"@type": "Hospital", "name": "NewYork-Presbyterian / Weill Cornell Medical Center"},
-        {"@type": "MedicalOrganization", "name": "Memorial Sloan Kettering Cancer Center"}
-      ],
-      "hasCredential": [
+      "@graph": [
         {
-          "@type": "EducationalOccupationalCredential",
-          "credentialCategory": "Board Certification",
-          "name": "Endocrinology, Diabetes & Metabolism",
-          "recognizedBy": {"@type": "Organization", "name": "American Board of Internal Medicine"}
+          "@type": "Physician",
+          "@id": "https://michaelweintraubmd.com/#michaelweintraub",
+          "name": "Michael A. Weintraub, MD",
+          "givenName": "Michael",
+          "familyName": "Weintraub",
+          "honorificSuffix": "MD",
+          "jobTitle": "Endocrinologist & Obesity Medicine Specialist",
+          "description": "Triple board-certified physician (endocrinology, internal medicine, obesity medicine). Co-Chair of the Endocrine Society guideline on pharmacologic management of obesity, NEJM Faculty, and clinical researcher focused on GLP-1 therapies and metabolic disease.",
+          "url": "https://michaelweintraubmd.com/",
+          "image": "https://michaelweintraubmd.com/images/weintraub-headshot-800.jpg",
+          "email": "michaelweintraubmd@gmail.com",
+          "medicalSpecialty": ["Endocrine", "InternalMedicine"],
+          "knowsAbout": [
+            "Obesity Medicine",
+            "Obesity Pharmacotherapy",
+            "GLP-1 Receptor Agonists",
+            "Type 2 Diabetes",
+            "Metabolic Health",
+            "Weight Management",
+            "Endocrinology",
+            "Thyroid Disorders",
+            "Adrenal Disorders",
+            "Pituitary Disorders"
+          ],
+          "alumniOf": [
+            {"@type": "CollegeOrUniversity", "name": "University of Pennsylvania", "sameAs": "https://www.upenn.edu/"},
+            {"@type": "CollegeOrUniversity", "name": "The Wharton School", "sameAs": "https://www.wharton.upenn.edu/"},
+            {"@type": "CollegeOrUniversity", "name": "Rutgers Robert Wood Johnson Medical School", "sameAs": "https://rwjms.rutgers.edu/"},
+            {"@type": "Hospital", "name": "Thomas Jefferson University Hospital"},
+            {"@type": "Hospital", "name": "NewYork-Presbyterian / Weill Cornell Medical Center"},
+            {"@type": "MedicalOrganization", "name": "Memorial Sloan Kettering Cancer Center"}
+          ],
+          "hasCredential": [
+            {
+              "@type": "EducationalOccupationalCredential",
+              "credentialCategory": "Board Certification",
+              "name": "Endocrinology, Diabetes & Metabolism",
+              "recognizedBy": {"@type": "Organization", "name": "American Board of Internal Medicine"}
+            },
+            {
+              "@type": "EducationalOccupationalCredential",
+              "credentialCategory": "Board Certification",
+              "name": "Obesity Medicine",
+              "recognizedBy": {"@type": "Organization", "name": "American Board of Obesity Medicine"}
+            },
+            {
+              "@type": "EducationalOccupationalCredential",
+              "credentialCategory": "Board Certification",
+              "name": "Internal Medicine",
+              "recognizedBy": {"@type": "Organization", "name": "American Board of Internal Medicine"}
+            }
+          ],
+          "memberOf": [
+            {"@type": "Organization", "name": "Endocrine Society"},
+            {"@type": "Organization", "name": "American Board of Obesity Medicine"}
+          ],
+          "worksFor": {"@id": "https://michaelweintraubmd.com/#clinic"},
+          "workLocation": {"@id": "https://michaelweintraubmd.com/#clinic"},
+          "identifier": [
+            {"@type": "PropertyValue", "propertyID": "ORCID", "value": "0000-0001-9599-9184"}
+          ],
+          "sameAs": [
+            "https://www.linkedin.com/in/michaelameerweintraub/",
+            "https://x.com/MWeintraubMD",
+            "https://orcid.org/0000-0001-9599-9184",
+            "https://scholar.google.com/citations?user=G9qngpQAAAAJ&hl=en"
+          ]
         },
         {
-          "@type": "EducationalOccupationalCredential",
-          "credentialCategory": "Board Certification",
-          "name": "Obesity Medicine",
-          "recognizedBy": {"@type": "Organization", "name": "American Board of Obesity Medicine"}
-        },
-        {
-          "@type": "EducationalOccupationalCredential",
-          "credentialCategory": "Board Certification",
-          "name": "Internal Medicine",
-          "recognizedBy": {"@type": "Organization", "name": "American Board of Internal Medicine"}
+          "@type": "MedicalClinic",
+          "@id": "https://michaelweintraubmd.com/#clinic",
+          "name": "NYU Langone Diabetes & Endocrine Associates",
+          "parentOrganization": {
+            "@type": "MedicalOrganization",
+            "name": "NYU Langone Health",
+            "url": "https://nyulangone.org/"
+          },
+          "url": "https://michaelweintraubmd.com/#location",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "222 East 41st Street, 23rd Floor",
+            "addressLocality": "New York",
+            "addressRegion": "NY",
+            "postalCode": "10017",
+            "addressCountry": "US"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 40.7499,
+            "longitude": -73.9742
+          },
+          "medicalSpecialty": ["Endocrine", "InternalMedicine"],
+          "physician": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"},
+          "hasMap": "https://www.google.com/maps/search/?api=1&query=222+East+41st+Street+New+York+NY+10017"
         }
-      ],
-      "memberOf": [
-        {"@type": "Organization", "name": "Endocrine Society"},
-        {"@type": "Organization", "name": "American Board of Obesity Medicine"}
-      ],
-      "worksFor": {
-        "@type": "MedicalOrganization",
-        "name": "NYU Langone Diabetes & Endocrine Associates",
-        "parentOrganization": {"@type": "MedicalOrganization", "name": "NYU Langone Health"},
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "222 East 41st Street, 23rd Floor",
-          "addressLocality": "New York",
-          "addressRegion": "NY",
-          "postalCode": "10017",
-          "addressCountry": "US"
-        }
-      },
-      "identifier": [
-        {"@type": "PropertyValue", "propertyID": "ORCID", "value": "0000-0001-9599-9184"}
-      ],
-      "sameAs": [
-        "https://www.linkedin.com/in/michaelameerweintraub/",
-        "https://x.com/MWeintraubMD",
-        "https://orcid.org/0000-0001-9599-9184",
-        "https://scholar.google.com/citations?user=G9qngpQAAAAJ&hl=en"
       ]
     }
     </script>
