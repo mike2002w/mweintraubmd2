@@ -319,6 +319,116 @@
             text-decoration: underline;
         }
         
+        /* Filter bar — search + year + type chips */
+        .filter-bar {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 20px 20px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+        }
+        .filter-bar .container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .filter-search {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #042F33;
+            background: #f8fafc;
+            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+        }
+        .filter-search:focus {
+            outline: none;
+            border-color: #14B8A6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+        }
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .filter-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #718096;
+            min-width: 42px;
+        }
+        .filter-chips {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .filter-chip {
+            border: 1px solid #e2e8f0;
+            background: white;
+            color: #4a5568;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+        .filter-chip:hover {
+            border-color: #14B8A6;
+            color: #0E8377;
+        }
+        .filter-chip.active {
+            background: #14B8A6;
+            border-color: #14B8A6;
+            color: white;
+        }
+        .filter-chip-count {
+            opacity: 0.75;
+            margin-left: 4px;
+            font-weight: 500;
+        }
+        .filter-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+        .filter-count { color: #4a5568; font-weight: 500; }
+        .filter-clear {
+            background: none;
+            border: none;
+            color: #0E8377;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        .filter-clear:hover { background: #F0FDF9; }
+        .filter-no-results {
+            padding: 60px 20px;
+            text-align: center;
+            color: #718096;
+            font-size: 15px;
+        }
+        .filter-hidden { display: none !important; }
+        @media (max-width: 600px) {
+            .filter-bar { padding: 14px 16px; position: static; }
+            .filter-row { align-items: flex-start; }
+            .filter-label { min-width: 0; }
+        }
+
         /* Footer */
         .press-footer {
             background: #042F33;
@@ -400,7 +510,31 @@
         </div>
     </div>
     
-    <div class="press-section">
+    <!-- Filter bar -->
+    <section class="filter-bar" aria-label="Filter press coverage">
+        <div class="container">
+            <input type="search" class="filter-search" placeholder="Search by title or outlet..." aria-label="Search press coverage" autocomplete="off">
+            <div class="filter-row">
+                <span class="filter-label">Year</span>
+                <div class="filter-chips" data-filter-chips="year"></div>
+            </div>
+            <div class="filter-row">
+                <span class="filter-label">Type</span>
+                <div class="filter-chips" data-filter-chips="type">
+                    <button class="filter-chip active" data-value="all" type="button">All</button>
+                    <button class="filter-chip" data-value="tv" type="button">TV / Video</button>
+                    <button class="filter-chip" data-value="podcast" type="button">Podcast / Radio</button>
+                    <button class="filter-chip" data-value="article" type="button">Article</button>
+                </div>
+            </div>
+            <div class="filter-status">
+                <span class="filter-count" data-filter-count>Showing all 42</span>
+                <button class="filter-clear" data-filter-clear type="button" hidden>Clear filters ✕</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="press-section" data-filterable>
         <div class="container">
             <h2>Live Media Appearances</h2>
             
@@ -445,7 +579,7 @@
                 <div class="press-date">September 2025</div>
             </div>
             
-            <div class="press-item">
+            <div class="press-item" data-type="tv">
                 <div class="press-outlet">Metabolic Care Today</div>
                 <div class="press-title">Orforglipron Phase 3 Data: Dr. Michael Weintraub Reviews ATTAIN-1 and ACHIEVE-1 Findings</div>
                 <div class="press-date">August 2025</div>
@@ -741,6 +875,138 @@
                 }
             });
         }
+
+        // Filter: search + year chips + type chips with URL hash state
+        (function initFilter() {
+            const search = document.querySelector('.filter-search');
+            const yearContainer = document.querySelector('[data-filter-chips="year"]');
+            const typeContainer = document.querySelector('[data-filter-chips="type"]');
+            const countEl = document.querySelector('[data-filter-count]');
+            const clearBtn = document.querySelector('[data-filter-clear]');
+            if (!search || !yearContainer || !typeContainer || !countEl) return;
+
+            const items = Array.from(document.querySelectorAll('.press-item, .pub-item'));
+            if (items.length === 0) return;
+
+            // Annotate each item with filter metadata
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.dataset.filterText = text;
+                const yearMatch = text.match(/\b(19|20)\d{2}\b/g);
+                if (yearMatch) item.dataset.filterYear = yearMatch[yearMatch.length - 1];
+                // Type: honor data-type attribute if present, otherwise auto-detect
+                if (!item.dataset.type) {
+                    const section = item.closest('[data-section-type]');
+                    if (section) {
+                        item.dataset.type = section.dataset.sectionType;
+                    } else {
+                        const href = (item.querySelector('a[href]') || {}).href || '';
+                        const isYouTube = /youtube\.com|youtu\.be/.test(href);
+                        const hasPodcastKw = /(podcast|sirius\s?xm|radio)/.test(text);
+                        if (hasPodcastKw) item.dataset.type = 'podcast';
+                        else if (isYouTube) item.dataset.type = 'tv';
+                        else item.dataset.type = 'article';
+                    }
+                }
+            });
+
+            // Build year chips (descending)
+            const years = Array.from(new Set(items.map(i => i.dataset.filterYear).filter(Boolean))).sort().reverse();
+            const yearAllChip = '<button class="filter-chip active" data-value="all" type="button">All</button>';
+            yearContainer.innerHTML = yearAllChip + years.map(y => {
+                const count = items.filter(i => i.dataset.filterYear === y).length;
+                return '<button class="filter-chip" data-value="' + y + '" type="button">' + y + '<span class="filter-chip-count">·' + count + '</span></button>';
+            }).join('');
+
+            const state = { year: 'all', type: 'all', q: '' };
+
+            function apply() {
+                let shown = 0;
+                items.forEach(item => {
+                    const okY = state.year === 'all' || item.dataset.filterYear === state.year;
+                    const okT = state.type === 'all' || item.dataset.type === state.type;
+                    const okQ = !state.q || item.dataset.filterText.includes(state.q);
+                    const visible = okY && okT && okQ;
+                    item.classList.toggle('filter-hidden', !visible);
+                    if (visible) shown++;
+                });
+                countEl.textContent = shown === items.length
+                    ? 'Showing all ' + items.length
+                    : 'Showing ' + shown + ' of ' + items.length;
+                const active = state.year !== 'all' || state.type !== 'all' || !!state.q;
+                clearBtn.hidden = !active;
+
+                // Hide empty year group headers (publications page only)
+                document.querySelectorAll('.pub-year-header').forEach(h => {
+                    const m = h.textContent.match(/\b(19|20)\d{2}\b/);
+                    if (!m) return;
+                    const y = m[0];
+                    const any = items.some(i => i.dataset.filterYear === y && !i.classList.contains('filter-hidden'));
+                    h.classList.toggle('filter-hidden', !any);
+                });
+
+                // Hide empty sections
+                document.querySelectorAll('.press-section, .pub-section').forEach(sec => {
+                    const secItems = sec.querySelectorAll('.press-item, .pub-item');
+                    if (secItems.length === 0) return;
+                    const any = Array.from(secItems).some(i => !i.classList.contains('filter-hidden'));
+                    sec.classList.toggle('filter-hidden', !any);
+                });
+
+                // Update URL hash
+                const params = new URLSearchParams();
+                if (state.year !== 'all') params.set('year', state.year);
+                if (state.type !== 'all') params.set('type', state.type);
+                if (state.q) params.set('q', state.q);
+                const qs = params.toString();
+                history.replaceState(null, '', location.pathname + (qs ? '#' + qs : ''));
+            }
+
+            function setActive(container, value) {
+                container.querySelectorAll('.filter-chip').forEach(c => {
+                    c.classList.toggle('active', c.dataset.value === value);
+                });
+            }
+
+            // Event listeners
+            search.addEventListener('input', () => {
+                state.q = search.value.toLowerCase().trim();
+                apply();
+            });
+            yearContainer.addEventListener('click', (e) => {
+                const chip = e.target.closest('.filter-chip');
+                if (!chip) return;
+                state.year = chip.dataset.value;
+                setActive(yearContainer, state.year);
+                apply();
+            });
+            typeContainer.addEventListener('click', (e) => {
+                const chip = e.target.closest('.filter-chip');
+                if (!chip) return;
+                state.type = chip.dataset.value;
+                setActive(typeContainer, state.type);
+                apply();
+            });
+            clearBtn.addEventListener('click', () => {
+                state.year = 'all'; state.type = 'all'; state.q = '';
+                search.value = '';
+                setActive(yearContainer, 'all');
+                setActive(typeContainer, 'all');
+                apply();
+            });
+
+            // Restore state from URL hash
+            const hash = location.hash.slice(1);
+            if (hash) {
+                const p = new URLSearchParams(hash);
+                const y = p.get('year'); const t = p.get('type'); const q = p.get('q');
+                if (y) { state.year = y; setActive(yearContainer, y); }
+                if (t) { state.type = t; setActive(typeContainer, t); }
+                if (q) { state.q = q; search.value = q; }
+            }
+
+            apply();
+        })();
 
         // GA4 event tracking: contact clicks + outbound link clicks
         document.addEventListener('click', (e) => {
