@@ -80,7 +80,32 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        /* Skip-to-content link (WCAG 2.4.1) */
+        .skip-to-content {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            background: #1e3a8a;
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-weight: 700;
+            z-index: 10000;
+        }
+        .skip-to-content:focus {
+            left: 10px;
+            top: 10px;
+        }
+
+        /* Visible focus outlines (WCAG 2.4.7) */
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid #3b82f6;
+            outline-offset: 3px;
+            border-radius: 2px;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
@@ -262,7 +287,8 @@
     </style>
 </head>
 <body>
-    
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
     <!-- Top Navigation -->
     <nav class="top-nav" aria-label="Site navigation">
         <div class="container" style="justify-content: flex-end; gap: 28px;">
@@ -271,7 +297,8 @@
             <a href="publications.html" class="back-link" aria-current="page" style="color: #1e3a8a; font-weight: 700;">Publications</a>
         </div>
     </nav>
-    
+
+    <main id="main-content">
     <!-- Header -->
     <header>
         <div class="container">
@@ -682,7 +709,8 @@
         </section>
         
     </div>
-    
+    </main>
+
     <!-- Footer -->
     <footer>
         <p>© <span id="easterEggTrigger" style="cursor: pointer; user-select: none; transition: opacity 0.1s;">2026</span> Dr. Michael A. Weintraub. All rights reserved.</p>

@@ -9,7 +9,14 @@
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://michaelweintraubmd.com/" />
-    
+
+    <!-- Preload hero image (LCP optimization) -->
+    <link rel="preload" as="image" href="images/weintraub-headshot-800.webp" imagesrcset="images/weintraub-headshot-400.webp 400w, images/weintraub-headshot-800.webp 800w" imagesizes="(max-width: 768px) 350px, 500px" type="image/webp">
+
+    <!-- DNS prefetch for third-party embeds -->
+    <link rel="dns-prefetch" href="https://www.google.com">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+
     <!-- Open Graph / Social Media -->
     <meta property="og:title" content="Dr. Michael A. Weintraub - Endocrinology & Obesity Medicine">
     <meta property="og:description" content="Triple board-certified physician advancing obesity medicine through clinical research and evidence-based education.">
@@ -151,7 +158,34 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        /* Skip-to-content link (WCAG 2.4.1) */
+        .skip-to-content {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            background: #1e3a8a;
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-weight: 700;
+            z-index: 10000;
+        }
+        .skip-to-content:focus {
+            left: 10px;
+            top: 10px;
+        }
+
+        /* Visible focus outlines (WCAG 2.4.7) */
+        a:focus-visible,
+        button:focus-visible,
+        [role="button"]:focus-visible,
+        .educator-tab:focus-visible {
+            outline: 3px solid #3b82f6;
+            outline-offset: 3px;
+            border-radius: 2px;
+        }
+
         html {
             scroll-behavior: smooth;
         }
@@ -262,6 +296,8 @@
             gap: 5px;
             cursor: pointer;
             padding: 5px;
+            background: transparent;
+            border: none;
         }
         
         .mobile-menu-toggle span {
@@ -1894,16 +1930,18 @@
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
     <!-- Sticky Navigation -->
     <nav class="nav-container" id="stickyNav">
         <div class="nav-content">
             <div class="nav-logo">Dr. Michael Weintraub</div>
             
-            <div class="mobile-menu-toggle" id="mobileMenuToggle">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navMenu" type="button">
                 <span></span>
                 <span></span>
                 <span></span>
-            </div>
+            </button>
             
             <ul class="nav-menu" id="navMenu">
                 <li><a href="#home" class="nav-link">Home</a></li>
@@ -1939,7 +1977,8 @@
             <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
         </svg>
     </button>
-    
+
+    <main id="main-content">
     <section class="section section-hero section-hero-bg" id="home">
         <div class="hero-grid">
             <div class="hero-text animate-slide-in-left">
@@ -2221,10 +2260,11 @@
                         </a>
                     </div>
                     <div class="location-map">
-                        <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.6558707934945!2d-73.97558492346565!3d40.750071671385654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a7c760e5a7%3A0x4b3c3d3c3c3c3c3c!2s222%20E%2041st%20St%2C%20New%20York%2C%20NY%2010017!5e0!3m2!1sen!2sus!4v1704999999999!5m2!1sen!2sus" 
-                            allowfullscreen="" 
-                            loading="lazy" 
+                        <iframe
+                            title="Map of NYU Langone Diabetes & Endocrine Associates at 222 East 41st Street, New York, NY"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.6558707934945!2d-73.97558492346565!3d40.750071671385654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a7c760e5a7%3A0x4b3c3d3c3c3c3c3c!2s222%20E%2041st%20St%2C%20New%20York%2C%20NY%2010017!5e0!3m2!1sen!2sus!4v1704999999999!5m2!1sen!2sus"
+                            allowfullscreen=""
+                            loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade">
                         </iframe>
                     </div>
@@ -2442,7 +2482,8 @@
             </div>
         </div>
     </section>
-    
+    </main>
+
     <!-- Footer -->
     <footer style="background: #1e3a8a; color: white; padding: 40px 20px; text-align: center;">
         <div class="container">
@@ -2680,17 +2721,19 @@
             });
         });
         
-        // Mobile menu toggle
+        // Mobile menu toggle (with aria-expanded for accessibility)
         mobileMenuToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('mobile-open');
+            const isOpen = navMenu.classList.toggle('mobile-open');
             mobileMenuToggle.classList.toggle('active');
+            mobileMenuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         });
-        
+
         // Close mobile menu when clicking outside
         document.addEventListener('click', (e) => {
             if (!navMenu.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
                 navMenu.classList.remove('mobile-open');
                 mobileMenuToggle.classList.remove('active');
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
             }
         });
         

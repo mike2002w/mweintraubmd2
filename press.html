@@ -103,7 +103,32 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        /* Skip-to-content link (WCAG 2.4.1) */
+        .skip-to-content {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            background: #1e3a8a;
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-weight: 700;
+            z-index: 10000;
+        }
+        .skip-to-content:focus {
+            left: 10px;
+            top: 10px;
+        }
+
+        /* Visible focus outlines (WCAG 2.4.7) */
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid #3b82f6;
+            outline-offset: 3px;
+            border-radius: 2px;
+        }
+
         html {
             scroll-behavior: smooth;
         }
@@ -256,7 +281,8 @@
     </style>
 </head>
 <body>
-    
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
     <!-- Top Navigation -->
     <nav aria-label="Site navigation" style="background: white; border-bottom: 1px solid #e2e8f0; padding: 15px 0;">
         <div class="container" style="display: flex; justify-content: flex-end; gap: 28px; align-items: center;">
@@ -265,7 +291,8 @@
             <a href="publications.html" style="color: #3b82f6; text-decoration: none; font-weight: 600; font-size: 14px;">Publications</a>
         </div>
     </nav>
-    
+
+    <main id="main-content">
     <div class="press-header">
         <div class="container">
             <h1>Press & Media</h1>
@@ -573,7 +600,8 @@
             </div>
         </div>
     </div>
-    
+    </main>
+
     <div class="press-footer">
         <div class="container">
             <p>© <span id="easterEggTrigger" style="cursor: pointer; user-select: none; transition: opacity 0.1s;">2026</span> Dr. Michael A. Weintraub. All rights reserved.</p>
