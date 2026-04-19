@@ -192,6 +192,73 @@
             opacity: 1;
         }
         
+        /* Featured recent coverage — highlights above the main list */
+        .featured-coverage {
+            padding: 32px 20px 8px;
+            background: white;
+        }
+        .featured-coverage-heading {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1e3a8a;
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #1F6F73;
+            letter-spacing: -0.01em;
+        }
+        .featured-coverage-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .featured-card {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+        }
+        .featured-card:hover {
+            border-color: #1F6F73;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+        }
+        .featured-card-outlet {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1F6F73;
+            margin-bottom: 8px;
+        }
+        .featured-card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a202c;
+            line-height: 1.4;
+            flex: 1;
+            margin-bottom: 14px;
+        }
+        .featured-card-date {
+            font-size: 12px;
+            color: #718096;
+            margin-bottom: 6px;
+        }
+        .featured-card-cta {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1F6F73;
+        }
+        @media (max-width: 768px) {
+            .featured-coverage-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Press Sections */
         .press-section {
             padding: 40px 20px;
@@ -293,6 +360,34 @@
     </nav>
 
     <main id="main-content">
+
+    <!-- Featured recent coverage -->
+    <section class="featured-coverage" aria-label="Featured recent coverage">
+        <div class="container">
+            <h2 class="featured-coverage-heading">Featured Recent Coverage</h2>
+            <div class="featured-coverage-grid">
+                <a href="https://time.com/7017001/tirzepatide-zepbound-weight-loss-drug-diabetes/" target="_blank" rel="noopener" class="featured-card">
+                    <div class="featured-card-outlet">TIME Magazine</div>
+                    <div class="featured-card-title">The weight loss drug that can prevent diabetes</div>
+                    <div class="featured-card-date">September 2024</div>
+                    <span class="featured-card-cta">Read article →</span>
+                </a>
+                <a href="https://www.hcplive.com/view/glp-1-discontinuation-results-in-significant-weight-regain-with-michael-weintraub-md" target="_blank" rel="noopener" class="featured-card">
+                    <div class="featured-card-outlet">HCPLive</div>
+                    <div class="featured-card-title">GLP-1 Discontinuation Results in Significant Weight Regain, With Michael Weintraub, MD</div>
+                    <div class="featured-card-date">January 2026</div>
+                    <span class="featured-card-cta">Read article →</span>
+                </a>
+                <a href="https://www.cbsnews.com/news/weight-loss-drugs-appetite-smoking-side-effects/" target="_blank" rel="noopener" class="featured-card">
+                    <div class="featured-card-outlet">CBS News</div>
+                    <div class="featured-card-title">Can weight loss drugs curb more than appetite?</div>
+                    <div class="featured-card-date">August 2024</div>
+                    <span class="featured-card-cta">Read article →</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <div class="press-header">
         <div class="container">
             <h1>Press & Media</h1>
@@ -630,5 +725,36 @@
                 clickTimer = setTimeout(() => {
                     clickCount = 0;
                 }, 2000);
-                
-                if (clickC
+
+                if (clickCount === 5) {
+                    clickCount = 0;
+                    clearTimeout(clickTimer);
+                    window.location.href = 'index.html#myspace';
+                }
+            });
+        }
+
+        // GA4 event tracking: contact clicks + outbound link clicks
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a');
+            if (!link || typeof gtag !== 'function') return;
+            const href = link.getAttribute('href') || '';
+            if (href.startsWith('mailto:')) {
+                gtag('event', 'contact_click', {
+                    method: 'email',
+                    page_path: location.pathname
+                });
+            } else if (href.startsWith('http') && !href.startsWith(location.origin)) {
+                try {
+                    const url = new URL(href);
+                    gtag('event', 'outbound_link', {
+                        link_url: href,
+                        link_domain: url.hostname,
+                        page_path: location.pathname
+                    });
+                } catch (err) { /* ignore malformed URLs */ }
+            }
+        });
+    </script>
+</body>
+</html>
