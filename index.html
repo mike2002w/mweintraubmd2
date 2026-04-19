@@ -232,9 +232,10 @@
         
         .nav-logo {
             font-size: 20px;
-            font-weight: 700;
+            font-weight: 800;
             color: #1e3a8a;
-            font-family: 'Georgia', serif;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.01em;
         }
         
         .nav-menu {
@@ -362,86 +363,66 @@
         }
         
         .animate-fade-in {
-            animation: fadeIn 1s ease-out;
+            animation: fadeIn 0.5s ease-out;
         }
-        
+
         .animate-fade-in-up {
-            animation: fadeInUp 0.8s ease-out;
+            animation: fadeInUp 0.4s ease-out;
         }
-        
+
         .animate-slide-in-left {
-            animation: slideInLeft 0.8s ease-out;
+            animation: slideInLeft 0.4s ease-out;
         }
-        
+
         .animate-slide-in-right {
-            animation: slideInRight 0.8s ease-out;
+            animation: slideInRight 0.4s ease-out;
         }
-        
-        .stagger-1 {
-            animation-delay: 0.1s;
-            opacity: 0;
-            animation-fill-mode: forwards;
-        }
-        
-        .stagger-2 {
-            animation-delay: 0.2s;
-            opacity: 0;
-            animation-fill-mode: forwards;
-        }
-        
-        .stagger-3 {
-            animation-delay: 0.3s;
-            opacity: 0;
-            animation-fill-mode: forwards;
-        }
-        
-        .stagger-4 {
-            animation-delay: 0.4s;
-            opacity: 0;
-            animation-fill-mode: forwards;
-        }
-        
-        /* Scroll-triggered fade-in animations */
+
+        .stagger-1 { animation-delay: 0.05s; opacity: 0; animation-fill-mode: forwards; }
+        .stagger-2 { animation-delay: 0.1s;  opacity: 0; animation-fill-mode: forwards; }
+        .stagger-3 { animation-delay: 0.15s; opacity: 0; animation-fill-mode: forwards; }
+        .stagger-4 { animation-delay: 0.2s;  opacity: 0; animation-fill-mode: forwards; }
+
+        /* Scroll-triggered fade-in animations — snappier than the previous 0.8s/30px defaults */
         .fade-in-section {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transform: translateY(15px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
         }
-        
+
         .fade-in-section.is-visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         .fade-in-element {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
         }
-        
+
         .fade-in-element.is-visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
-        .delay-1 {
-            transition-delay: 0.1s;
-        }
-        
-        .delay-2 {
-            transition-delay: 0.2s;
-        }
-        
-        .delay-3 {
-            transition-delay: 0.3s;
-        }
-        
-        .delay-4 {
-            transition-delay: 0.4s;
-        }
-        
-        .delay-5 {
-            transition-delay: 0.5s;
+
+        .delay-1 { transition-delay: 0.05s; }
+        .delay-2 { transition-delay: 0.1s; }
+        .delay-3 { transition-delay: 0.15s; }
+        .delay-4 { transition-delay: 0.2s; }
+        .delay-5 { transition-delay: 0.25s; }
+
+        /* Respect prefers-reduced-motion — skip all decorative animations */
+        @media (prefers-reduced-motion: reduce) {
+            .animate-fade-in, .animate-fade-in-up,
+            .animate-slide-in-left, .animate-slide-in-right {
+                animation: none;
+            }
+            .fade-in-section, .fade-in-element {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
         }
         
         .social-icons-top {
@@ -552,10 +533,11 @@
         .hero-text h1 {
             font-size: 72px;
             margin-bottom: 0;
-            font-weight: 700;
-            line-height: 1.1;
+            font-weight: 800;
+            line-height: 1.05;
             color: #1e3a8a;
-            font-family: 'Georgia', serif;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.03em;
         }
         
         .hero-name-first {
@@ -679,9 +661,9 @@
             max-width: 500px;
             height: auto;
             aspect-ratio: 1;
-            border-radius: 0;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
             flex-shrink: 0;
             border: none;
         }
@@ -2289,26 +2271,23 @@
         <div class="container">
             <h2 class="fade-in-element">In the News</h2>
             
+            <!--
+              Logo pattern: self-hosted SVGs in images/logos/.
+              To add or swap an outlet, drop its SVG into images/logos/ and update the src below.
+              See images/logos/README.md for details.
+            -->
             <div class="press-grid fade-in-element delay-1">
-                <a href="press.html" class="press-logo">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/NBC_logo.svg/200px-NBC_logo.svg.png" alt="NBC News" style="max-width: 100px; height: auto;">
+                <a href="press.html" class="press-logo" aria-label="Featured on NBC News — see all press">
+                    <img src="images/logos/nbc.svg" alt="NBC News" loading="lazy" style="max-height: 72px; width: auto;">
                 </a>
-                <a href="press.html" class="press-logo">
-                    <svg viewBox="0 0 140 60" xmlns="http://www.w3.org/2000/svg" style="width: 140px; height: 60px;">
-                        <rect x="10" y="10" width="120" height="40" fill="none" stroke="#E01E26" stroke-width="3"/>
-                        <text x="70" y="40" font-family="serif" font-size="28" font-weight="bold" fill="#E01E26" text-anchor="middle">TIME</text>
-                    </svg>
+                <a href="press.html" class="press-logo" aria-label="Featured in TIME Magazine — see all press">
+                    <img src="images/logos/time.svg" alt="TIME" loading="lazy" style="max-width: 140px; height: auto;">
                 </a>
-                <a href="press.html" class="press-logo">
-                    <svg viewBox="0 0 140 60" xmlns="http://www.w3.org/2000/svg" style="width: 140px; height: 60px;">
-                        <text x="70" y="28" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#0066A1" text-anchor="middle">Medscape</text>
-                        <text x="70" y="48" font-family="Arial, sans-serif" font-size="11" font-weight="normal" fill="#666" text-anchor="middle">MEDICAL NEWS</text>
-                    </svg>
+                <a href="press.html" class="press-logo" aria-label="Featured on Medscape — see all press">
+                    <img src="images/logos/medscape.svg" alt="Medscape" loading="lazy" style="max-width: 140px; height: auto;">
                 </a>
-                <a href="press.html" class="press-logo">
-                    <svg viewBox="0 0 140 60" xmlns="http://www.w3.org/2000/svg" style="width: 140px; height: 60px;">
-                        <text x="70" y="38" font-family="sans-serif" font-size="32" font-weight="900" fill="#000" text-anchor="middle" letter-spacing="-2">WIRED</text>
-                    </svg>
+                <a href="press.html" class="press-logo" aria-label="Featured in WIRED — see all press">
+                    <img src="images/logos/wired.svg" alt="WIRED" loading="lazy" style="max-width: 140px; height: auto;">
                 </a>
             </div>
             

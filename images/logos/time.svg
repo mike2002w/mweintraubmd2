@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 60" role="img" aria-label="TIME">
+  <rect x="10" y="10" width="120" height="40" fill="none" stroke="#E01E26" stroke-width="3"/>
+  <text x="70" y="40" font-family="Georgia, 'Times New Roman', serif" font-size="28" font-weight="700" fill="#E01E26" text-anchor="middle">TIME</text>
+</svg>
