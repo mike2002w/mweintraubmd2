@@ -565,7 +565,7 @@
         .hero-subtitle {
             font-size: 22px;
             font-weight: 600;
-            color: #14B8A6;
+            color: #0E8377;
             margin-bottom: 15px;
             letter-spacing: 0.5px;
             font-family: 'Inter', sans-serif;
@@ -782,7 +782,7 @@
         
         .education-institution-multiple::before {
             content: '•';
-            color: #14B8A6;
+            color: #0E8377;
             font-weight: bold;
             margin-right: 8px;
         }
@@ -891,7 +891,7 @@
         }
         
         .certification-card:hover {
-            border-color: #14B8A6;
+            border-color: #0E8377;
             background: #eff6ff;
             transform: translateY(-3px);
             box-shadow: 0 4px 12px rgba(20, 184, 166, 0.15);
@@ -931,7 +931,7 @@
             content: '•';
             position: absolute;
             left: 0;
-            color: #14B8A6;
+            color: #0E8377;
             font-size: 24px;
             font-weight: bold;
         }
@@ -1139,6 +1139,38 @@
             line-height: 1.3;
             font-weight: 600;
         }
+
+        /* Inline logo + heading row for educator cards */
+        .card-heading-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .card-heading-row h4 {
+            margin-bottom: 0;
+            flex: 1;
+        }
+        .card-heading-row .logo-inline {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 4px;
+            overflow: hidden;
+        }
+        .card-heading-row .logo-inline img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
         
         .educator-card p {
             color: #4a5568;
@@ -1284,12 +1316,12 @@
         }
         
         .pub-title a:hover {
-            color: #14B8A6;
+            color: #0E8377;
         }
         
         .pub-journal {
             font-size: 15px;
-            color: #14B8A6;
+            color: #0E8377;
             font-weight: 600;
             margin-bottom: 8px;
         }
@@ -1485,7 +1517,7 @@
         }
         
         .press-logo:hover {
-            border-color: #14B8A6;
+            border-color: #0E8377;
             transform: translateY(-3px);
             box-shadow: 0 4px 12px rgba(20, 184, 166, 0.2);
             background: white;
@@ -1504,6 +1536,11 @@
         .section:not(.section-hero) {
             content-visibility: auto;
             contain-intrinsic-size: auto 600px;
+        }
+
+        /* Tighten the gap between hero and trust strip */
+        .section-hero {
+            padding-bottom: 40px;
         }
 
         /* Trust strip: "As featured in" credibility bar directly below hero */
@@ -2158,7 +2195,10 @@
             <div id="leadership" class="educator-content active">
                 <div class="educator-category-grid">
                     <div class="educator-card">
-                        <h4>NEJM Course Faculty Director</h4>
+                        <div class="card-heading-row">
+                            <div class="logo-inline"><img src="images/logos/nejm-square.jpg" alt="NEJM" loading="lazy"></div>
+                            <h4>NEJM Course Faculty Director</h4>
+                        </div>
                         <p>Faculty Director for the New England Journal of Medicine Group's "Advancing Obesity Care" course, collaborating with leading experts to deliver evidence-based approaches for obesity management and GLP-1 therapies.</p>
                         <a href="https://www.linkedin.com/posts/michaelameerweintraub_honored-to-be-faculty-director-of-nejm-activity-7398376843273314305-3cAK" class="educator-link" target="_blank">
                             Learn More
@@ -2169,7 +2209,10 @@
                     </div>
                     
                     <div class="educator-card">
-                        <h4>Endocrine Society Guidelines Co-Chair</h4>
+                        <div class="card-heading-row">
+                            <div class="logo-inline"><img src="images/logos/endocrine-society-square.jpg" alt="Endocrine Society" loading="lazy"></div>
+                            <h4>Endocrine Society Guidelines Co-Chair</h4>
+                        </div>
                         <p>Co-Chair of the pharmacologic management of obesity guideline update through the Endocrine Society, leading the development of evidence-based recommendations for obesity pharmacotherapy.</p>
                         <a href="https://www.endocrine.org/" class="educator-link" target="_blank">
                             Learn More
@@ -2180,7 +2223,10 @@
                     </div>
                     
                     <div class="educator-card">
-                        <h4>American Board of Obesity Medicine</h4>
+                        <div class="card-heading-row">
+                            <div class="logo-inline"><img src="images/logos/abom.png" alt="American Board of Obesity Medicine" loading="lazy"></div>
+                            <h4>American Board of Obesity Medicine</h4>
+                        </div>
                         <p>Serving on the exam writing committee for the American Board of Obesity Medicine, contributing to the certification and education of obesity medicine specialists nationwide.</p>
                         <a href="https://www.abom.org/" class="educator-link" target="_blank">
                             Learn More
@@ -2196,7 +2242,10 @@
             <div id="media" class="educator-content">
                 <div class="educator-category-grid">
                     <div class="educator-card">
-                        <h4>Endocrine News Podcast</h4>
+                        <div class="card-heading-row">
+                            <div class="logo-inline"><img src="images/logos/endocrine-society-square.jpg" alt="Endocrine Society" loading="lazy"></div>
+                            <h4>Endocrine News Podcast</h4>
+                        </div>
                         <p>Featured expert discussing compounded obesity medications, addressing regulatory considerations, safety, efficacy, and patient access concerns in the evolving landscape of obesity pharmacotherapy.</p>
                         <a href="https://www.endocrine.org/podcast/enp107" class="educator-link" target="_blank">
                             Listen Now
@@ -2207,7 +2256,10 @@
                     </div>
                     
                     <div class="educator-card">
-                        <h4>DocWire News: EASO Framework Discussion</h4>
+                        <div class="card-heading-row">
+                            <div class="logo-inline"><img src="images/logos/docwire.jpg" alt="DocWire News" loading="lazy"></div>
+                            <h4>DocWire News: EASO Framework Discussion</h4>
+                        </div>
                         <p>Expert commentary on how the European Association for the Study of Obesity framework reshapes clinical practice by moving beyond BMI to focus on individualized, health-centered approaches.</p>
                         <a href="https://www.docwirenews.com/post/new-easo-framework-for-treating-obesity-shifts-focus-from-weight-to-health" class="educator-link" target="_blank">
                             Watch Video
@@ -2218,7 +2270,10 @@
                     </div>
                     
                     <div class="educator-card">
-                        <h4>Medscape: GLP-1 Discontinuation Research</h4>
+                        <div class="card-heading-row">
+                            <div class="logo-inline"><img src="images/logos/medscape.svg" alt="Medscape" loading="lazy"></div>
+                            <h4>Medscape: GLP-1 Discontinuation Research</h4>
+                        </div>
                         <p>Discussing real-world data presented at ObesityWeek on weight regain patterns after GLP-1 discontinuation and implications for long-term obesity management strategies.</p>
                         <a href="https://www.medscape.com/viewarticle/over-half-regain-weight-after-stopping-glp-1s-2025a1000vmt?form=fpf" class="educator-link" target="_blank">
                             Read Article
@@ -2234,7 +2289,10 @@
             <div id="speaking" class="educator-content">
                 <div class="educator-category-grid">
                     <div class="educator-card">
-                        <h4>ObesityWeek 2025</h4>
+                        <div class="card-heading-row">
+                            <div class="logo-inline"><img src="images/logos/obesity-society-square.jpg" alt="The Obesity Society" loading="lazy"></div>
+                            <h4>ObesityWeek 2025</h4>
+                        </div>
                         <p>Presented real-world evidence on weight regain after GLP-1 discontinuation, highlighting the chronic nature of obesity and the importance of continuous treatment strategies.</p>
                         <a href="https://www.linkedin.com/posts/michaelameerweintraub_honored-for-the-opportunity-to-present-weight-activity-7391955105626947584-Gond" class="educator-link" target="_blank">
                             View Details
@@ -2245,7 +2303,10 @@
                     </div>
                     
                     <div class="educator-card">
-                        <h4>2026 Columbia Cornell Obesity Medicine Course</h4>
+                        <div class="card-heading-row">
+                            <div class="logo-inline"><img src="images/logos/columbia.jpg" alt="Columbia University · Cornell" loading="lazy"></div>
+                            <h4>2026 Columbia Cornell Obesity Medicine Course</h4>
+                        </div>
                         <p>Lecturer for the Columbia Cornell intensive CME program covering evidence-based approaches to obesity etiology, prevention, and treatment. Course emphasizes practical pharmacologic, nutritional, behavioral, and procedural interventions for patient-centered care.</p>
                         <a href="https://www.ihn.cuimc.columbia.edu/news/registration-now-open-2026-columbia-cornell-obesity-etiology-prevention-and-treatment" class="educator-link" target="_blank">
                             Course Information
@@ -2256,7 +2317,10 @@
                     </div>
                     
                     <div class="educator-card">
-                        <h4>Clinical Updates & CME</h4>
+                        <div class="card-heading-row">
+                            <div class="logo-inline"><img src="images/logos/cme.svg" alt="CME — Continuing Medical Education" loading="lazy"></div>
+                            <h4>Clinical Updates & CME</h4>
+                        </div>
                         <p>Regular speaker on obesity medicine topics including GLP-1 therapies, metabolic complications, and evidence-based treatment approaches.</p>
                         <a href="mailto:michaelweintraubmd@gmail.com" class="educator-link">
                             Connect
