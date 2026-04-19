@@ -20,17 +20,40 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://michaelweintraubmd.com/images/weintraub-headshot-800.jpg">
 
-    <!-- Structured data: Publications page tied to main Physician entity -->
+    <!-- Structured data: Publications page + ScholarlyArticle list -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "CollectionPage",
-      "url": "https://michaelweintraubmd.com/publications.html",
-      "name": "Publications - Dr. Michael A. Weintraub",
-      "description": "Peer-reviewed publications, book chapters, abstracts, and presentations by Dr. Michael A. Weintraub.",
-      "author": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"},
-      "mainEntity": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"},
-      "about": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"}
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "@id": "https://michaelweintraubmd.com/publications.html#webpage",
+          "url": "https://michaelweintraubmd.com/publications.html",
+          "name": "Publications - Dr. Michael A. Weintraub",
+          "description": "Peer-reviewed publications, book chapters, abstracts, and presentations by Dr. Michael A. Weintraub.",
+          "author": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"},
+          "mainEntity": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"},
+          "about": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"}
+        },
+        {
+          "@type": "ItemList",
+          "name": "Peer-Reviewed Publications by Dr. Michael A. Weintraub",
+          "itemListOrder": "https://schema.org/ItemListOrderDescending",
+          "numberOfItems": 10,
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "item": {"@type": "ScholarlyArticle", "url": "https://pubmed.ncbi.nlm.nih.gov/40526425/", "headline": "GLP-1 Receptor Agonist Outcomes, Safety, and Body Mass Index Change in a National Cohort of Patients on Dialysis", "datePublished": "2025-06", "isPartOf": {"@type": "Periodical", "name": "Clinical Journal of the American Society of Nephrology"}, "author": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"}, "identifier": {"@type": "PropertyValue", "propertyID": "PMID", "value": "40526425"}}},
+            {"@type": "ListItem", "position": 2, "item": {"@type": "ScholarlyArticle", "url": "https://pubmed.ncbi.nlm.nih.gov/40056927/", "headline": "GLP-1 Receptor Agonists in Kidney Transplant Recipients with Pre-Existing Diabetes: A Retrospective Cohort Study", "datePublished": "2025-03", "isPartOf": {"@type": "Periodical", "name": "Lancet Diabetes and Endocrinology"}, "author": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"}, "identifier": {"@type": "PropertyValue", "propertyID": "PMID", "value": "40056927"}}},
+            {"@type": "ListItem", "position": 3, "item": {"@type": "ScholarlyArticle", "url": "https://pubmed.ncbi.nlm.nih.gov/39099569/", "headline": "Nasal Resistance and Inflammation: Mechanisms for Obstructive Sleep Apnea from Chronic Rhinosinusitis", "datePublished": "2024-10", "isPartOf": {"@type": "Periodical", "name": "Journal of Clinical Sleep Medicine"}, "author": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"}, "identifier": {"@type": "PropertyValue", "propertyID": "PMID", "value": "39099569"}}},
+            {"@type": "ListItem", "position": 4, "item": {"@type": "ScholarlyArticle", "url": "https://pubmed.ncbi.nlm.nih.gov/36993733/", "headline": "Sodium-Glucose Cotransporter-2 Inhibitors for Hyperglycemia in Phosphoinositide 3-kinase Pathway Inhibition", "datePublished": "2023-08", "isPartOf": {"@type": "Periodical", "name": "Breast Cancer Research and Treatment"}, "author": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"}, "identifier": {"@type": "PropertyValue", "propertyID": "PMID", "value": "36993733"}}},
+            {"@type": "ListItem", "position": 5, "item": {"@type": "ScholarlyArticle", "url": "https://pubmed.ncbi.nlm.nih.gov/36810608/", "headline": "Five-year weight loss maintenance with obesity pharmacotherapy", "datePublished": "2023", "isPartOf": {"@type": "Periodical", "name": "Journal of Clinical Endocrinology and Metabolism"}, "author": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"}, "identifier": {"@type": "PropertyValue", "propertyID": "PMID", "value": "36810608"}}},
+            {"@type": "ListItem", "position": 6, "item": {"@type": "ScholarlyArticle", "url": "https://pubmed.ncbi.nlm.nih.gov/34964373/", "headline": "Graves' disease following the SARS-CoV-2 vaccine: case series", "datePublished": "2021-12", "isPartOf": {"@type": "Periodical", "name": "Journal of Investigative Medicine High Impact Case Reports"}, "author": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"}, "identifier": {"@type": "PropertyValue", "propertyID": "PMID", "value": "34964373"}}},
+            {"@type": "ListItem", "position": 7, "item": {"@type": "ScholarlyArticle", "url": "https://pubmed.ncbi.nlm.nih.gov/32392402/", "headline": "Dosing common medications in hospitalized pediatric patients with obesity: A review", "datePublished": "2020", "isPartOf": {"@type": "Periodical", "name": "Obesity"}, "author": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"}, "identifier": {"@type": "PropertyValue", "propertyID": "PMID", "value": "32392402"}}},
+            {"@type": "ListItem", "position": 8, "item": {"@type": "ScholarlyArticle", "url": "https://pubmed.ncbi.nlm.nih.gov/30448367/", "headline": "Chronic rhinosinusitis is an independent risk factor for OSA in World Trade Center responders", "datePublished": "2019-02", "isPartOf": {"@type": "Periodical", "name": "Chest"}, "author": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"}, "identifier": {"@type": "PropertyValue", "propertyID": "PMID", "value": "30448367"}}},
+            {"@type": "ListItem", "position": 9, "item": {"@type": "ScholarlyArticle", "url": "https://pubmed.ncbi.nlm.nih.gov/30088664/", "headline": "Pediatric Obesity: Influence on drug dosing and therapeutics", "datePublished": "2018-10", "isPartOf": {"@type": "Periodical", "name": "Journal of Clinical Pharmacology"}, "author": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"}, "identifier": {"@type": "PropertyValue", "propertyID": "PMID", "value": "30088664"}}},
+            {"@type": "ListItem", "position": 10, "item": {"@type": "ScholarlyArticle", "url": "https://pubmed.ncbi.nlm.nih.gov/26472638/", "headline": "Loss of hepatocyte ERBB3 but not EGFR impairs hepatocarcinogenesis", "datePublished": "2015-12", "isPartOf": {"@type": "Periodical", "name": "American Journal of Physiology - Gastrointestinal and Liver Physiology"}, "author": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"}, "identifier": {"@type": "PropertyValue", "propertyID": "PMID", "value": "26472638"}}}
+          ]
+        }
+      ]
     }
     </script>
 
@@ -105,6 +128,39 @@
         header p {
             font-size: 16px;
             color: #6b7280;
+        }
+
+        /* Researcher identity badges */
+        .researcher-ids {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        .researcher-id-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            color: #1e3a8a;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .researcher-id-btn:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+            transform: translateY(-1px);
+        }
+        .researcher-id-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
         }
         
         /* Publication Sections */
@@ -210,6 +266,29 @@
         <div class="container">
             <h1>Publications</h1>
             <p>Peer-reviewed research, book chapters, abstracts, and presentations</p>
+            <div class="researcher-ids">
+                <a href="https://orcid.org/0000-0001-9599-9184" target="_blank" rel="noopener" class="researcher-id-btn" aria-label="ORCID profile">
+                    <svg class="researcher-id-icon" viewBox="0 0 256 256" aria-hidden="true" focusable="false">
+                        <circle cx="128" cy="128" r="128" fill="#A6CE39"/>
+                        <path fill="#fff" d="M86.3 186.2H70.9V79.1h15.4v107.1zm22.6-107.1h41.6c39.6 0 57 28.3 57 53.6 0 27.5-21.5 53.6-56.8 53.6h-41.8V79.1zm15.4 93.3h24.5c34.9 0 42.9-26.5 42.9-39.7 0-21.5-13.7-39.7-43.7-39.7h-23.7v79.4zM88.7 56.8c0 5.5-4.5 10.1-10.1 10.1s-10.1-4.6-10.1-10.1c0-5.6 4.5-10.1 10.1-10.1s10.1 4.6 10.1 10.1z"/>
+                    </svg>
+                    ORCID: 0000-0001-9599-9184
+                </a>
+                <a href="https://scholar.google.com/citations?user=G9qngpQAAAAJ&hl=en" target="_blank" rel="noopener" class="researcher-id-btn" aria-label="Google Scholar profile">
+                    <svg class="researcher-id-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path fill="#4285F4" d="M5.242 13.769L.5 9.5 12 1l11.5 8.5-4.742 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269z"/>
+                        <path fill="#EA4335" d="M12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/>
+                    </svg>
+                    Google Scholar
+                </a>
+                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Weintraub+MA%5BAuthor%5D" target="_blank" rel="noopener" class="researcher-id-btn" aria-label="PubMed author search">
+                    <svg class="researcher-id-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <rect width="24" height="24" rx="4" fill="#326598"/>
+                        <text x="12" y="16" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#fff">PM</text>
+                    </svg>
+                    PubMed
+                </a>
+            </div>
         </div>
     </header>
     
