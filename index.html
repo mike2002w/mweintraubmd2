@@ -1500,6 +1500,12 @@
             opacity: 1;
         }
 
+        /* Perf: skip rendering offscreen sections until near viewport (LCP/INP win) */
+        .section:not(.section-hero) {
+            content-visibility: auto;
+            contain-intrinsic-size: auto 600px;
+        }
+
         /* Trust strip: "As featured in" credibility bar directly below hero */
         .trust-strip {
             background: #ffffff;
@@ -2065,8 +2071,6 @@
                 <a href="press.html" class="trust-logo">CNBC</a>
                 <a href="press.html" class="trust-logo">Medscape</a>
                 <a href="press.html" class="trust-logo">Reuters</a>
-                <a href="press.html" class="trust-logo">STAT</a>
-                <a href="press.html" class="trust-logo">Wired</a>
             </div>
         </div>
     </section>
@@ -3056,6 +3060,28 @@
                 message.remove();
             }, 3000);
         }
+
+        // GA4 event tracking: contact clicks + outbound link clicks
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a');
+            if (!link || typeof gtag !== 'function') return;
+            const href = link.getAttribute('href') || '';
+            if (href.startsWith('mailto:')) {
+                gtag('event', 'contact_click', {
+                    method: 'email',
+                    page_path: location.pathname
+                });
+            } else if (href.startsWith('http') && !href.startsWith(location.origin)) {
+                try {
+                    const url = new URL(href);
+                    gtag('event', 'outbound_link', {
+                        link_url: href,
+                        link_domain: url.hostname,
+                        page_path: location.pathname
+                    });
+                } catch (err) { /* ignore malformed URLs */ }
+            }
+        });
     </script>
 </body>
 </html>
