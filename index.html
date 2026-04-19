@@ -1512,11 +1512,71 @@
         .press-logo:hover svg {
             opacity: 1;
         }
-        }
-        
+
         .press-logo:hover img {
             filter: grayscale(0%);
             opacity: 1;
+        }
+
+        /* Trust strip: "As featured in" credibility bar directly below hero */
+        .trust-strip {
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 28px 20px;
+        }
+        .trust-strip-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .trust-strip-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #718096;
+            white-space: nowrap;
+        }
+        .trust-strip-logos {
+            display: flex;
+            gap: 36px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+        .trust-logo {
+            font-size: 16px;
+            font-weight: 700;
+            color: #4a5568;
+            text-decoration: none;
+            transition: color 0.2s ease, opacity 0.2s ease;
+            letter-spacing: 0.04em;
+            opacity: 0.65;
+            font-family: 'Inter', sans-serif;
+        }
+        .trust-logo:hover,
+        .trust-logo:focus-visible {
+            color: #1e3a8a;
+            opacity: 1;
+        }
+        @media (max-width: 768px) {
+            .trust-strip {
+                padding: 20px 15px;
+            }
+            .trust-strip-container {
+                gap: 14px;
+            }
+            .trust-strip-logos {
+                gap: 20px;
+            }
+            .trust-logo {
+                font-size: 13px;
+            }
         }
         
         .press-cta {
@@ -2011,7 +2071,24 @@
             </div>
         </div>
     </section>
-    
+
+    <!-- Trust strip: above-the-fold "As featured in" credibility bar -->
+    <section class="trust-strip" aria-label="Featured media outlets">
+        <div class="trust-strip-container">
+            <span class="trust-strip-label">As featured in</span>
+            <div class="trust-strip-logos">
+                <a href="press.html" class="trust-logo">NBC News</a>
+                <a href="press.html" class="trust-logo">TIME</a>
+                <a href="press.html" class="trust-logo">CBS News</a>
+                <a href="press.html" class="trust-logo">CNBC</a>
+                <a href="press.html" class="trust-logo">Medscape</a>
+                <a href="press.html" class="trust-logo">Reuters</a>
+                <a href="press.html" class="trust-logo">STAT</a>
+                <a href="press.html" class="trust-logo">Wired</a>
+            </div>
+        </div>
+    </section>
+
     <section class="section section-white section-about-bg fade-in-section" id="about">
         <div class="container">
             <h2 class="fade-in-element">About Me</h2>
