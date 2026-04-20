@@ -6,6 +6,18 @@
     <meta name="description" content="Dr. Michael A. Weintraub - Complete list of peer-reviewed publications, book chapters, abstracts, and presentations.">
     <title>Publications - Dr. Michael A. Weintraub</title>
 
+    <!-- Theme init (runs before CSS parse to avoid light-mode flash) -->
+    <script>
+    (function() {
+        try {
+            const saved = localStorage.getItem('theme');
+            const systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = saved || (systemDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+    })();
+    </script>
+
     <!-- Canonical URL -->
     <link rel="canonical" href="https://michaelweintraubmd.com/publications.html" />
 
@@ -437,6 +449,60 @@
                 font-size: 22px;
             }
         }
+
+        /* ===== DARK MODE ===== */
+        [data-theme="dark"] body { background: #0a1618; color: #b8c5c8; }
+        [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 { color: #e2f0f1; }
+        [data-theme="dark"] nav[aria-label="Site navigation"] { background: #0f1e21 !important; border-bottom-color: #1e2b30 !important; }
+        [data-theme="dark"] .back-link { color: #2DD4BF !important; }
+        [data-theme="dark"] .back-link[aria-current="page"] { color: #14B8A6 !important; }
+        [data-theme="dark"] header { background: #0f1e21; border-bottom-color: #1e2b30; }
+        [data-theme="dark"] header h1 { color: #e2f0f1; }
+        [data-theme="dark"] header p { color: #9aacb0; }
+        [data-theme="dark"] .researcher-id-btn { background: #132228; border-color: #2a3d43; color: #e2f0f1; }
+        [data-theme="dark"] .researcher-id-btn:hover { border-color: #14B8A6; box-shadow: 0 2px 8px rgba(20, 184, 166, 0.25); }
+        [data-theme="dark"] .filter-bar { background: #0f1e21; border-bottom-color: #1e2b30; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+        [data-theme="dark"] .filter-search { background: #132228; border-color: #2a3d43; color: #cbd5e0; }
+        [data-theme="dark"] .filter-search::placeholder { color: #64757a; }
+        [data-theme="dark"] .filter-search:focus { background: #0f1e21; border-color: #14B8A6; }
+        [data-theme="dark"] .filter-chip { background: #132228; border-color: #2a3d43; color: #b8c5c8; }
+        [data-theme="dark"] .filter-chip:hover { border-color: #14B8A6; color: #2DD4BF; }
+        [data-theme="dark"] .filter-chip.active { background: #14B8A6; border-color: #14B8A6; color: #042F33; }
+        [data-theme="dark"] .filter-count { color: #9aacb0; }
+        [data-theme="dark"] .filter-clear { color: #2DD4BF; }
+        [data-theme="dark"] .pub-section { background: #132228 !important; box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+        [data-theme="dark"] .pub-section h2 { color: #e2f0f1; border-bottom-color: #14B8A6; }
+        [data-theme="dark"] .pub-year-header { color: #2DD4BF; border-bottom-color: #1e2b30; }
+        [data-theme="dark"] .pub-item { border-bottom-color: #1e2b30; }
+        [data-theme="dark"] .pub-item-title { color: #e2f0f1; }
+        [data-theme="dark"] .pub-item-title a { color: #e2f0f1; }
+        [data-theme="dark"] .pub-item-title a:hover { color: #2DD4BF; }
+        [data-theme="dark"] .pub-item-details { color: #b8c5c8; }
+        [data-theme="dark"] .pub-item-details em { color: #9aacb0; }
+        [data-theme="dark"] footer { background: #050f11 !important; }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #042F33;
+            transition: all 0.2s;
+            padding: 0;
+            margin-left: 8px;
+        }
+        .theme-toggle:hover { border-color: #14B8A6; color: #0E8377; }
+        [data-theme="dark"] .theme-toggle { background: #132228; border-color: #2a3d43; color: #2DD4BF; }
+        .theme-icon-sun { display: none; }
+        .theme-icon-moon { display: block; }
+        [data-theme="dark"] .theme-icon-sun { display: block; }
+        [data-theme="dark"] .theme-icon-moon { display: none; }
     </style>
 </head>
 <body>
@@ -448,6 +514,10 @@
             <a href="index.html" class="back-link">Home</a>
             <a href="press.html" class="back-link">Press</a>
             <a href="publications.html" class="back-link" aria-current="page" style="color: #042F33; font-weight: 700;">Publications</a>
+            <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+                <svg class="theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg class="theme-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 17a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1zM4.22 4.22a1 1 0 0 1 1.42 0l1.41 1.41a1 1 0 1 1-1.41 1.42L4.22 5.64a1 1 0 0 1 0-1.42zm13.74 13.74a1 1 0 0 1 1.42 0l1.41 1.41a1 1 0 1 1-1.41 1.42l-1.42-1.41a1 1 0 0 1 0-1.42zM2 12a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2H3a1 1 0 0 1-1-1zm17 0a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1zM4.22 19.78a1 1 0 0 1 0-1.42l1.41-1.41a1 1 0 1 1 1.42 1.41l-1.41 1.42a1 1 0 0 1-1.42 0zm13.74-13.74a1 1 0 0 1 0-1.42l1.41-1.41a1 1 0 1 1 1.42 1.42l-1.42 1.41a1 1 0 0 1-1.41 0z"/></svg>
+            </button>
         </div>
     </nav>
 
@@ -973,6 +1043,18 @@
                 }
             });
         }
+
+        // Theme toggle
+        (function() {
+            const toggle = document.getElementById('themeToggle');
+            if (!toggle) return;
+            toggle.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme') || 'light';
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) {}
+            });
+        })();
 
         // Filter: search + year chips + type chips with URL hash state
         (function initFilter() {
