@@ -2158,11 +2158,20 @@
         [data-theme="dark"] .location-card,
         [data-theme="dark"] .certification-section-modern,
         [data-theme="dark"] .certification-card,
-        [data-theme="dark"] .follow-cta,
-        [data-theme="dark"] .publication-item {
+        [data-theme="dark"] .follow-cta {
             background: #132228 !important;
             border-color: #283138 !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+        }
+        /* Select Publications tiles — brighter than other cards for emphasis */
+        [data-theme="dark"] .publication-item {
+            background: #1e2f35 !important;
+            border: 1px solid #2f4249;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+        }
+        [data-theme="dark"] .publication-item:hover {
+            background: #243840 !important;
+            box-shadow: 0 8px 22px rgba(20, 184, 166, 0.2);
         }
         [data-theme="dark"] .educator-card h4,
         [data-theme="dark"] .post-title,
@@ -2206,7 +2215,16 @@
         [data-theme="dark"] .about-text {
             color: #b8c5c8;
         }
-        /* Education table */
+        /* Education table — dark row striping + hover */
+        [data-theme="dark"] .education-table tr:nth-child(odd) {
+            background: #132228;
+        }
+        [data-theme="dark"] .education-table tr:nth-child(even) {
+            background: #0f1e21;
+        }
+        [data-theme="dark"] .education-table tr:hover {
+            background: #1a2b30;
+        }
         [data-theme="dark"] .education-table td,
         [data-theme="dark"] .education-degree-cell,
         [data-theme="dark"] .education-institution-cell {
