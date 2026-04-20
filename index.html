@@ -2153,7 +2153,6 @@
             color: #2DD4BF;
         }
         /* Cards */
-        [data-theme="dark"] .educator-card,
         [data-theme="dark"] .post-card,
         [data-theme="dark"] .location-card,
         [data-theme="dark"] .certification-section-modern,
@@ -2163,13 +2162,15 @@
             border-color: #283138 !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
         }
-        /* Select Publications tiles — brighter than other cards for emphasis */
-        [data-theme="dark"] .publication-item {
+        /* Select Publications + Contribution tiles — brighter for emphasis */
+        [data-theme="dark"] .publication-item,
+        [data-theme="dark"] .educator-card {
             background: #1e2f35 !important;
             border: 1px solid #2f4249;
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
         }
-        [data-theme="dark"] .publication-item:hover {
+        [data-theme="dark"] .publication-item:hover,
+        [data-theme="dark"] .educator-card:hover {
             background: #243840 !important;
             box-shadow: 0 8px 22px rgba(20, 184, 166, 0.2);
         }
