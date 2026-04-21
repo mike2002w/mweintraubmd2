@@ -2003,6 +2003,24 @@
         }
         
         @media (max-width: 968px) {
+            /* Mobile: always show the sticky nav at top so hamburger is reachable
+               without scrolling. (Desktop still slides it in after 100px.) */
+            .nav-container {
+                top: 0 !important;
+            }
+            /* Hide the floating social-icons on mobile — they collide with the hamburger */
+            .social-icons-top {
+                display: none !important;
+            }
+            /* When menu is open, lift hamburger to viewport stacking context
+               above the full-screen overlay so it can close the menu. */
+            .mobile-menu-toggle.active {
+                position: fixed !important;
+                top: 14px;
+                right: 18px;
+                z-index: 1002;
+            }
+
             /* Full-screen mobile menu takeover */
             .nav-menu {
                 position: fixed;
