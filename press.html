@@ -535,6 +535,41 @@
         .theme-icon-moon { display: block; }
         [data-theme="dark"] .theme-icon-sun { display: block; }
         [data-theme="dark"] .theme-icon-moon { display: none; }
+
+        /* Print stylesheet */
+        @media print {
+            nav[aria-label="Site navigation"], .filter-bar, .featured-coverage,
+            .press-footer, .theme-toggle, .scroll-progress,
+            .filter-hidden {
+                display: none !important;
+            }
+            body, .press-header, .press-section {
+                background: white !important;
+                color: #000 !important;
+                box-shadow: none !important;
+            }
+            h1, h2, .press-outlet, .press-title { color: #000 !important; }
+            a[href^="http"]::after {
+                content: " (" attr(href) ")";
+                font-size: 9pt;
+                color: #555;
+                word-break: break-all;
+            }
+            a[href^="mailto:"]::after { content: ""; }
+            body { font-size: 10pt; line-height: 1.4; }
+            h1 { font-size: 22pt; }
+            h2 { font-size: 16pt; page-break-after: avoid; margin-top: 18pt; }
+            .press-item {
+                page-break-inside: avoid;
+                margin-bottom: 8pt;
+                padding: 6pt 0 !important;
+                border-bottom: 1px solid #ddd !important;
+            }
+            .press-outlet { font-weight: 700; }
+            .press-title { font-weight: 600; margin-top: 2pt; }
+            .press-summary { font-style: italic; color: #444 !important; }
+            .container { max-width: 100% !important; padding: 0 !important; }
+        }
     </style>
 </head>
 <body>

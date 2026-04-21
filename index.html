@@ -640,13 +640,19 @@
         .section-hero-bg {
             position: relative;
             overflow: hidden;
-            background: linear-gradient(
-                to right,
-                rgba(239, 246, 255, 1) 0%,
-                rgba(255, 255, 255, 1) 100%
-            );
+            background:
+                radial-gradient(circle at 1px 1px, rgba(20, 184, 166, 0.13) 1px, transparent 1.5px),
+                linear-gradient(to right, rgba(239, 246, 255, 1) 0%, rgba(255, 255, 255, 1) 100%);
+            background-size: 28px 28px, 100% 100%;
+            background-position: 0 0, 0 0;
         }
-        
+        [data-theme="dark"] .section-hero-bg {
+            background:
+                radial-gradient(circle at 1px 1px, rgba(45, 212, 191, 0.09) 1px, transparent 1.5px),
+                linear-gradient(135deg, #0a1618 0%, #122024 100%);
+            background-size: 28px 28px, 100% 100%;
+        }
+
         .section-hero-bg .hero-grid {
             position: relative;
             z-index: 1;
@@ -823,6 +829,63 @@
         }
         
         /* Old education table styles - keep for now in case needed */
+        /* Education timeline (replaces old table) */
+        .education-timeline {
+            list-style: none;
+            padding: 0;
+            margin: 30px 0 0;
+            position: relative;
+            max-width: 720px;
+        }
+        .education-timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background: linear-gradient(to bottom, #14B8A6 0%, #14B8A6 60%, rgba(20, 184, 166, 0.25) 100%);
+        }
+        .education-timeline-item {
+            position: relative;
+            padding: 2px 0 32px 42px;
+        }
+        .education-timeline-item:last-child { padding-bottom: 0; }
+        .education-timeline-marker {
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 18px;
+            height: 18px;
+            background: #14B8A6;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px white, 0 0 0 6px rgba(20, 184, 166, 0.25);
+        }
+        .education-timeline-degree {
+            font-size: 18px;
+            font-weight: 700;
+            color: #042F33;
+            letter-spacing: -0.01em;
+            margin-bottom: 8px;
+        }
+        .education-timeline-institution {
+            font-size: 15px;
+            color: #4a5568;
+            margin-bottom: 3px;
+        }
+        [data-theme="dark"] .education-timeline-degree { color: #e2f0f1; }
+        [data-theme="dark"] .education-timeline-institution { color: #b8c5c8; }
+        [data-theme="dark"] .education-timeline-marker {
+            box-shadow: 0 0 0 4px #0f1e21, 0 0 0 6px rgba(45, 212, 191, 0.35);
+        }
+        [data-theme="dark"] .education-timeline::before {
+            background: linear-gradient(to bottom, #2DD4BF 0%, #14B8A6 60%, rgba(20, 184, 166, 0.2) 100%);
+        }
+        @media (max-width: 600px) {
+            .education-timeline-degree { font-size: 16px; }
+            .education-timeline-institution { font-size: 14px; }
+        }
+
         .education-table {
             width: 100%;
             border-collapse: separate;
@@ -1151,6 +1214,30 @@
             margin-bottom: 12px;
             line-height: 1.3;
             font-weight: 600;
+        }
+
+        /* Flagship-role variant: visual emphasis for NEJM + Endocrine Society cards */
+        .educator-card--flagship {
+            position: relative;
+            border-top: 3px solid #14B8A6;
+            box-shadow: 0 12px 32px rgba(20, 184, 166, 0.18);
+        }
+        .flagship-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            background: #14B8A6;
+            color: #042F33;
+            border-radius: 4px;
+        }
+        [data-theme="dark"] .educator-card--flagship {
+            border-top-color: #2DD4BF;
+            box-shadow: 0 12px 32px rgba(45, 212, 191, 0.22);
         }
 
         /* Inline logo + heading row for educator cards */
@@ -2329,6 +2416,91 @@
         .theme-icon-moon { display: block; }
         [data-theme="dark"] .theme-icon-sun { display: block; }
         [data-theme="dark"] .theme-icon-moon { display: none; }
+
+        /* ============================================
+           PRINT STYLESHEET — optimized for pharma review,
+           CV printing, and hard-copy bio sharing.
+           ============================================ */
+        @media print {
+            /* Hide interactive / decorative elements */
+            .nav-container, .mobile-menu-toggle, .social-icons-top,
+            .back-to-top, .scroll-progress, .theme-toggle,
+            .trust-strip, .educator-tabs, .press-cta, .press-button,
+            .educator-link, .location-link, .follow-cta,
+            .easter-egg-molecule, .easter-egg-message, .myspace-overlay,
+            .filter-bar, .filter-hidden, .featured-coverage,
+            .post-link svg, .educator-link svg {
+                display: none !important;
+            }
+            /* Show all filter-hidden items when printing */
+            .filter-hidden { display: block !important; }
+            /* Force black-on-white; remove shadows/gradients */
+            html, body,
+            .section, .section-hero, .section-light, .section-white,
+            .section-gradient, .section-accent, .section-hero-bg,
+            .educator-card, .publication-item, .pub-section, .pub-item,
+            .press-item, .post-card, .location-card, .certification-card,
+            .certification-section-modern {
+                background: white !important;
+                background-image: none !important;
+                color: #000 !important;
+                box-shadow: none !important;
+                border-color: #ccc !important;
+            }
+            h1, h2, h3, h4, h5,
+            .hero-name-first, .hero-name-last, .pub-title a,
+            .press-outlet, .educator-card h4, .post-title {
+                color: #000 !important;
+            }
+            /* Show link URLs next to text for print */
+            a[href^="http"]::after {
+                content: " (" attr(href) ")";
+                font-size: 9pt;
+                color: #555;
+                word-break: break-all;
+            }
+            a[href^="mailto:"]::after,
+            a[href^="#"]::after { content: ""; }
+            /* Typography tuned for print */
+            body { font-size: 10pt; line-height: 1.4; }
+            h1 { font-size: 22pt; }
+            h2 { font-size: 16pt; page-break-after: avoid; margin-top: 18pt; }
+            h3 { font-size: 13pt; page-break-after: avoid; }
+            h4 { font-size: 11pt; page-break-after: avoid; }
+            p { font-size: 10pt; }
+            /* Prevent awkward page breaks mid-entry */
+            .publication-item, .pub-item, .press-item, .educator-card {
+                page-break-inside: avoid;
+                margin-bottom: 10pt;
+                padding: 6pt 0 !important;
+                border: none !important;
+                border-bottom: 1px solid #ddd !important;
+            }
+            /* Reset grid layouts to block for linear print flow */
+            .hero-grid, .educator-category-grid, .posts-grid,
+            .publication-list-new, .press-grid, .certification-grid,
+            .location-content {
+                display: block !important;
+            }
+            .container { max-width: 100% !important; padding: 0 !important; }
+            .section { padding: 10pt 0 !important; }
+            /* Hero image — constrain for print, center on page */
+            .profile-image { max-width: 140px !important; margin: 0 auto 14pt !important; }
+            .profile-image img { width: 100% !important; height: auto !important; }
+            /* Skip-link doesn't belong in print */
+            .skip-to-content { display: none !important; }
+            /* Iframes (maps) would print as a big blank box — hide */
+            iframe { display: none !important; }
+            /* Flagship badge stays but simpler */
+            .flagship-badge { background: #000 !important; color: white !important; }
+            /* Footer */
+            footer, .press-footer {
+                background: white !important;
+                color: #666 !important;
+                padding-top: 12pt !important;
+                border-top: 1px solid #ddd !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2466,7 +2638,8 @@
             <!-- Leadership Roles Content -->
             <div id="leadership" class="educator-content active">
                 <div class="educator-category-grid">
-                    <div class="educator-card">
+                    <div class="educator-card educator-card--flagship">
+                        <span class="flagship-badge">Flagship Role</span>
                         <div class="card-heading-row">
                             <div class="logo-inline"><img src="images/logos/nejm-square.jpg" alt="NEJM" loading="lazy"></div>
                             <h4>NEJM Course Faculty Director</h4>
@@ -2480,7 +2653,8 @@
                         </a>
                     </div>
                     
-                    <div class="educator-card">
+                    <div class="educator-card educator-card--flagship">
+                        <span class="flagship-badge">Flagship Role</span>
                         <div class="card-heading-row">
                             <div class="logo-inline"><img src="images/logos/endocrine-society-square.jpg" alt="Endocrine Society" loading="lazy"></div>
                             <h4>Endocrine Society Guidelines Co-Chair</h4>
@@ -2610,34 +2784,30 @@
         <div class="container">
             <h2 class="fade-in-element">Education and Training</h2>
             
-            <table class="education-table fade-in-element delay-1">
-                <tr>
-                    <td class="education-degree-cell">Fellowship: Endocrinology, Diabetes & Metabolism</td>
-                    <td class="education-institution-cell">
-                        <div>Cornell New York Presbyterian Hospital</div>
-                        <div>Memorial Sloan Kettering Cancer Center</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="education-degree-cell">Residency: Internal Medicine</td>
-                    <td class="education-institution-cell">
-                        <div>Thomas Jefferson University Hospital</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="education-degree-cell">Medical School</td>
-                    <td class="education-institution-cell">
-                        <div>Rutgers Robert Wood Johnson Medical School</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="education-degree-cell">Undergraduate</td>
-                    <td class="education-institution-cell">
-                        <div>University of Pennsylvania</div>
-                        <div>The Wharton School</div>
-                    </td>
-                </tr>
-            </table>
+            <ol class="education-timeline fade-in-element delay-1">
+                <li class="education-timeline-item">
+                    <span class="education-timeline-marker" aria-hidden="true"></span>
+                    <h3 class="education-timeline-degree">Fellowship — Endocrinology, Diabetes & Metabolism</h3>
+                    <div class="education-timeline-institution">Cornell NewYork-Presbyterian Hospital</div>
+                    <div class="education-timeline-institution">Memorial Sloan Kettering Cancer Center</div>
+                </li>
+                <li class="education-timeline-item">
+                    <span class="education-timeline-marker" aria-hidden="true"></span>
+                    <h3 class="education-timeline-degree">Residency — Internal Medicine</h3>
+                    <div class="education-timeline-institution">Thomas Jefferson University Hospital</div>
+                </li>
+                <li class="education-timeline-item">
+                    <span class="education-timeline-marker" aria-hidden="true"></span>
+                    <h3 class="education-timeline-degree">Medical School</h3>
+                    <div class="education-timeline-institution">Rutgers Robert Wood Johnson Medical School</div>
+                </li>
+                <li class="education-timeline-item">
+                    <span class="education-timeline-marker" aria-hidden="true"></span>
+                    <h3 class="education-timeline-degree">Undergraduate</h3>
+                    <div class="education-timeline-institution">University of Pennsylvania</div>
+                    <div class="education-timeline-institution">The Wharton School</div>
+                </li>
+            </ol>
             
             <div class="certification-section-modern fade-in-element delay-2">
                 <div class="certification-title-modern">Board Certifications</div>
