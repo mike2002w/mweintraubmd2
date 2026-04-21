@@ -503,6 +503,101 @@
         .theme-icon-moon { display: block; }
         [data-theme="dark"] .theme-icon-sun { display: block; }
         [data-theme="dark"] .theme-icon-moon { display: none; }
+
+        /* Year-jumper: right-side floating nav */
+        .year-jumper {
+            position: fixed;
+            top: 50%;
+            right: 18px;
+            transform: translateY(-50%);
+            z-index: 45;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 14px 10px 10px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+            max-height: 68vh;
+            overflow-y: auto;
+        }
+        .year-jumper-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #718096;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .year-jumper a {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a5568;
+            text-decoration: none;
+            padding: 4px 12px;
+            border-radius: 4px;
+            text-align: center;
+            transition: all 0.15s;
+            display: block;
+        }
+        .year-jumper a:hover { background: #F0FDF9; color: #0E8377; }
+        .year-jumper a.active { background: #14B8A6; color: white; }
+        [data-theme="dark"] .year-jumper {
+            background: rgba(19, 34, 40, 0.96);
+            border-color: #2a3d43;
+        }
+        [data-theme="dark"] .year-jumper-label { color: #8a9898; }
+        [data-theme="dark"] .year-jumper a { color: #b8c5c8; }
+        [data-theme="dark"] .year-jumper a:hover { background: #1a2b30; color: #2DD4BF; }
+        [data-theme="dark"] .year-jumper a.active { background: #14B8A6; color: #042F33; }
+        @media (max-width: 1150px) { .year-jumper { display: none !important; } }
+
+        /* Print stylesheet — CV-ready output */
+        @media print {
+            nav[aria-label="Site navigation"], .filter-bar, .theme-toggle,
+            .researcher-ids, footer, .filter-hidden {
+                display: none !important;
+            }
+            body, header, .pub-section {
+                background: white !important;
+                color: #000 !important;
+                box-shadow: none !important;
+            }
+            h1, h2, h3, .pub-item-title, .pub-item-title a,
+            .pub-year-header { color: #000 !important; }
+            a[href^="http"]::after {
+                content: " (" attr(href) ")";
+                font-size: 9pt;
+                color: #555;
+                word-break: break-all;
+            }
+            body { font-size: 10pt; line-height: 1.4; }
+            h1 { font-size: 22pt; }
+            h2 { font-size: 16pt; page-break-after: avoid; margin-top: 18pt; }
+            h3.pub-year-header {
+                font-size: 12pt;
+                border: none !important;
+                margin-top: 10pt;
+            }
+            .pub-section {
+                padding: 0 !important;
+                margin: 10pt 0 !important;
+                border: none !important;
+            }
+            .pub-item {
+                page-break-inside: avoid;
+                margin-bottom: 6pt;
+                padding: 4pt 0 !important;
+                border-bottom: 1px solid #eee !important;
+            }
+            .pub-item-title { font-weight: 600; font-size: 10.5pt; margin-bottom: 2pt; }
+            .pub-item-details { color: #444 !important; font-size: 9.5pt; }
+            .container { max-width: 100% !important; padding: 0 !important; }
+        }
     </style>
 </head>
 <body>
@@ -1043,6 +1138,77 @@
                 }
             });
         }
+
+        // Year-jumper: floating right-side nav linking to each year group
+        (function() {
+            const headers = Array.from(document.querySelectorAll('.pub-year-header'));
+            if (headers.length === 0) return;
+
+            // Give each header an ID (year-2026 etc.)
+            const seen = new Set();
+            headers.forEach(h => {
+                const m = h.textContent.match(/\b(19|20)\d{2}\b/);
+                if (!m) return;
+                const year = m[0];
+                if (!h.id) h.id = 'year-' + year + (seen.has(year) ? '-' + seen.size : '');
+                seen.add(year);
+            });
+
+            // Build the jumper nav
+            const nav = document.createElement('nav');
+            nav.className = 'year-jumper';
+            nav.setAttribute('aria-label', 'Jump to publication year');
+            const label = document.createElement('span');
+            label.className = 'year-jumper-label';
+            label.textContent = 'Jump to';
+            nav.appendChild(label);
+
+            const yearToHeader = {};
+            headers.forEach(h => {
+                const m = h.textContent.match(/\b(19|20)\d{2}\b/);
+                if (!m) return;
+                const year = m[0];
+                if (!yearToHeader[year]) yearToHeader[year] = h;
+            });
+
+            Object.keys(yearToHeader).sort().reverse().forEach(year => {
+                const a = document.createElement('a');
+                a.href = '#' + yearToHeader[year].id;
+                a.textContent = year;
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    yearToHeader[year].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+                nav.appendChild(a);
+            });
+            document.body.appendChild(nav);
+
+            const yearLinks = Array.from(nav.querySelectorAll('a'));
+
+            function update() {
+                // Hide year links whose header is filter-hidden
+                yearLinks.forEach(link => {
+                    const h = document.getElementById(link.getAttribute('href').slice(1));
+                    link.style.display = (h && h.classList.contains('filter-hidden')) ? 'none' : '';
+                });
+                // Highlight active year based on scroll position
+                let currentHeaderId = null;
+                headers.forEach(h => {
+                    if (h.classList.contains('filter-hidden')) return;
+                    if (h.getBoundingClientRect().top < 180) currentHeaderId = h.id;
+                });
+                yearLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === '#' + currentHeaderId);
+                });
+            }
+            window.addEventListener('scroll', update, { passive: true });
+
+            // Re-evaluate when the filter changes header visibility
+            const mo = new MutationObserver(update);
+            headers.forEach(h => mo.observe(h, { attributes: true, attributeFilter: ['class'] }));
+
+            update();
+        })();
 
         // Theme toggle
         (function() {
