@@ -2007,6 +2007,11 @@
                without scrolling. (Desktop still slides it in after 100px.) */
             .nav-container {
                 top: 0 !important;
+                /* Remove backdrop-filter on mobile — it creates a containing block
+                   that traps the position: fixed .nav-menu inside this small
+                   nav bar instead of filling the viewport. */
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
             }
             /* Hide the floating social-icons on mobile — they collide with the hamburger */
             .social-icons-top {
