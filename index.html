@@ -1951,6 +1951,112 @@
             color: #ff00ff;
         }
         
+        /* Scrolling marquee banner (classic 2006 MySpace flex) */
+        .myspace-marquee {
+            background: linear-gradient(90deg, #ff00ff 0%, #ffff00 25%, #00ffff 50%, #ff00ff 75%, #ffff00 100%);
+            background-size: 200% auto;
+            animation: myspace-rainbow 4s linear infinite;
+            color: #000;
+            font-weight: 900;
+            padding: 8px 0;
+            margin-bottom: 16px;
+            border-top: 3px solid #000;
+            border-bottom: 3px solid #000;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        @keyframes myspace-rainbow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        .myspace-marquee-inner {
+            display: inline-block;
+            animation: myspace-scroll 28s linear infinite;
+            padding-left: 100%;
+        }
+        @keyframes myspace-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Profile song fake progress bar */
+        .song-progress {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            margin-top: 6px;
+            color: #00ffff;
+            justify-content: center;
+        }
+        .song-progress-bar {
+            flex: 1;
+            max-width: 120px;
+            height: 6px;
+            background: #000066;
+            border: 1px solid #00ffff;
+            position: relative;
+        }
+        .song-progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 68%;
+            background: linear-gradient(90deg, #ff00ff, #ffff00, #00ffff);
+            animation: song-pulse 2s ease-in-out infinite alternate;
+        }
+        @keyframes song-pulse {
+            from { width: 68%; }
+            to { width: 72%; }
+        }
+        .song-visualizer {
+            display: block;
+            text-align: center;
+            font-size: 18px;
+            margin-top: 4px;
+            animation: visualizer 0.5s ease-in-out infinite alternate;
+            color: #ff00ff;
+        }
+        @keyframes visualizer {
+            from { letter-spacing: 0.05em; transform: scale(1); }
+            to   { letter-spacing: 0.15em; transform: scale(1.08); }
+        }
+
+        /* Bulletin board */
+        .bulletin {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ffff00;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .bulletin:nth-child(2n) { border-left-color: #ff00ff; }
+        .bulletin:nth-child(3n) { border-left-color: #00ffff; }
+        .bulletin-meta {
+            font-size: 10px;
+            color: #999;
+            margin-top: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Sparkle cursor trail (MySpace glitter cursor) */
+        .myspace-sparkle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100001;
+            font-size: 18px;
+            animation: myspace-sparkle-fade 900ms forwards;
+            user-select: none;
+        }
+        @keyframes myspace-sparkle-fade {
+            0%   { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translate(-50%, -90px) scale(0.2) rotate(360deg); }
+        }
+
         /* MySpace Mobile Responsiveness */
         @media (max-width: 768px) {
             .myspace-profile {
@@ -3182,32 +3288,43 @@
             <div class="myspace-header">
                 <h1>✨ Dr. Michael's MySpace ✨</h1>
                 <p style="color: #00ffff; font-size: 14px;">www.myspace.com/dr_weintraub_md</p>
-                <div class="visitor-counter">👁️ Visitors: 420,069</div>
+                <div class="visitor-counter" id="myspaceVisitorCounter">👁️ Visitors: 420,069</div>
+                <p style="color: #ffff00; font-size: 12px; margin-top: 8px;">🟢 Online now · Last login: 2.5 min ago · 📍 The Hospital</p>
+            </div>
+
+            <div class="myspace-marquee">
+                <span class="myspace-marquee-inner">✨ WELCOME TO MY PAGE ✨ 🎉 UR IN MY TOP 8!!! 🎉 💊 NOW PRESCRIBING: EVIDENCE-BASED MEDICINE 💊 🔥 GLP-1 IS SO HOT RIGHT NOW 🔥 💯 THX 4 THA ADD 💯 📚 STUDYING 4 BOARDS AGAIN 😭 📚 🧬 OBESITY MEDICINE 4EVA 🧬 ✨ PIMP MY PROFILE??? ✨ &nbsp;</span>
             </div>
             
             <div class="myspace-sections">
                 <!-- Left Column -->
                 <div>
                     <div class="myspace-box">
-                        <h3>🎵 Profile Song</h3>
+                        <h3>🎵 Profile Song (autoplay ON)</h3>
                         <div class="profile-song">
                             ♪ Now Playing:<br>
-                            "Pump It" - Black Eyed Peas<br>
-                            <small>(autoplay enabled 🔊)</small>
+                            <strong>"Pump It"</strong> · Black Eyed Peas (2006) 🔥🔥🔥
+                            <div class="song-progress">
+                                <span>2:34</span>
+                                <span class="song-progress-bar"></span>
+                                <span>3:34</span>
+                            </div>
+                            <span class="song-visualizer">♫ ♬ ♩ ♪ ♫ ♬ ♪ ♫</span>
+                            <small style="display:block; margin-top:6px; color:#ff00ff;">🔊 autoplay enabled · can't turn it off sry</small>
                         </div>
                     </div>
-                    
+
                     <div class="myspace-box">
                         <h3>💫 Top 8 Friends</h3>
                         <div class="top-friends">
-                            <div class="friend-box">🏆 Tom<br><small>(MySpace Creator)</small></div>
-                            <div class="friend-box">💊 GLP-1<br><small>(Best Friend)</small></div>
-                            <div class="friend-box">⚖️ Obesity Medicine<br><small>(BFF)</small></div>
-                            <div class="friend-box">🔬 Endocrinology<br><small>(Day One)</small></div>
-                            <div class="friend-box">📚 NEJM<br><small>(Study Buddy)</small></div>
-                            <div class="friend-box">🎓 Wharton<br><small>(College Days)</small></div>
-                            <div class="friend-box">📊 PubMed<br><small>(Research Bestie)</small></div>
-                            <div class="friend-box">📊 Evidence-Based Medicine<br><small>(Ride or Die)</small></div>
+                            <div class="friend-box">🏆 Tom<br><small>(MySpace Creator · ILU 4eva)</small></div>
+                            <div class="friend-box">🧬 Semaglutide<br><small>(OG GLP-1 bae)</small></div>
+                            <div class="friend-box">💊 Tirzepatide<br><small>(rebound 🔥)</small></div>
+                            <div class="friend-box">📚 NEJM<br><small>(the GOAT)</small></div>
+                            <div class="friend-box">🔬 Endocrine Society<br><small>(ride or die)</small></div>
+                            <div class="friend-box">🗽 NYC<br><small>(4eva home)</small></div>
+                            <div class="friend-box">🎓 Wharton<br><small>(college days 💼)</small></div>
+                            <div class="friend-box">📊 PubMed<br><small>(study buddy)</small></div>
                         </div>
                     </div>
                     
@@ -3275,6 +3392,44 @@
                         </p>
                         <p style="font-size: 11px; color: #999;">Posted: 2 days ago | 420 comments</p>
                     </div>
+
+                    <div class="myspace-box">
+                        <h3>🤔 Who I'd Like to Meet</h3>
+                        <p style="font-size: 13px;">
+                            ⚗️ Whoever discovered GLP-1 (you changed the game 🙏)<br>
+                            🧠 Claude Bernard (original endocrinology dad)<br>
+                            📞 The Nobel committee (email me when u ready)<br>
+                            🎬 Tom (for the MySpace reunion tour 😤)<br>
+                            🤖 Whatever AI helped make this site ✨
+                        </p>
+                    </div>
+
+                    <div class="myspace-box">
+                        <h3>🎯 Quiz Results</h3>
+                        <p style="font-size: 13px; line-height: 1.7;">
+                            ✅ Which GLP-1 are u? → <strong style="color:#ffff00;">Semaglutide</strong> (the classic 🔥)<br>
+                            ✅ Which medical specialty r u? → <strong style="color:#ffff00;">Endocrinology (obvi)</strong><br>
+                            ✅ % evidence-based? → <strong style="color:#ffff00;">110%</strong><br>
+                            ✅ 2006 anthem? → <strong style="color:#ffff00;">Pump It 🎶</strong><br>
+                            ✅ Zodiac? → <strong style="color:#ffff00;">Endocrinus ♐</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="myspace-box" style="margin-top: 20px;">
+                <h3>📢 Bulletin Board</h3>
+                <div class="bulletin">
+                    <strong style="color: #ffff00;">Tom:</strong> HEADS UP GUYS the site is down for maintenance 😤 we'll be back soooon!!!
+                    <div class="bulletin-meta">posted 2008 · 2,147 comments</div>
+                </div>
+                <div class="bulletin">
+                    <strong style="color: #ff00ff;">Obesity Medicine:</strong> PSA to all my friendz — new guidelines just dropped!!! go peep the Endocrine Society page for the full deets 💊 update ur practice 🙏
+                    <div class="bulletin-meta">posted yesterday · 69 comments</div>
+                </div>
+                <div class="bulletin">
+                    <strong style="color: #00ffff;">Dr. Mike:</strong> whoever wants to study 4 boards later w/ me hmu on AIM — my screen name is <em>EndoDoc2006</em> 😉 we'll pull an all-nighter and order pizza 🍕
+                    <div class="bulletin-meta">posted 3 hrs ago · 24 comments</div>
                 </div>
             </div>
             
@@ -3641,16 +3796,46 @@
             });
         }
         
+        let myspaceCounterInterval = null;
+        let myspaceSparkleHandler = null;
         function toggleMySpaceMode() {
             myspaceActive = !myspaceActive;
             const overlay = document.getElementById('myspaceMode');
-            
+
             if (myspaceActive) {
                 overlay.classList.add('active');
                 document.body.style.overflow = 'hidden';
+                // Visitor counter ticks up randomly — "live" profile views
+                const counterEl = document.getElementById('myspaceVisitorCounter');
+                let count = 420069;
+                if (counterEl) counterEl.textContent = '👁️ Visitors: ' + count.toLocaleString();
+                myspaceCounterInterval = setInterval(() => {
+                    count += 1 + Math.floor(Math.random() * 4);
+                    if (counterEl) counterEl.textContent = '👁️ Visitors: ' + count.toLocaleString();
+                }, 2800);
+                // Sparkle cursor trail (throttled)
+                let lastSparkle = 0;
+                const sparkleChars = ['✨','⭐','💫','🌟','💖','🎀'];
+                myspaceSparkleHandler = (e) => {
+                    const now = Date.now();
+                    if (now - lastSparkle < 90) return;
+                    lastSparkle = now;
+                    const sp = document.createElement('div');
+                    sp.className = 'myspace-sparkle';
+                    sp.textContent = sparkleChars[Math.floor(Math.random() * sparkleChars.length)];
+                    sp.style.left = e.clientX + 'px';
+                    sp.style.top = e.clientY + 'px';
+                    document.body.appendChild(sp);
+                    setTimeout(() => sp.remove(), 900);
+                };
+                document.addEventListener('mousemove', myspaceSparkleHandler);
             } else {
                 overlay.classList.remove('active');
                 document.body.style.overflow = 'auto';
+                if (myspaceCounterInterval) { clearInterval(myspaceCounterInterval); myspaceCounterInterval = null; }
+                if (myspaceSparkleHandler) { document.removeEventListener('mousemove', myspaceSparkleHandler); myspaceSparkleHandler = null; }
+                // Remove any lingering sparkles
+                document.querySelectorAll('.myspace-sparkle').forEach(el => el.remove());
             }
         }
         
