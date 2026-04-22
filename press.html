@@ -412,6 +412,96 @@
             text-decoration: underline;
         }
         
+        /* View toggle (list ⇄ grid) */
+        .view-toggle {
+            display: inline-flex;
+            background: #f1f5f9;
+            border-radius: 999px;
+            padding: 3px;
+            gap: 2px;
+        }
+        .view-toggle button {
+            background: none;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 700;
+            color: #4a5568;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            letter-spacing: 0.04em;
+        }
+        .view-toggle button.active { background: #14B8A6; color: white; }
+        .view-toggle button svg { width: 13px; height: 13px; }
+        [data-theme="dark"] .view-toggle { background: #0a1618; }
+        [data-theme="dark"] .view-toggle button { color: #b8c5c8; }
+        [data-theme="dark"] .view-toggle button.active { background: #14B8A6; color: #042F33; }
+
+        /* Press type tag — shown only in grid view */
+        .press-type-tag {
+            display: none;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #0E8377;
+            background: #F0FDF9;
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin-bottom: 10px;
+            align-self: flex-start;
+        }
+        [data-theme="dark"] .press-type-tag { color: #2DD4BF; background: #0a1618; }
+
+        /* Grid view: applied when body has .view-grid class */
+        .view-grid .press-section .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        @media (min-width: 640px) {
+            .view-grid .press-section .container { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+        }
+        @media (min-width: 1000px) {
+            .view-grid .press-section .container { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        }
+        .view-grid .press-section h2 {
+            grid-column: 1 / -1;
+        }
+        .view-grid .press-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 18px 20px 18px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0;
+            padding-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+        .view-grid .press-item:last-child,
+        .view-grid .press-item {
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .view-grid .press-item:hover {
+            border-color: #14B8A6;
+            box-shadow: 0 4px 14px rgba(20, 184, 166, 0.15);
+            transform: translateY(-2px);
+        }
+        .view-grid .press-type-tag { display: inline-block; }
+        .view-grid .press-summary { flex: 1; max-width: 100%; }
+        [data-theme="dark"] .view-grid .press-item {
+            background: #132228;
+            border-color: #2a3d43;
+        }
+        [data-theme="dark"] .view-grid .press-item:hover {
+            background: #1a2b30;
+        }
+
         /* Filter bar — search + year + type chips */
         .filter-bar {
             background: #ffffff;
@@ -735,6 +825,19 @@
                     <button class="filter-chip" data-value="tv" type="button">TV / Video</button>
                     <button class="filter-chip" data-value="podcast" type="button">Podcast / Radio</button>
                     <button class="filter-chip" data-value="article" type="button">Article</button>
+                </div>
+            </div>
+            <div class="filter-row">
+                <span class="filter-label">View</span>
+                <div class="view-toggle">
+                    <button data-view="list" type="button" aria-label="List view">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        List
+                    </button>
+                    <button data-view="grid" type="button" class="active" aria-label="Grid view">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                        Grid
+                    </button>
                 </div>
             </div>
             <div class="filter-status">
@@ -1139,6 +1242,37 @@
                 document.documentElement.setAttribute('data-theme', next);
                 try { localStorage.setItem('theme', next); } catch (e) {}
             });
+        })();
+
+        // View toggle: list ⇄ grid, default grid, persisted in localStorage
+        (function() {
+            const listBtn = document.querySelector('.view-toggle button[data-view="list"]');
+            const gridBtn = document.querySelector('.view-toggle button[data-view="grid"]');
+            if (!listBtn || !gridBtn) return;
+
+            // Inject type-tag into each press-item (shown only in grid view via CSS)
+            const TYPE_LABELS = { tv: 'TV / Video', podcast: 'Podcast / Radio', article: 'Article' };
+            document.querySelectorAll('.press-item').forEach(item => {
+                const type = item.dataset.type || 'article';
+                const tag = document.createElement('span');
+                tag.className = 'press-type-tag';
+                tag.textContent = TYPE_LABELS[type] || 'Article';
+                item.insertBefore(tag, item.firstChild);
+            });
+
+            function applyView(view) {
+                document.body.classList.toggle('view-grid', view === 'grid');
+                listBtn.classList.toggle('active', view === 'list');
+                gridBtn.classList.toggle('active', view === 'grid');
+                try { localStorage.setItem('pressView', view); } catch (e) {}
+            }
+            listBtn.addEventListener('click', () => applyView('list'));
+            gridBtn.addEventListener('click', () => applyView('grid'));
+
+            // Restore preference (default grid)
+            let saved = 'grid';
+            try { saved = localStorage.getItem('pressView') || 'grid'; } catch (e) {}
+            applyView(saved);
         })();
 
         // Filter: search + year chips + type chips with URL hash state
