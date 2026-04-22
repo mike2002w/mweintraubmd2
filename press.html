@@ -205,6 +205,79 @@
             opacity: 1;
         }
         
+        /* Media coverage wall — "as featured in" logo grid */
+        .coverage-wall {
+            padding: 36px 20px 28px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .coverage-wall-heading {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #718096;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .coverage-wall-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            align-items: center;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+        .coverage-tile {
+            aspect-ratio: 5 / 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 14px;
+            background: #fafbfc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .coverage-tile:hover {
+            background: white;
+            border-color: #14B8A6;
+            box-shadow: 0 2px 8px rgba(20, 184, 166, 0.18);
+        }
+        .coverage-tile img {
+            max-width: 100%;
+            max-height: 40px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            filter: grayscale(100%) opacity(0.72);
+            transition: filter 0.2s ease;
+        }
+        .coverage-tile:hover img {
+            filter: grayscale(0%) opacity(1);
+        }
+        @media (max-width: 700px) {
+            .coverage-wall-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+            .coverage-wall { padding: 24px 16px 20px; }
+        }
+        /* Dark-mode coverage wall: keep tiles light so all logo styles read cleanly */
+        [data-theme="dark"] .coverage-wall {
+            background: #0a1618;
+            border-bottom-color: #1e2b30;
+        }
+        [data-theme="dark"] .coverage-wall-heading { color: #8a9898; }
+        [data-theme="dark"] .coverage-tile {
+            background: #ffffff;
+            border-color: #2a3d43;
+        }
+        [data-theme="dark"] .coverage-tile:hover {
+            border-color: #14B8A6;
+            box-shadow: 0 2px 8px rgba(20, 184, 166, 0.3);
+        }
+
         /* Featured recent coverage — highlights above the main list */
         .featured-coverage {
             padding: 32px 20px 8px;
@@ -627,7 +700,26 @@
             <a href="mailto:contact@michaelweintraubmd.com?subject=Media%20Inquiry" style="display: inline-block; background: #042F33; color: white; padding: 12px 28px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: all 0.3s;">Contact for Media Inquiries</a>
         </div>
     </div>
-    
+
+    <!-- Media coverage wall: "as featured in" logos -->
+    <section class="coverage-wall" aria-label="Media outlets featured">
+        <div class="container">
+            <h2 class="coverage-wall-heading">As Featured In</h2>
+            <div class="coverage-wall-grid">
+                <div class="coverage-tile"><img src="images/logos/nbc.svg" alt="NBC News" loading="lazy"></div>
+                <div class="coverage-tile"><img src="images/logos/time.svg" alt="TIME Magazine" loading="lazy"></div>
+                <div class="coverage-tile"><img src="images/logos/cbs.svg" alt="CBS News" loading="lazy"></div>
+                <div class="coverage-tile"><img src="images/logos/cnbc.svg" alt="CNBC" loading="lazy"></div>
+                <div class="coverage-tile"><img src="images/logos/reuters.svg" alt="Reuters" loading="lazy"></div>
+                <div class="coverage-tile"><img src="images/logos/forbes.svg" alt="Forbes" loading="lazy"></div>
+                <div class="coverage-tile"><img src="images/logos/stat.svg" alt="STAT News" loading="lazy"></div>
+                <div class="coverage-tile"><img src="images/logos/medscape.svg" alt="Medscape" loading="lazy"></div>
+                <div class="coverage-tile"><img src="images/logos/wired.svg" alt="WIRED" loading="lazy"></div>
+                <div class="coverage-tile"><img src="images/logos/docwire.jpg" alt="DocWire News" loading="lazy"></div>
+            </div>
+        </div>
+    </section>
+
     <!-- Filter bar -->
     <section class="filter-bar" aria-label="Filter press coverage">
         <div class="container">
