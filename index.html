@@ -1178,77 +1178,55 @@
             gap: 25px;
         }
 
-        /* Speaking & Booking CTA — sits below the tabbed cards, visible
-           regardless of which tab is selected. Quick mailto with a
-           pre-filled subject + body so booking requests arrive structured. */
+        /* Speaking & Booking CTA — subtle inline strip below the tabbed
+           cards. Visible regardless of tab. */
         .speaking-cta {
-            margin-top: 50px;
-            padding: 36px 40px;
-            background: linear-gradient(135deg, #042F33 0%, #0E8377 100%);
-            border-radius: 16px;
-            color: #ffffff;
-            box-shadow: 0 10px 40px rgba(4, 47, 51, 0.15);
+            margin-top: 36px;
+            padding: 18px 24px;
+            background: rgba(20, 184, 166, 0.06);
+            border: 1px solid rgba(4, 47, 51, 0.12);
+            border-radius: 10px;
         }
         .speaking-cta-inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 32px;
+            gap: 24px;
+            flex-wrap: wrap;
         }
         .speaking-cta-text {
             flex: 1;
-            min-width: 0;
-        }
-        .speaking-cta-text h3 {
-            margin: 0 0 8px 0;
-            font-size: 22px;
-            color: #ffffff;
-            font-weight: 700;
-        }
-        .speaking-cta-text p {
+            min-width: 220px;
+            font-size: 14.5px;
+            line-height: 1.5;
+            color: #042F33;
             margin: 0;
-            font-size: 15px;
-            line-height: 1.55;
-            color: rgba(255, 255, 255, 0.92);
-            max-width: 720px;
         }
         .speaking-cta-button {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: #14B8A6;
-            color: #042F33;
-            padding: 14px 24px;
-            border-radius: 10px;
+            gap: 6px;
+            color: #0E8377;
             text-decoration: none;
-            font-weight: 700;
-            font-size: 15px;
+            font-weight: 600;
+            font-size: 14.5px;
             white-space: nowrap;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            transition: color 0.15s ease, gap 0.15s ease;
             flex-shrink: 0;
         }
         .speaking-cta-button:hover,
         .speaking-cta-button:focus-visible {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(20, 184, 166, 0.35);
-            background: #2DD4BF;
+            color: #042F33;
+            gap: 10px;
         }
-        @media (max-width: 768px) {
+        @media (max-width: 600px) {
             .speaking-cta {
-                padding: 28px 22px;
-                margin-top: 36px;
+                padding: 16px 18px;
             }
             .speaking-cta-inner {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 20px;
-            }
-            .speaking-cta-text h3 {
-                font-size: 20px;
-            }
-            .speaking-cta-button {
-                width: 100%;
-                justify-content: center;
+                gap: 10px;
             }
         }
         
@@ -3006,13 +2984,10 @@
             <!-- Speaking & Booking inquiries CTA -->
             <div class="speaking-cta" role="region" aria-label="Speaking engagement requests">
                 <div class="speaking-cta-inner">
-                    <div class="speaking-cta-text">
-                        <h3>Inviting Dr. Weintraub to speak?</h3>
-                        <p>Grand rounds, CME courses, conference keynotes, departmental lectures, fellowship teaching, podcast and media interviews. Topics include obesity pharmacotherapy, GLP-1 receptor agonists, metabolic health, weight loss maintenance, and clinical endocrinology updates.</p>
-                    </div>
+                    <p class="speaking-cta-text">Available for grand rounds, CME courses, conference keynotes, fellowship teaching, podcasts, and media interviews.</p>
                     <a href="mailto:contact@michaelweintraubmd.com?subject=Speaking%20Engagement%20Request&body=Hi%20Dr.%20Weintraub%2C%0A%0AI%27d%20like%20to%20invite%20you%20to%20speak.%20A%20few%20details%3A%0A%0A%E2%80%A2%20Event%2Forganization%3A%0A%E2%80%A2%20Date%20or%20date%20range%3A%0A%E2%80%A2%20Format%20(in-person%2Fvirtual%2Fhybrid)%3A%0A%E2%80%A2%20Location%3A%0A%E2%80%A2%20Audience%20(specialty%2C%20size)%3A%0A%E2%80%A2%20Suggested%20topic%20or%20length%3A%0A%E2%80%A2%20Honorarium%2Ftravel%20budget%20(if%20any)%3A%0A%0AThanks%21" class="speaking-cta-button" onclick="if(typeof gtag!=='undefined')gtag('event','speaking_inquiry',{event_category:'engagement',event_label:'Speaking CTA'});">
-                        Request a Speaking Engagement
-                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        Request Speaking Engagement
+                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
                         </svg>
                     </a>
