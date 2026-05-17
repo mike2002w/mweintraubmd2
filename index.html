@@ -1229,6 +1229,22 @@
                 gap: 10px;
             }
         }
+        /* Dark mode — flip text/border colors so the CTA stays readable
+           on the dark page background. */
+        [data-theme="dark"] .speaking-cta {
+            background: rgba(20, 184, 166, 0.10);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        [data-theme="dark"] .speaking-cta-text {
+            color: #ffffff;
+        }
+        [data-theme="dark"] .speaking-cta-button {
+            color: #2DD4BF;
+        }
+        [data-theme="dark"] .speaking-cta-button:hover,
+        [data-theme="dark"] .speaking-cta-button:focus-visible {
+            color: #ffffff;
+        }
         
         .educator-grid::-webkit-scrollbar {
             height: 10px;
@@ -2984,7 +3000,7 @@
             <!-- Speaking & Booking inquiries CTA -->
             <div class="speaking-cta" role="region" aria-label="Speaking engagement requests">
                 <div class="speaking-cta-inner">
-                    <p class="speaking-cta-text">Available for grand rounds, CME courses, conference keynotes, fellowship teaching, podcasts, and media interviews.</p>
+                    <p class="speaking-cta-text">Available for CME courses, grand rounds, and media interviews.</p>
                     <a href="mailto:contact@michaelweintraubmd.com?subject=Speaking%20Engagement%20Request&body=Hi%20Dr.%20Weintraub%2C%0A%0AI%27d%20like%20to%20invite%20you%20to%20speak.%20A%20few%20details%3A%0A%0A%E2%80%A2%20Event%2Forganization%3A%0A%E2%80%A2%20Date%20or%20date%20range%3A%0A%E2%80%A2%20Format%20(in-person%2Fvirtual%2Fhybrid)%3A%0A%E2%80%A2%20Location%3A%0A%E2%80%A2%20Audience%20(specialty%2C%20size)%3A%0A%E2%80%A2%20Suggested%20topic%20or%20length%3A%0A%E2%80%A2%20Honorarium%2Ftravel%20budget%20(if%20any)%3A%0A%0AThanks%21" class="speaking-cta-button" onclick="if(typeof gtag!=='undefined')gtag('event','speaking_inquiry',{event_category:'engagement',event_label:'Speaking CTA'});">
                         Request Speaking Engagement
                         <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
