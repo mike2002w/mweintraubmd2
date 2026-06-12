@@ -241,6 +241,16 @@
             box-shadow: 0 2px 8px rgba(20, 184, 166, 0.15);
             transform: translateY(-1px);
         }
+        /* Primary action: Download CV — filled to stand out from the ID badges */
+        .researcher-id-btn--cv {
+            background: #042F33;
+            border-color: #042F33;
+            color: #ffffff;
+        }
+        .researcher-id-btn--cv:hover {
+            background: #0E8377;
+            border-color: #0E8377;
+        }
         .researcher-id-icon {
             width: 20px;
             height: 20px;
@@ -470,6 +480,8 @@
         [data-theme="dark"] header p { color: #9aacb0; }
         [data-theme="dark"] .researcher-id-btn { background: #132228; border-color: #2a3d43; color: #e2f0f1; }
         [data-theme="dark"] .researcher-id-btn:hover { border-color: #14B8A6; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06); }
+        [data-theme="dark"] .researcher-id-btn--cv { background: #14B8A6; border-color: #14B8A6; color: #042F33; }
+        [data-theme="dark"] .researcher-id-btn--cv:hover { background: #2DD4BF; border-color: #2DD4BF; }
         [data-theme="dark"] .filter-bar { background: #0f1e21; border-bottom-color: #1e2b30; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
         [data-theme="dark"] .filter-search { background: #132228; border-color: #2a3d43; color: #cbd5e0; }
         [data-theme="dark"] .filter-search::placeholder { color: #64757a; }
@@ -652,6 +664,14 @@
                         <text x="12" y="16" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#fff">PM</text>
                     </svg>
                     PubMed
+                </a>
+                <a href="Michael-Weintraub-MD-CV.pdf" download class="researcher-id-btn researcher-id-btn--cv" aria-label="Download curriculum vitae as PDF" onclick="if(typeof gtag!=='undefined')gtag('event','cv_download',{event_category:'engagement',event_label:'Publications header'});">
+                    <svg class="researcher-id-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Download CV
                 </a>
             </div>
         </div>
