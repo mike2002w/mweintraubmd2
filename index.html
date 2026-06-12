@@ -3852,6 +3852,8 @@
         // Add click listener to the year 2026
         const easterEggTrigger = document.getElementById('easterEggTrigger');
         if (easterEggTrigger) {
+            // Keep the copyright year current automatically
+            easterEggTrigger.textContent = new Date().getFullYear();
             easterEggTrigger.addEventListener('click', (e) => {
                 e.preventDefault();
                 clickCount++;
