@@ -496,14 +496,39 @@ const Title = {
       ctx.beginPath(); ctx.arc(bx,by,10+(i%4)*5,0,Math.PI*2); ctx.stroke();
     }
     ctx.globalAlpha = 1;
-    emoji('🎆', W/2, 225, 72);
-    text("SIENNA & PHOEBE'S", W/2, 320, 30, '#ffd23f');
-    text("RHODE ISLAND", W/2, 362, 40, '#fff');
-    text("ADVENTURE", W/2, 406, 40, '#4fd1ff');
-    text('A 4th of July adventure in 3 chapters', W/2, 448, 16, 'rgba(255,255,255,.65)', 'center', '500');
-    drawMiniWagon(W/2, 608, this.t);
-    if(button('▶  Start the Adventure', W/2, 690, 290, 64, taps, '#ff5a7a')){ setScene(Story2); }
-    text('Made for Jake, Jane & Phoebe 💛', W/2, 762, 14, 'rgba(255,255,255,.5)', 'center', '500');
+    emoji('🎆', W/2, 200, 60);
+    text("SIENNA & PHOEBE'S", W/2, 282, 28, '#ffd23f');
+    text("RHODE ISLAND", W/2, 322, 38, '#fff');
+    text("ADVENTURE", W/2, 364, 38, '#4fd1ff');
+    text('A 4th of July adventure in 3 chapters', W/2, 404, 15, 'rgba(255,255,255,.65)', 'center', '500');
+    text('CHOOSE A CHAPTER', W/2, 448, 14, '#ffd23f', 'center', '800');
+    // chapter select cards
+    const chapters = [
+      {icon:'🧋', name:'Bubbles',   num:'CHAPTER 1', color:'#4fd1ff', go:()=>Story2},
+      {icon:'🚨', name:'The Heist', num:'CHAPTER 2', color:'#ffb020', go:()=>StoryW},
+      {icon:'🎆', name:'Fireworks', num:'CHAPTER 3', color:'#ff5a7a', go:()=>Story3}
+    ];
+    chapters[0].icon='🫧';
+    for(let i=0;i<3;i++){
+      const c = chapters[i];
+      const ccx = 90+i*150, ccy = 515, cw2 = 134, ch2 = 100;
+      const x = ccx-cw2/2, y = ccy-ch2/2;
+      rr(ctx, x, y, cw2, ch2, 14);
+      ctx.fillStyle = 'rgba(255,255,255,0.07)'; ctx.fill();
+      ctx.strokeStyle = c.color;
+      ctx.globalAlpha = 0.7+0.3*Math.sin(this.t*2.2+i*1.5);
+      ctx.lineWidth = 2.5;
+      rr(ctx, x, y, cw2, ch2, 14); ctx.stroke();
+      ctx.globalAlpha = 1;
+      emoji(c.icon, ccx, ccy-22, 34);
+      text(c.num, ccx, ccy+12, 10, 'rgba(255,255,255,0.55)', 'center', '700');
+      text(c.name, ccx, ccy+32, 17, c.color, 'center', '800');
+      for(const tp of taps){
+        if(tp.x>=x && tp.x<=x+cw2 && tp.y>=y && tp.y<=y+ch2){ setScene(c.go()); }
+      }
+    }
+    drawMiniWagon(W/2, 700, this.t);
+    text('Made for Jake, Jane & Phoebe 💛', W/2, 772, 13, 'rgba(255,255,255,.5)', 'center', '500');
   }
 };
 function drawMiniWagon(cx, baseY, t){
