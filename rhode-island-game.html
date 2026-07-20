@@ -57,6 +57,13 @@ const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const W = 480, H = 800;
 
+// real trip photo for the postcard back (present only on the self-hosted copy)
+const TRIP_PHOTO = new Image();
+let tripPhotoReady = false;
+TRIP_PHOTO.onload = function(){ tripPhotoReady = true; };
+TRIP_PHOTO.onerror = function(){};
+TRIP_PHOTO.src = 'rhode-island-wagon-photo.jpg';
+
 // ---------- input ----------
 const input = { tap:false, held:false, left:false, right:false, x:W/2, y:H/2 };
 let tapQueue = [];
@@ -337,6 +344,8 @@ function drawAdult(x, y, s, o){
 }
 const JAKE = {hair:'#3b3128', skin:'#f0c9a2', shirt:'#7a2f33', glasses:true, beard:'#7d726a'};
 const JANE = {hair:'#2e2620', skin:'#f2c9a4', shirt:'#2a2a32', longHair:true, floral:true};
+const MIKE = {hair:'#2f2a26', skin:'#f0c9a2', shirt:'#3b6ea5'};
+const ALLIE = {hair:'#5a3f28', skin:'#f6cfae', shirt:'#e8735a', longHair:true};
 
 // the hula doll from the trip: brown hair, red hibiscus, lei, grass skirt
 function drawHulaDoll(x, y, s){
@@ -506,7 +515,7 @@ function drawMiniWagon(cx, baseY, t){
     }
     drawGirl(cx-38, bodyTop-16+sway*0.3, 13, SIENNA);
     drawGirl(cx+40, bodyTop-13-sway*0.3, 12, PHOEBE);
-    drawHulaDoll(cx+1, bodyTop-7+sway*0.2, 8);
+    ctx.save(); ctx.translate(cx+57, bodyTop-7-sway*0.3); ctx.rotate(0.35); drawHulaDoll(0,0,6); ctx.restore();
     const bg2=ctx.createLinearGradient(0,bodyTop,0,bodyBot);
     bg2.addColorStop(0,'#e63946'); bg2.addColorStop(1,'#b51d28');
     rr(ctx,cx-bw/2,bodyTop,bw,bodyBot-bodyTop,9);
@@ -569,7 +578,7 @@ function StoryCard(opts){
 
 const Story2 = StoryCard({
   icon:'🫧', chapter:'CHAPTER 1', title:'Bubble Buddies',
-  body:'Sienna and Phoebe pile into the little red wagon with their bubble blasters and their hula doll riding along! Tap to pop bubbles, chain matching colors for combos, and watch for cat 🐱 and pancake 🥞 bubbles... plus one glowing special bubble just for the grown-ups!',
+  body:'Sienna and Phoebe pile into the red wagon with bubble blasters, snacks to share, and Leilani the hula doll! The gramophone spins dance-party tunes while you pop. Chain colors for combos and catch cat 🐱, pancake 🥞 and snack 🍪 bubbles!',
   color:'#ff5a7a', btn:'Blow Bubbles  ▶', top:'#124a52', bot:'#0b1026', next:()=>BubbleLevel
 });
 
@@ -601,9 +610,10 @@ const BubbleLevel = {
   spawnBubble(){
     const roll=Math.random();
     let type='normal';
-    if(roll<0.07) type='cat';
-    else if(roll<0.13) type='pancake';
-    else if(roll<0.17 && this.frenzy<=0 && this.frenzyCD<=0) type='joint';
+    if(roll<0.06) type='cat';
+    else if(roll<0.115) type='pancake';
+    else if(roll<0.17) type='snack';
+    else if(roll<0.21 && this.frenzy<=0 && this.frenzyCD<=0) type='joint';
     const fam=(Math.random()*this.fams.length)|0;
     const fromGun=Math.random()<0.75;
     const gn=this.guns[(Math.random()*2)|0];
@@ -612,6 +622,7 @@ const BubbleLevel = {
       y: fromGun ? gn.y-6 : H+40,
       r: type==='joint' ? rand(30,38) : rand(24,48),
       fam, type,
+      snk: ['🍪','🍓','🥨'][(Math.random()*3)|0],
       vx: fromGun ? gn.dir*rand(15,70) : rand(-12,12),
       vy: -rand(65,115),
       wob: rand(0,6.28), ws: rand(0.8,1.6), amp: rand(4,14),
@@ -627,11 +638,13 @@ const BubbleLevel = {
     this.best=Math.max(this.best,this.combo);
     let pts=10+(this.combo>1 ? this.combo*5 : 0);
     if(b.type==='cat'){ pts+=30; this.cats++; }
+    if(b.type==='snack'){ pts+=20; }
     if(this.frenzy>0) pts*=2;
     scores.bubbles+=pts; this.popped++;
     buzz(b.type==='normal'?12:28);
     if(b.type==='cat') chime([740,520]);
     else if(b.type==='pancake') chime([440,554,659]);
+    else if(b.type==='snack') chime([587,784]);
     else if(b.type==='joint') chime([330,262,220]);
     else popSound(620 - b.r*6 + rand(-30,30));
     this.pops.push({x:b.x,y:b.y,r:b.r,t:0,hue,combo:this.combo});
@@ -640,6 +653,9 @@ const BubbleLevel = {
       this.drops.push({x:b.x,y:b.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-40,life:rand(0.4,0.8),age:0,hue});
     }
     this.floats.push({x:b.x,y:b.y-b.r,txt:'+'+pts,t:0,hue:(b.type==='cat'?30:hue),big:b.type!=='normal',center:false});
+    if(b.type==='snack'){
+      this.floats.push({x:b.x,y:b.y-b.r-22,txt:'SNACK BREAK!',t:0,hue:25,big:true,center:false});
+    }
     if(b.type==='pancake'){
       for(let k=0;k<3;k++){
         this.bubbles.push({
@@ -791,10 +807,37 @@ const BubbleLevel = {
       ctx.fillStyle='#14161a'; ctx.beginPath(); ctx.arc(wx,GY+6,11,0,Math.PI*2); ctx.fill();
       ctx.fillStyle='#9aa0aa'; ctx.beginPath(); ctx.arc(wx,GY+6,5,0,Math.PI*2); ctx.fill();
     }
-    // Jake & Jane watching from the lawn
+    // the grown-ups watching from the lawn
     drawAdult(50, GY-38, 12, JAKE);
     drawAdult(92, GY-36, 12, JANE);
     text('Jake & Jane', 70, GY+10, 12, '#5a4632', 'center', '700');
+    drawAdult(152, GY-37, 12, MIKE);
+    drawAdult(194, GY-36, 12, ALLIE);
+    text('Mike & Allie', 172, GY+10, 12, '#5a4632', 'center', '700');
+    // the gramophone from the dance party
+    const gpx=252, gpy=GY-14;
+    ctx.fillStyle='#8a5a33';
+    rr(ctx, gpx-16, gpy-14, 32, 16, 3); ctx.fill();
+    ctx.fillStyle='#6e4526';
+    rr(ctx, gpx-16, gpy-2, 32, 4, 2); ctx.fill();
+    ctx.fillStyle='#d9a441';
+    ctx.beginPath();
+    ctx.moveTo(gpx+2, gpy-16);
+    ctx.quadraticCurveTo(gpx+10, gpy-46, gpx+34, gpy-42);
+    ctx.quadraticCurveTo(gpx+26, gpy-24, gpx+8, gpy-12);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#f0c775';
+    ctx.beginPath(); ctx.ellipse(gpx+32, gpy-42, 10, 15, 0.5, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle='#b57f2e';
+    ctx.beginPath(); ctx.ellipse(gpx+32, gpy-42, 5, 8, 0.5, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#4a3018'; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.moveTo(gpx-16, gpy-8); ctx.lineTo(gpx-24, gpy-8); ctx.lineTo(gpx-24, gpy-13); ctx.stroke();
+    for(let k=0;k<3;k++){
+      const nt=(this.time*0.5+k*0.33)%1;
+      ctx.globalAlpha=(1-nt)*0.8;
+      text(k%2?'\u266a':'\u266b', gpx+30+Math.sin((this.time+k)*2.5)*10, gpy-50-nt*55, 16+k*2, '#5a4632','center','700');
+    }
+    ctx.globalAlpha=1;
     // butterfly
     const bf=this.butterfly;
     ctx.save(); ctx.translate(bf.x,bf.y); ctx.rotate(Math.sin(bf.t*6)*0.25);
@@ -828,7 +871,11 @@ const BubbleLevel = {
     // the girls, seated (wagon side will cover their laps)
     drawGirl(cx-60, bodyTop-28+sway*0.4, 20, SIENNA);
     drawGirl(cx+62, bodyTop-24-sway*0.4, 18, PHOEBE);
-    drawHulaDoll(cx+1, bodyTop-12+sway*0.2, 12);
+    ctx.save();
+    ctx.translate(cx+90, bodyTop-12-sway*0.4);
+    ctx.rotate(0.35);
+    drawHulaDoll(0, 0, 9);
+    ctx.restore();
     // bubble blasters
     this.drawGun(this.guns[0]);
     this.drawGun(this.guns[1]);
@@ -870,6 +917,7 @@ const BubbleLevel = {
     // name tags on the driveway
     text('Sienna', cx-60, H-92, 15, '#fff', 'center', '800');
     text('Phoebe', cx+62, H-92, 15, '#fff', 'center', '800');
+    text('+ Leilani 🌺', cx+80, H-72, 12, 'rgba(255,255,255,0.85)', 'center', '700');
   },
   drawGun(gn){
     const hx=gn.x-gn.dir*20, hy=gn.y+24;
@@ -927,6 +975,7 @@ const BubbleLevel = {
     if(b.type==='cat') emoji('🐱',0,2,b.r*0.85);
     if(b.type==='joint') drawJoint(0,2,b.r*0.9,this.time+b.ph);
     if(b.type==='pancake') emoji('🥞',0,2,b.r*0.8);
+    if(b.type==='snack') emoji(b.snk,0,2,b.r*0.8);
     ctx.restore();
   },
   draw(taps){
@@ -1018,7 +1067,7 @@ const BubbleLevel = {
 
 const Story3 = StoryCard({
   icon:'🎆', chapter:'CHAPTER 2', title:'4th of July Finale',
-  body:'The sky turns dark and it is time for fireworks! Tap anywhere in the sky to launch a rocket. Fill the night with color while everyone watches together on the Rhode Island coast.',
+  body:'The sky goes dark over the coast and it is time for fireworks! Tap the sky to launch rockets, and hit the glowing golden rings for DIRECT HIT bonuses. Then hold on for the grand finale!',
   color:'#4fd1ff', btn:'Light the Sky  ▶', top:'#141a3a', bot:'#05060f', next:()=>FireworksLevel
 });
 
@@ -1027,19 +1076,21 @@ const Story3 = StoryCard({
 // =====================================================
 const FireworksLevel = {
   rockets:[], sparks:[], time:0, dur:30, launched:0, done:false, t:0, auto:0, nameTimer:0, nameIdx:0,
-  finale:false, finaleT:0, finaleSpawn:0, _saveReq:false,
+  finale:false, finaleT:0, finaleSpawn:0, _saveReq:false, _photoSide:false,
+  targets:[], tSpawn:0, hits:0, msgs:[],
   _showName:null, _showNameT:0, _showNameX:0, _showNameY:0, _showNameC:'#fff',
-  names:['SIENNA','PHOEBE','ALLIE','MIKE','JAKE','JANE'],
+  names:['SIENNA','PHOEBE','LEILANI','ALLIE','MIKE','JAKE','JANE'],
   palette:['#ff5a7a','#ffd23f','#4fd1ff','#7CFC8A','#ff8ad2','#fff2a8'],
   enter(){
     this.rockets=[]; this.sparks=[]; this.time=0; this.launched=0;
     this.done=false; this.t=0; this.auto=0; this.nameTimer=0; this.nameIdx=0; this._showName=null;
-    this.finale=false; this.finaleT=0; this.finaleSpawn=0;
+    this.finale=false; this.finaleT=0; this.finaleSpawn=0; this._photoSide=false;
+    this.targets=[]; this.tSpawn=1.2; this.hits=0; this.msgs=[];
   },
   launch(tx, ty, user){
     ty = clamp(ty, 120, H*0.6);
     tx = clamp(tx, 40, W-40);
-    this.rockets.push({ x:tx, y:H-20, tx, ty, color:this.palette[(Math.random()*this.palette.length)|0] });
+    this.rockets.push({ x:tx, y:H-20, tx, ty, user:!!user, color:this.palette[(Math.random()*this.palette.length)|0] });
     this.launched++;
     if(user){ whistle(); buzz(16); }
   },
@@ -1050,8 +1101,24 @@ const FireworksLevel = {
       grav, streak, flicker, ph:rand(0,6.28)
     });
   },
-  burst(x,y,color){
+  burst(x,y,color,userRocket){
     boom();
+    // only player-launched rockets can score on target rings
+    for(let ti=userRocket ? this.targets.length-1 : -1; ti>=0; ti--){
+      const tg=this.targets[ti];
+      if(Math.hypot(x-tg.x, y-tg.y) < tg.r+16){
+        this.hits++;
+        this.msgs.push({x:tg.x, y:Math.max(60,tg.y-40), txt:'DIRECT HIT! +25', t:0});
+        this.targets.splice(ti,1);
+        const n2=20;
+        for(let i2=0;i2<n2;i2++){
+          this.addSpark(tg.x, tg.y, i2/n2*Math.PI*2, rand(150,170), '#ffd23f', rand(0.7,1.1), 60, false, true);
+        }
+        chime([784,988,1175]);
+        buzz(20);
+        break;
+      }
+    }
     const kind = ['peony','peony','ring','willow','twinkle'][(Math.random()*5)|0];
     let n = 26 + (Math.random()*14|0);
     if(kind==='ring') n = 30;
@@ -1090,10 +1157,20 @@ const FireworksLevel = {
       const dx=r.tx-r.x, dy=r.ty-r.y;
       const d=Math.hypot(dx,dy);
       const step = 520*dt;
-      if(d < step){ this.burst(r.tx, r.ty, r.color); r.done=true; }
+      if(d < step){ this.burst(r.tx, r.ty, r.color, r.user); r.done=true; }
       else { r.x += dx/d*step; r.y += dy/d*step; }
     }
     this.rockets = this.rockets.filter(r=>!r.done);
+    // bonus target rings
+    this.tSpawn -= dt;
+    if(this.tSpawn<=0 && this.targets.length<3 && !this.done && !this.finale){
+      this.tSpawn = rand(1.4,2.2);
+      this.targets.push({x:rand(70,W-70), y:rand(140,H*0.5), r:34, age:0, life:4.5, vx:rand(-28,28)});
+    }
+    for(const tg of this.targets){ tg.age+=dt; tg.x+=tg.vx*dt; if(tg.x<50||tg.x>W-50) tg.vx*=-1; }
+    this.targets = this.targets.filter(tg=>tg.age<tg.life);
+    for(const m of this.msgs) m.t+=dt;
+    this.msgs = this.msgs.filter(m=>m.t<1.2);
     for(const s of this.sparks){
       s.age += dt;
       s.x += s.vx*dt; s.y += s.vy*dt;
@@ -1152,8 +1229,8 @@ const FireworksLevel = {
     }
     ctx.globalAlpha=1;
     // shore: the family + the wagon
-    emoji('👨', 40, H-42, 30);
-    emoji('👩', 88, H-42, 30);
+    drawAdult(40, H-56, 13, MIKE);
+    drawAdult(92, H-54, 13, ALLIE);
     drawGirl(140, H-54, 11, SIENNA);
     drawGirl(188, H-52, 10, PHOEBE);
     drawAdult(244, H-58, 13, JAKE);
@@ -1173,6 +1250,21 @@ const FireworksLevel = {
       ctx.fillStyle='#0c0d12'; ctx.beginPath(); ctx.arc(wx,H-36,10,0,Math.PI*2); ctx.fill();
     }
     drawHulaDoll(W-72, H-88, 8);
+    // bonus target rings
+    for(const tg of this.targets){
+      const lifeK = 1 - tg.age/tg.life;
+      const blink = tg.age>tg.life-1 ? (Math.sin(tg.age*12)>0?1:0.25) : 1;
+      ctx.globalAlpha = 0.85*blink;
+      ctx.strokeStyle='#ffd23f'; ctx.lineWidth=3;
+      ctx.setLineDash([8,6]); ctx.lineDashOffset=-this.time*30;
+      ctx.beginPath(); ctx.arc(tg.x,tg.y,tg.r*(0.8+0.2*lifeK),0,Math.PI*2); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.strokeStyle='rgba(255,210,63,0.5)'; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.arc(tg.x,tg.y,tg.r*0.45,0,Math.PI*2); ctx.stroke();
+      ctx.fillStyle='#ffd23f';
+      ctx.beginPath(); ctx.arc(tg.x,tg.y,3,0,Math.PI*2); ctx.fill();
+      ctx.globalAlpha=1;
+    }
     // rockets with sparkle trails
     for(const r of this.rockets){
       const dx=r.tx-r.x, dy=r.ty-r.y, d=Math.hypot(dx,dy)||1;
@@ -1202,6 +1294,12 @@ const FireworksLevel = {
       }
     }
     ctx.globalAlpha=1;
+    for(const m of this.msgs){
+      const k=m.t/1.2;
+      ctx.globalAlpha=1-k;
+      text(m.txt, m.x, m.y-k*30, 20, '#ffd23f','center','800');
+      ctx.globalAlpha=1;
+    }
     if(this._showName!=null && this._showNameT<2.2 && !this.finale){
       ctx.globalAlpha = clamp(1.2 - this._showNameT/2.2, 0, 1);
       text(this._showName, this._showNameX, this._showNameY, 30, this._showNameC);
@@ -1216,11 +1314,14 @@ const FireworksLevel = {
     if(!this.done && !this.finale){
       const timeLeft = Math.max(0, Math.ceil(this.dur - this.time));
       rr(ctx, 12, 12, W-24, 40, 12); ctx.fillStyle='rgba(0,0,0,.3)'; ctx.fill();
-      text('🎆 ' + this.launched + ' launched', 30, 32, 18, '#fff', 'left');
+      text('🎆 '+this.launched+'   🎯 '+this.hits, 30, 32, 18, '#fff', 'left');
       text('⏱ ' + timeLeft + 's', W-24, 32, 18, '#fff', 'right');
-      text('Tap the sky!', W/2, 32, 16, '#ffd23f');
+      text('Hit the rings!', W/2, 32, 16, '#ffd23f');
     }
     if(this.done){
+      for(const tp of taps){
+        if(tripPhotoReady && tp.x>40 && tp.x<W-40 && tp.y>110 && tp.y<650) this._photoSide = !this._photoSide;
+      }
       this.drawPostcard();
       // a save was requested last frame: the canvas now holds the clean postcard
       if(this._saveReq){
@@ -1246,6 +1347,23 @@ const FireworksLevel = {
     rr(ctx, 28, 96, W-56, 560, 10);
     ctx.fillStyle='#fdf6e8'; ctx.fill();
     ctx.restore();
+    if(this._photoSide && tripPhotoReady){
+      // the real photo, full-frame
+      text('THE REAL THING 📷', W/2, 138, 20, '#c22030', 'center', '900');
+      const px=44, py=160, pw=W-88, ph=294;
+      ctx.save();
+      rr(ctx, px, py, pw, ph, 6); ctx.clip();
+      const ir=TRIP_PHOTO.width/TRIP_PHOTO.height, br=pw/ph;
+      let dw, dh;
+      if(ir>br){ dh=ph; dw=ph*ir; } else { dw=pw; dh=pw/ir; }
+      ctx.drawImage(TRIP_PHOTO, px+(pw-dw)/2, py+(ph-dh)/2, dw, dh);
+      ctx.restore();
+      text('The real Rhode Island Flyer crew 💛', W/2, 490, 17, '#5a4632','center','700');
+      text('Sienna, Phoebe & one million bubbles', W/2, 520, 14, '#7a6a55','center','500');
+      text('July 4th', W/2, 548, 13, '#a08a6a','center','600');
+      text('tap the card to flip back ↻', W/2, 630, 12, '#a08a6a','center','600');
+      return;
+    }
     // stamp + postmark
     rr(ctx, W-96, 116, 52, 62, 4);
     ctx.strokeStyle='#c9a86b'; ctx.lineWidth=2; ctx.setLineDash([3,3]); ctx.stroke(); ctx.setLineDash([]);
@@ -1279,12 +1397,13 @@ const FireworksLevel = {
     drawAdult(96, 420, 11, JAKE);
     drawAdult(384, 420, 11, JANE);
     ctx.restore();
-    const grand = scores.bubbles + this.launched*5;
-    text('FINAL SCORE  '+grand.toLocaleString()+'   •   🎆 '+this.launched, W/2, 500, 18, '#5a4632', 'center', '800');
+    const grand = scores.bubbles + this.launched*5 + this.hits*25;
+    text('FINAL SCORE  '+grand.toLocaleString()+'   •   🎆 '+this.launched+'   •   🎯 '+this.hits, W/2, 500, 18, '#5a4632', 'center', '800');
     text('Sienna & Phoebe: friends forever 💛', W/2, 534, 17, '#c22030', 'center', '700');
     text('Bubbles, fireworks & the best hosts in Rhode Island.', W/2, 564, 14, '#7a6a55', 'center', '500');
     text('XOXO — Mike, Allie & Sienna', W/2, 592, 15, '#5a4632', 'center', '700');
     text('July 4th', W/2, 622, 13, '#a08a6a', 'center', '600');
+    if(tripPhotoReady) text('tap the card to see the real photo 📷', W/2, 644, 12, '#a08a6a', 'center', '600');
   }
 };
 
