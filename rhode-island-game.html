@@ -119,7 +119,7 @@ function ensureAudio(){
   ensureMusic();
 }
 function tone(freq, dur, vol){
-  if(!AC) return;
+  if(!AC || SND.muted) return;
   const t0 = AC.currentTime;
   const o = AC.createOscillator(), g = AC.createGain();
   o.type = 'sine';
@@ -133,7 +133,7 @@ function tone(freq, dur, vol){
 function popSound(freq){ tone(freq, 0.09, 0.16); }
 function buzz(ms){ if(navigator.vibrate){ try{ navigator.vibrate(ms); }catch(e){} } }
 function whistle(){
-  if(!AC) return;
+  if(!AC || SND.muted) return;
   const t0 = AC.currentTime;
   const o = AC.createOscillator(), g = AC.createGain();
   o.type = 'triangle';
@@ -146,7 +146,7 @@ function whistle(){
 }
 function chime(freqs){ for(let i=0;i<freqs.length;i++){ setTimeout(tone, i*90, freqs[i], 0.18, 0.11); } }
 function boom(){
-  if(!AC) return;
+  if(!AC || SND.muted) return;
   const t0 = AC.currentTime;
   const o = AC.createOscillator(), g = AC.createGain();
   o.type = 'sine';
@@ -177,6 +177,7 @@ function ensureMusic(){
   music.next = AC.currentTime + 0.1;
 }
 function pnote(freq, t, dur, vol, type){
+  if(SND.muted) return;
   const o = AC.createOscillator(), g = AC.createGain();
   o.type = type || 'square';
   o.frequency.setValueAtTime(freq, t);
@@ -187,6 +188,7 @@ function pnote(freq, t, dur, vol, type){
   o.start(t); o.stop(t+dur+0.03);
 }
 function kickDrum(t){
+  if(SND.muted) return;
   const o = AC.createOscillator(), g = AC.createGain();
   o.type='sine';
   o.frequency.setValueAtTime(130, t);
@@ -197,6 +199,7 @@ function kickDrum(t){
   o.start(t); o.stop(t+0.18);
 }
 function hatTick(t){
+  if(SND.muted) return;
   const s = AC.createBufferSource(); s.buffer = noiseBuf;
   const hp = AC.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=6000;
   const g = AC.createGain(); g.gain.value = 0.05;
@@ -213,6 +216,7 @@ const P_MELODY = [
   349,440,523,0,440,349,262,0,  392,0,330,294,262,0,0,0
 ];
 function mnote(freq, t, dur, vol, type){
+  if(SND.muted) return;
   const o = AC.createOscillator(), g = AC.createGain();
   o.type = type || 'square';
   o.frequency.setValueAtTime(freq*(1+rand(-0.004,0.004)), t);
@@ -233,6 +237,7 @@ const M_MELODY = [
 ];
 function musicTick(){
   if(!AC || !musicBus) return;
+  if(SND.muted){ music.next = AC.currentTime + 0.1; return; }
   if(music.next < AC.currentTime - 0.5) music.next = AC.currentTime;
   while(music.next < AC.currentTime + 0.35){
     const i = music.step, t = music.next;
@@ -491,6 +496,8 @@ const scores = { road:0, bubbles:0, wagon:0, fireworks:0, lander:0 };
 // per-level best scores, saved on this device
 function bestGet(k){ try{ return parseInt(localStorage.getItem('riw_'+k))||0; }catch(e){ return 0; } }
 function bestPut(k,v){ try{ if(v>bestGet(k)){ localStorage.setItem('riw_'+k, ''+v); return true; } }catch(e){} return false; }
+const SND = { muted:false };
+try{ SND.muted = localStorage.getItem('riw_muted')==='1'; }catch(e){}
 
 function setScene(s){
   scene = s;
@@ -522,6 +529,22 @@ function homeButton(taps){
   emoji('\u{1F3E0}', 32, 94, 16);
   for(const t of taps){
     if(Math.hypot(t.x-32, t.y-94) <= 22) return true;
+  }
+  return false;
+}
+
+// mute toggle
+function soundButton(taps, x, y){
+  ctx.beginPath(); ctx.arc(x, y, 17, 0, Math.PI*2);
+  ctx.fillStyle='rgba(20,15,35,0.45)'; ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.5)'; ctx.lineWidth=1.5; ctx.stroke();
+  emoji(SND.muted?'\u{1F507}':'\u{1F50A}', x, y, 15);
+  for(const t of taps){
+    if(Math.hypot(t.x-x, t.y-y) <= 22){
+      SND.muted = !SND.muted;
+      try{ localStorage.setItem('riw_muted', SND.muted?'1':'0'); }catch(e){}
+      return true;
+    }
   }
   return false;
 }
@@ -571,13 +594,14 @@ const Title = {
     text("RHODE ISLAND", W/2, 322, 38, '#fff');
     text("ADVENTURE", W/2, 364, 38, '#4fd1ff');
     text('A 4th of July adventure — 3 chapters + a bonus dream', W/2, 404, 15, 'rgba(255,255,255,.65)', 'center', '500');
+    soundButton(taps, W-32, 36);
     text('CHOOSE A CHAPTER', W/2, 448, 14, '#ffd23f', 'center', '800');
     // chapter select cards
     const chapters = [
       {icon:'🫧', name:'Bubbles',   num:'CHAPTER 1', color:'#4fd1ff', key:'bubbles',   go:()=>Story2},
       {icon:'🚨', name:'Heist',     num:'CHAPTER 2', color:'#ffb020', key:'wagon',     go:()=>StoryW},
       {icon:'🎆', name:'Fireworks', num:'CHAPTER 3', color:'#ff5a7a', key:'fireworks', go:()=>Story3},
-      {icon:'🌙', name:'Moon',      num:'BONUS',     color:'#c4a7ff', key:'lander',    go:()=>StoryL}
+      {icon:'🌙', name:'Moon',      num:'BONUS',     color:'#c4a7ff', key:'lander2',   go:()=>StoryL}
     ];
     for(let i=0;i<4;i++){
       const c = chapters[i];
@@ -1130,11 +1154,18 @@ const BubbleLevel = {
     text(scores.bubbles+' pts', 172, 35, 14, '#ffd23f', 'left', '800');
     const timeLeft=Math.max(0,Math.ceil(this.dur-this.time));
     text('⏱ '+timeLeft+'s', W-24, 34, 20, '#fff', 'right');
-    if(this.combo>1) text('🔥 ×'+this.combo, W/2+20, 34, 19, '#ffd23f');
+    if(this.lastFam>=0){
+      ctx.beginPath(); ctx.arc(W/2+4, 34, 8, 0, Math.PI*2);
+      ctx.fillStyle='hsl('+this.fams[this.lastFam]+',85%,60%)'; ctx.fill();
+      ctx.lineWidth=2; ctx.strokeStyle='#fff'; ctx.stroke();
+      if(this.combo>1) text('×'+this.combo, W/2+20, 34, 19, '#ffd23f', 'left', '800');
+      else text('chain', W/2+18, 35, 11, 'rgba(255,255,255,0.6)', 'left', '600');
+    }
     // time bar
     const tp2=clamp(1-this.time/this.dur,0,1);
     rr(ctx, 12, 62, W-24, 8, 4); ctx.fillStyle='rgba(0,0,0,0.18)'; ctx.fill();
     rr(ctx, 12, 62, (W-24)*tp2, 8, 4); ctx.fillStyle=this.frenzy>0?'#ffb020':'#4fd1ff'; ctx.fill();
+    soundButton(taps, 76, 94);
     if(!this.done && homeButton(taps)){ setScene(Title); return; }
 
     if(this.done){
@@ -1158,8 +1189,9 @@ const BubbleLevel = {
       text('Best combo: ×'+this.best+'   •   Cats: '+this.cats+' 🐱', W/2, 430, 17, 'rgba(255,255,255,0.85)');
       text('Chapter best: '+bestGet('bubbles')+(this.newBest?'   🏆 NEW BEST!':''), W/2, 460, 15, this.newBest?'#ffd23f':'rgba(255,255,255,0.7)', 'center', '700');
       text('Now the sun is going down...', W/2, 488, 14, 'rgba(255,255,255,0.7)','center','500');
-      if(button('Menu  ⌂', W/2-88, 560, 156, 56, taps, '#4fa3d1')){ setScene(Title); }
-      if(button('The Heist  ▶', W/2+88, 560, 156, 56, taps, '#ffb020')){
+      if(button('Menu ⌂', 92, 560, 128, 54, taps, '#4fa3d1')){ setScene(Title); }
+      if(button('Retry ↻', 240, 560, 128, 54, taps, '#8e6fd8')){ setScene(BubbleLevel); }
+      if(button('Heist ▶', 388, 560, 128, 54, taps, '#ffb020')){
         totalScore += scores.bubbles; setScene(StoryW);
       }
     }
@@ -1281,8 +1313,9 @@ const WagonLevel = {
     if(this.sceneT<=0){
       this.sceneT=0.4*(14/this.speed);
       const side=Math.random()<0.5?-1:1;
-      const kind=Math.random()<0.45?'house':'tree';
-      this.scenery.push({z:28, x:side*(kind==='house'?2.7:rand(1.8,3.4)), kind,
+      const kr=Math.random();
+      const kind=kr<0.40?'house':kr<0.80?'tree':kr<0.92?'sign':'dels';
+      this.scenery.push({z:28, x:side*(kind==='house'?2.7:kind==='tree'?rand(1.8,3.4):kind==='sign'?2.2:2.9), kind,
         hue:Math.floor(Math.random()*4), tr:['\u{1F333}','\u{1F332}','\u{1F334}'][(Math.random()*3)|0]});
     }
     // advance & collide
@@ -1308,7 +1341,7 @@ const WagonLevel = {
             this.addFloat('⚡ NITRO!','#4fd1ff');
             chime([523,784,1047]); buzz(20);
           } else if(s.kind==='obst'){
-            this.crash=1.0; this.shake=0.35;
+            this.crash=0.6; this.shake=0.35;
             this.addFloat('\u{1F4A5} CRASH!','#ffd23f');
             popSound(150); buzz(40);
           } else {
@@ -1400,6 +1433,33 @@ const WagonLevel = {
       const p=this.proj(o.x,o.z);
       if(o.kind==='tree'){ emoji(o.tr,p.x,p.y-90*p.s,Math.max(8,220*p.s)); }
       else if(o.kind==='house'){ this.drawHouse(p.x,p.y,p.s,o.hue); }
+      else if(o.kind==='sign'){
+        const s4=p.s;
+        ctx.fillStyle='#8a8f98';
+        ctx.fillRect(p.x-6*s4, p.y-130*s4, 12*s4, 130*s4);
+        ctx.fillStyle='#1a7a3c';
+        rr(ctx, p.x-130*s4, p.y-215*s4, 260*s4, 90*s4, 8*s4); ctx.fill();
+        ctx.strokeStyle='#fff'; ctx.lineWidth=Math.max(1,3*s4);
+        rr(ctx, p.x-122*s4, p.y-207*s4, 244*s4, 74*s4, 6*s4); ctx.stroke();
+        if(s4>0.06){
+          text('PROVIDENCE', p.x, p.y-188*s4, Math.max(4,30*s4), '#fff', 'center', '800');
+          text('3 MI', p.x, p.y-155*s4, Math.max(3,24*s4), '#fff', 'center', '700');
+        }
+      }
+      else if(o.kind==='dels'){
+        const s4=p.s;
+        ctx.fillStyle='#f7e34d';
+        rr(ctx, p.x-110*s4, p.y-120*s4, 220*s4, 120*s4, 8*s4); ctx.fill();
+        for(let st=0; st<6; st++){
+          ctx.fillStyle= st%2 ? '#fff' : '#1a7a3c';
+          ctx.fillRect(p.x-120*s4+st*40*s4, p.y-150*s4, 40*s4, 34*s4);
+        }
+        if(s4>0.06){
+          text("DEL'S", p.x, p.y-70*s4, Math.max(4,40*s4), '#1a7a3c', 'center', '900');
+          text('FROZEN LEMONADE', p.x, p.y-36*s4, Math.max(3,16*s4), '#8a6d1a', 'center', '700');
+        }
+        emoji('\u{1F34B}', p.x+86*s4, p.y-136*s4, Math.max(6,44*s4));
+      }
       else if(o.kind==='parent'){
         const bw=130*p.s, bh=Math.max(3,15*p.s);
         for(let st=0; st<6; st++){
@@ -1507,6 +1567,7 @@ const WagonLevel = {
     if(stars<5) text((this.wanted%5)+'/5 to next ★', W/2, 52, 10, 'rgba(255,255,255,0.5)', 'center', '600');
     // speedometer gag
     text(Math.round(this.speed*4)+' mph', W-24, 66, 13, this.nitro>0?'#4fd1ff':'rgba(255,255,255,0.55)', 'right', '700');
+    soundButton(taps, 76, 94);
     if(!this.done && homeButton(taps)){ setScene(Title); return; }
     if(this.intro<2.4){
       ctx.globalAlpha=clamp(2.4-this.intro,0,1);
@@ -1523,8 +1584,9 @@ const WagonLevel = {
       text('Busted: '+this.busts+'   •   Score: '+scores.wagon, W/2, 378, 17, 'rgba(255,255,255,0.85)');
       text('Chapter best: '+bestGet('wagon')+(this.newBest?'   🏆 NEW BEST!':''), W/2, 408, 15, this.newBest?'#ffd23f':'rgba(255,255,255,0.7)', 'center', '700');
       text('The parents pretend to be mad. They are not.', W/2, 438, 14, 'rgba(255,255,255,0.6)','center','500');
-      if(button('Menu  ⌂', W/2-88, 560, 156, 56, taps, '#4fa3d1')){ setScene(Title); }
-      if(button('Fireworks  ▶', W/2+88, 560, 156, 56, taps, '#ff5a7a')){
+      if(button('Menu ⌂', 92, 560, 128, 54, taps, '#4fa3d1')){ setScene(Title); }
+      if(button('Retry ↻', 240, 560, 128, 54, taps, '#8e6fd8')){ setScene(WagonLevel); }
+      if(button('Fireworks ▶', 388, 560, 128, 54, taps, '#ff5a7a')){
         totalScore += scores.wagon;
         setScene(Story3);
       }
@@ -1612,7 +1674,7 @@ const LanderLevel = {
         const pad=this.pads.find(function(p){ return px2>p.x0+8 && px2<p.x1-8; });
         if(pad && this.vy<70 && Math.abs(this.vx)<45){
           this.state='landed'; this.stateT=0; this.good++;
-          this.roundPts=100*pad.mult+Math.round(this.fuel);
+          this.roundPts=60*pad.mult+Math.round(this.fuel);
           scores.lander+=this.roundPts;
           chime([523,659,784,1047]); buzz(30);
         } else {
@@ -1625,7 +1687,7 @@ const LanderLevel = {
     } else if(this.state!=='done'){
       this.stateT+=dt;
       if(this.stateT>2.2){
-        if(this.att>=this.attMax){ this.state='done'; this.newBest=bestPut('lander', scores.lander); chime([523,659,784]); }
+        if(this.att>=this.attMax){ this.state='done'; this.newBest=bestPut('lander2', scores.lander); chime([523,659,784]); }
         else this.newRound();
       }
     }
@@ -1695,6 +1757,7 @@ const LanderLevel = {
     text('\u2193 '+Math.max(0,Math.round(this.vy)), W/2, 40, 20, fast?'#ff5a7a':'#7CFC8A', 'center', '800');
     text('\u{1F6DE} '+this.att+'/'+this.attMax, W-24, 28, 15, '#fff', 'right', '700');
     text(scores.lander+' pts', W-24, 52, 15, '#ffd23f', 'right', '800');
+    soundButton(taps, 76, 94);
     if(this.state!=='done' && homeButton(taps)){ setScene(Title); return; }
     if(this.state==='landed'){
       text('PERFECT LANDING!', W/2, 300, 32, '#7CFC8A');
@@ -1716,11 +1779,10 @@ const LanderLevel = {
       text('DREAM COMPLETE', W/2, 290, 30, '#c4a7ff');
       text('Landings: '+this.good+' / '+this.attMax, W/2, 344, 20, '#fff');
       text('Moon score: '+scores.lander, W/2, 380, 20, '#ffd23f');
-      text('Chapter best: '+bestGet('lander')+(this.newBest?'   🏆 NEW BEST!':''), W/2, 410, 15, this.newBest?'#ffd23f':'rgba(255,255,255,0.7)', 'center', '700');
+      text('Chapter best: '+bestGet('lander2')+(this.newBest?'   🏆 NEW BEST!':''), W/2, 410, 15, this.newBest?'#ffd23f':'rgba(255,255,255,0.7)', 'center', '700');
       text('The girls wake up giggling. Leilani is holding a moon rock.', W/2, 440, 14, 'rgba(255,255,255,0.6)', 'center', '500');
-      if(button('Back to Earth  \u21A9', W/2, 560, 250, 60, taps, '#c4a7ff')){
-        setScene(Title);
-      }
+      if(button('Retry ↻', W/2-88, 560, 156, 56, taps, '#8e6fd8')){ setScene(LanderLevel); }
+      if(button('Menu ⌂', W/2+88, 560, 156, 56, taps, '#c4a7ff')){ setScene(Title); }
     }
   }
 };
@@ -1875,7 +1937,16 @@ const FireworksLevel = {
       if(this.rainT<=0){
         this.rainT=Math.max(0.45, 1.5-this.wave*0.3)*rand(0.7,1.3);
         const cl=this.clouds[(Math.random()*this.clouds.length)|0];
-        this.drops.push({x:cl.x+rand(-14,14), y:cl.y+18});
+        cl.charge=0.55;
+      }
+      for(const cl of this.clouds){
+        if(cl.charge>0){
+          cl.charge-=dt;
+          if(cl.charge<=0){
+            cl.charge=0;
+            this.drops.push({x:cl.x+rand(-14,14), y:cl.y+18});
+          }
+        }
       }
       for(let j=this.clouds.length-1;j>=0;j--){
         if(this.clouds[j].y>H-230){ this.clouds.splice(j,1); this.hurt(); }
@@ -1905,8 +1976,9 @@ const FireworksLevel = {
   },
   drawCloud(cl){
     ctx.save();
-    ctx.translate(cl.x, cl.y+Math.sin(this.time*2+cl.ph)*3);
-    ctx.fillStyle='#59627a';
+    const charging = cl.charge>0;
+    ctx.translate(cl.x+(charging?Math.sin(this.time*45)*2.5:0), cl.y+Math.sin(this.time*2+cl.ph)*3);
+    ctx.fillStyle=charging?'#3d4459':'#59627a';
     ctx.beginPath();
     ctx.arc(-18,4,15,0,Math.PI*2); ctx.arc(0,-6,19,0,Math.PI*2);
     ctx.arc(19,4,14,0,Math.PI*2); ctx.arc(0,7,17,0,Math.PI*2);
@@ -2018,6 +2090,7 @@ const FireworksLevel = {
         text('storm clouds want to rain out the show!', W/2, 346, 15, 'rgba(255,255,255,0.8)', 'center', '600');
         ctx.globalAlpha=1;
       }
+      soundButton(taps, 76, 94);
       if(homeButton(taps)){ setScene(Title); return; }
     }
     if(this.flash>0){
@@ -2042,8 +2115,9 @@ const FireworksLevel = {
           a.click();
         }catch(e){}
       }
-      if(button('Save \u{1F4EE}', W/2-88, 706, 156, 54, taps, '#4fa3d1')) this._saveReq = true;
-      if(button('Menu  ⌂', W/2+88, 706, 156, 54, taps, '#ff5a7a')){
+      if(button('Save \u{1F4EE}', 92, 706, 128, 54, taps, '#4fa3d1')) this._saveReq = true;
+      if(button('Retry ↻', 240, 706, 128, 54, taps, '#8e6fd8')){ setScene(FireworksLevel); }
+      if(button('Menu ⌂', 388, 706, 128, 54, taps, '#ff5a7a')){
         totalScore = 0; scores.road=0; scores.bubbles=0; scores.wagon=0; scores.fireworks=0;
         setScene(Title);
       }
