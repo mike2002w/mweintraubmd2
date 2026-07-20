@@ -437,7 +437,7 @@ function drawJoint(x, y, s, t){
 // ---------- global state ----------
 let scene;
 let totalScore = 0;
-const scores = { road:0, bubbles:0, fireworks:0 };
+const scores = { road:0, bubbles:0, wagon:0, fireworks:0 };
 
 function setScene(s){ scene = s; if(s.enter) s.enter(); }
 
@@ -500,7 +500,7 @@ const Title = {
     text("SIENNA & PHOEBE'S", W/2, 320, 30, '#ffd23f');
     text("RHODE ISLAND", W/2, 362, 40, '#fff');
     text("ADVENTURE", W/2, 406, 40, '#4fd1ff');
-    text('A 4th of July adventure in 2 chapters', W/2, 448, 16, 'rgba(255,255,255,.65)', 'center', '500');
+    text('A 4th of July adventure in 3 chapters', W/2, 448, 16, 'rgba(255,255,255,.65)', 'center', '500');
     drawMiniWagon(W/2, 608, this.t);
     if(button('▶  Start the Adventure', W/2, 690, 290, 64, taps, '#ff5a7a')){ setScene(Story2); }
     text('Made for Jake, Jane & Phoebe 💛', W/2, 762, 14, 'rgba(255,255,255,.5)', 'center', '500');
@@ -1058,21 +1058,285 @@ const BubbleLevel = {
       text('Bubbles popped: '+this.popped+'   •   Score: '+scores.bubbles, W/2, 398, 19, '#fff');
       text('Best combo: ×'+this.best+'   •   Cats: '+this.cats+' 🐱', W/2, 430, 17, 'rgba(255,255,255,0.85)');
       text('Now the sun is going down...', W/2, 470, 16, 'rgba(255,255,255,0.7)','center','500');
-      if(button('Fireworks Time  ▶', W/2, 560, 250, 60, taps, '#ff5a7a')){
-        totalScore += scores.bubbles; setScene(Story3);
+      if(button('The Heist  ▶', W/2, 560, 250, 60, taps, '#ffb020')){
+        totalScore += scores.bubbles; setScene(StoryW);
       }
     }
   }
 };
 
 const Story3 = StoryCard({
-  icon:'🎆', chapter:'CHAPTER 2', title:'4th of July Finale',
+  icon:'🎆', chapter:'CHAPTER 3', title:'4th of July Finale',
   body:'The sky goes dark over the coast and it is time for fireworks! Tap the sky to launch rockets, and hit the glowing golden rings for DIRECT HIT bonuses. Then hold on for the grand finale!',
   color:'#4fd1ff', btn:'Light the Sky  ▶', top:'#141a3a', bot:'#05060f', next:()=>FireworksLevel
 });
 
+
+const StoryW = StoryCard({
+  icon:'🚨', chapter:'CHAPTER 2', title:'Grand Theft Wagon',
+  body:'While the grown-ups dance by the gramophone, Sienna, Phoebe and Leilani roll off on a top-secret snack heist! Steer the wagon with your finger or arrow keys, scoop up every snack... and do NOT get busted by the parents!',
+  color:'#ffb020', btn:'Start the Heist  ▶', top:'#2b1a3a', bot:'#0b1026',
+  next:()=>WagonLevel
+});
+
 // =====================================================
-//  CHAPTER 2 — FIREWORKS FINALE
+//  CHAPTER 2 — GRAND THEFT WAGON (top-down heist)
+// =====================================================
+const WagonLevel = {
+  wx:0, wy:0, ang:0, time:0, dur:35, loot:0, wanted:0, busts:0, done:false,
+  chasers:[], floats:[], dust:[], got:null, spawnT:0, intro:0,
+  C:240, RW:80,
+  enter(){
+    this.wx=40; this.wy=40; this.ang=0; this.time=0; this.loot=0; this.wanted=0;
+    this.busts=0; this.done=false; this.chasers=[]; this.floats=[]; this.dust=[];
+    this.got=new Set(); this.spawnT=2; this.intro=0;
+    scores.wagon=0;
+  },
+  h2(ix,iy){
+    let n=(ix*374761393+iy*668265263)|0;
+    n=((n^(n>>13))*1274126177)|0;
+    n=(n^(n>>16))>>>0;
+    return n/4294967295;
+  },
+  isRoad(x,y){
+    const C=this.C, RW=this.RW;
+    const mx=((x%C)+C)%C, my=((y%C)+C)%C;
+    return mx<RW || my<RW;
+  },
+  lootAt(ix,iy){
+    const r=this.h2(ix,iy);
+    if(r<0.45) return null;
+    const C=this.C;
+    const px=ix*C + 100 + this.h2(ix+7,iy)*100;
+    const py=iy*C + 100 + this.h2(ix,iy+7)*100;
+    const items=['🧃','🍪','🍓','🥨','🍦','🍉'];
+    return {x:px, y:py, ch:items[Math.floor(r*items.length)%items.length]};
+  },
+  update(dt,taps){
+    if(this.done) return;
+    this.time+=dt; this.intro+=dt;
+    const cx=W/2, cy=H/2+40;
+    // steering: hold to aim, or arrow keys
+    let steer=0;
+    if(input.left) steer=-1;
+    if(input.right) steer=1;
+    if(input.held){
+      const dx=input.x-cx, dy=input.y-cy;
+      if(Math.hypot(dx,dy)>20){
+        const target=Math.atan2(dy,dx);
+        let dd=target-this.ang;
+        while(dd>Math.PI) dd-=Math.PI*2;
+        while(dd<-Math.PI) dd+=Math.PI*2;
+        steer=clamp(dd*3,-1,1);
+      }
+    }
+    this.ang+=steer*2.6*dt;
+    const onRoad=this.isRoad(this.wx,this.wy);
+    const spd=onRoad?175:120;
+    const px0=this.wx, py0=this.wy;
+    this.wx+=Math.cos(this.ang)*spd*dt;
+    this.wy+=Math.sin(this.ang)*spd*dt;
+    // bounce off houses
+    if(this.bumpCD>0) this.bumpCD-=dt;
+    {
+      const cix=Math.floor(this.wx/this.C), ciy=Math.floor(this.wy/this.C);
+      const hr=this.h2(cix*3+1, ciy*5+2);
+      const hbx=cix*this.C+this.RW+14+hr*26, hby=ciy*this.C+this.RW+14+((hr*7)%1)*22;
+      if(this.wx>hbx-10 && this.wx<hbx+74 && this.wy>hby-10 && this.wy<hby+56){
+        this.wx=px0; this.wy=py0;
+        if(!(this.bumpCD>0)){
+          this.bumpCD=0.5;
+          this.floats.push({x:this.wx, y:this.wy-20, txt:'💥', t:0});
+          popSound(180); buzz(25);
+        }
+      }
+    }
+    if(!onRoad && Math.random()<0.5){
+      this.dust.push({x:this.wx-Math.cos(this.ang)*30+rand(-8,8), y:this.wy-Math.sin(this.ang)*30+rand(-8,8), t:0});
+    }
+    for(const d of this.dust) d.t+=dt;
+    this.dust=this.dust.filter(d=>d.t<0.6);
+    // loot pickup
+    const C=this.C;
+    const ix0=Math.floor((this.wx-C)/C), iy0=Math.floor((this.wy-C)/C);
+    for(let ix=ix0; ix<=ix0+2; ix++) for(let iy=iy0; iy<=iy0+2; iy++){
+      const lt=this.lootAt(ix,iy);
+      if(!lt) continue;
+      const key=ix+','+iy;
+      if(this.got.has(key)) continue;
+      if(Math.hypot(lt.x-this.wx, lt.y-this.wy)<34){
+        this.got.add(key);
+        this.loot++;
+        scores.wagon+=10;
+        this.wanted=Math.min(5, this.wanted+0.4);
+        this.floats.push({x:lt.x, y:lt.y, txt:'+10', t:0});
+        popSound(700); buzz(12);
+      }
+    }
+    this.wanted=Math.max(0, this.wanted-dt*0.06);
+    // parent chasers
+    this.spawnT-=dt;
+    const stars=Math.floor(this.wanted);
+    if(this.spawnT<=0 && this.chasers.length<stars){
+      this.spawnT=2.5;
+      const a=rand(0,Math.PI*2);
+      const who=[JAKE,JANE,MIKE,ALLIE][(Math.random()*4)|0];
+      this.chasers.push({x:this.wx+Math.cos(a)*380, y:this.wy+Math.sin(a)*380, who});
+      chime([494,440]);
+    }
+    for(const c of this.chasers){
+      const dx=this.wx-c.x, dy=this.wy-c.y, d=Math.hypot(dx,dy)||1;
+      c.x+=dx/d*150*dt; c.y+=dy/d*150*dt;
+      if(d<26){
+        this.busts++;
+        scores.wagon=Math.max(0, scores.wagon-20);
+        this.wanted=0;
+        this.chasers=[];
+        this.floats.push({x:this.wx, y:this.wy-40, txt:'🚨 BUSTED! -20', t:0});
+        boom(); buzz(80);
+        break;
+      }
+    }
+    if(this.chasers.length>stars) this.chasers.length=stars;
+    for(const f of this.floats) f.t+=dt;
+    this.floats=this.floats.filter(f=>f.t<1.2);
+    if(this.time>=this.dur){ this.done=true; chime([523,659,784]); }
+  },
+  draw(taps){
+    const cx=W/2, cy=H/2+40;
+    const camX=this.wx-cx, camY=this.wy-cy;
+    const C=this.C, RW=this.RW;
+    // lawns
+    ctx.fillStyle='#7ab857'; ctx.fillRect(0,0,W,H);
+    // streets
+    const x0=Math.floor(camX/C)*C, y0=Math.floor(camY/C)*C;
+    ctx.fillStyle='#9b958d';
+    for(let gx=x0; gx<camX+W+C; gx+=C){ ctx.fillRect(gx-camX, 0, RW, H); }
+    for(let gy=y0; gy<camY+H+C; gy+=C){ ctx.fillRect(0, gy-camY, W, RW); }
+    ctx.fillStyle='#f2c14e';
+    for(let gx=x0; gx<camX+W+C; gx+=C){
+      for(let yy=Math.floor(camY/40)*40; yy<camY+H+40; yy+=40){
+        ctx.fillRect(gx-camX+RW/2-3, yy-camY, 6, 22);
+      }
+    }
+    for(let gy=y0; gy<camY+H+C; gy+=C){
+      for(let xx=Math.floor(camX/40)*40; xx<camX+W+40; xx+=40){
+        ctx.fillRect(xx-camX, gy-camY+RW/2-3, 22, 6);
+      }
+    }
+    // houses & yards
+    for(let ix=Math.floor(camX/C); ix<=Math.floor((camX+W)/C); ix++){
+      for(let iy=Math.floor(camY/C); iy<=Math.floor((camY+H)/C); iy++){
+        const bx=ix*C+RW-camX, by=iy*C+RW-camY;
+        const r=this.h2(ix*3+1, iy*5+2);
+        const hx=bx+14+r*26, hy=by+14+((r*7)%1)*22;
+        ctx.fillStyle=['#f4e2c8','#dfe8f2','#f2d8dc','#e4f0d8'][Math.floor(r*4)%4];
+        rr(ctx,hx,hy,64,46,4); ctx.fill();
+        ctx.fillStyle='#8a5a45';
+        rr(ctx,hx+4,hy+4,56,14,3); ctx.fill();
+        ctx.fillStyle='#b46b46';
+        rr(ctx,hx+26,hy+34,12,12,2); ctx.fill();
+        emoji(['🌳','🌲','🌴','🌳'][Math.floor(r*8)%4], bx+128, by+42+((r*13)%1)*76, 34);
+        if(r>0.5){ emoji('🌷', bx+28, by+138, 16); emoji('🌼', bx+48, by+138, 16); }
+      }
+    }
+    // loot with glow
+    for(let ix=Math.floor(camX/C)-1; ix<=Math.floor((camX+W)/C)+1; ix++){
+      for(let iy=Math.floor(camY/C)-1; iy<=Math.floor((camY+H)/C)+1; iy++){
+        const lt=this.lootAt(ix,iy);
+        if(!lt || this.got.has(ix+','+iy)) continue;
+        const sx=lt.x-camX, sy=lt.y-camY;
+        if(sx>-40&&sx<W+40&&sy>-40&&sy<H+40){
+          ctx.globalAlpha=0.3+0.18*Math.sin(this.time*4+ix*2+iy);
+          ctx.fillStyle='#ffd23f';
+          ctx.beginPath(); ctx.arc(sx,sy,20,0,Math.PI*2); ctx.fill();
+          ctx.globalAlpha=1;
+          emoji(lt.ch, sx, sy, 28);
+        }
+      }
+    }
+    // grass dust
+    for(const d of this.dust){
+      ctx.globalAlpha=(1-d.t/0.6)*0.4;
+      ctx.fillStyle='#c9b89a';
+      ctx.beginPath(); ctx.arc(d.x-camX, d.y-camY, 4+d.t*10, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.globalAlpha=1;
+    // parents in pursuit
+    for(const c of this.chasers){
+      drawAdult(c.x-camX, c.y-camY, 12, c.who);
+      emoji('❗', c.x-camX, c.y-camY-34, 16);
+    }
+    // the getaway wagon
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(this.ang+Math.PI/2);
+    ctx.fillStyle='#1d1f24';
+    for(const wp of [[-26,-26],[26,-26],[-26,30],[26,30]]){
+      rr(ctx,wp[0]-5,wp[1]-10,10,20,4); ctx.fill();
+    }
+    const bgw=ctx.createLinearGradient(-26,0,26,0);
+    bgw.addColorStop(0,'#e63946'); bgw.addColorStop(1,'#b51d28');
+    rr(ctx,-24,-42,48,84,10); ctx.fillStyle=bgw; ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.35)'; ctx.lineWidth=2;
+    rr(ctx,-20,-38,40,76,8); ctx.stroke();
+    // Sienna + Leilani (front left) and Phoebe (front right)
+    ctx.fillStyle='#3f2a1a'; ctx.beginPath(); ctx.arc(-10,8,9,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#f6cfae'; ctx.beginPath(); ctx.arc(-10,11,4.5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#7a5230'; ctx.beginPath(); ctx.arc(-19,16,5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#d93636'; ctx.beginPath(); ctx.arc(-21,13,1.8,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#6b4226'; ctx.beginPath(); ctx.arc(11,8,8.5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#f8d8b8'; ctx.beginPath(); ctx.arc(11,11,4.2,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#ff5a7a'; ctx.beginPath(); ctx.arc(17,2,2.5,0,Math.PI*2); ctx.fill();
+    // canopy over the back half
+    const cgw=ctx.createLinearGradient(0,-44,0,-2);
+    cgw.addColorStop(0,'#c22030'); cgw.addColorStop(1,'#e63946');
+    rr(ctx,-30,-44,60,40,9); ctx.fillStyle=cgw; ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.9)'; ctx.lineWidth=4; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(-20,-26); ctx.quadraticCurveTo(0,-34,20,-26); ctx.stroke();
+    ctx.restore();
+    // floats
+    for(const f of this.floats){
+      const k=f.t/1.2;
+      ctx.globalAlpha=1-k;
+      text(f.txt, f.x-camX, f.y-camY-30-k*30, 20, '#fff', 'center','800');
+      ctx.globalAlpha=1;
+    }
+    // HUD
+    rr(ctx,12,12,W-24,44,14); ctx.fillStyle='rgba(20,15,35,0.5)'; ctx.fill();
+    emoji('🧃',38,34,24);
+    text(''+this.loot, 66, 34, 22, '#fff', 'left');
+    const timeLeft=Math.max(0,Math.ceil(this.dur-this.time));
+    text('⏱ '+timeLeft+'s', W-24, 34, 20, '#fff', 'right');
+    const stars=Math.floor(this.wanted);
+    let sstr='';
+    for(let i=0;i<5;i++) sstr += (i<stars?'★':'☆');
+    text(sstr, W/2, 34, 20, stars>0?'#ffd23f':'rgba(255,255,255,0.4)');
+    // title card
+    if(this.intro<2.4){
+      ctx.globalAlpha=clamp(2.4-this.intro,0,1);
+      ctx.fillStyle='rgba(5,6,15,0.55)'; ctx.fillRect(0,H/2-90,W,150);
+      text('GRAND THEFT WAGON', W/2, H/2-40, 34, '#ffd23f');
+      text('Grab the snacks. Dodge the parents.', W/2, H/2+2, 16, '#fff','center','600');
+      ctx.globalAlpha=1;
+    }
+    if(this.done){
+      ctx.fillStyle='rgba(11,16,38,0.85)'; ctx.fillRect(0,0,W,H);
+      emoji('🚨', W/2, 200, 80);
+      text(this.busts===0?'CLEAN GETAWAY!':'WILD RIDE!', W/2, 290, 32, '#ffd23f');
+      text('Snacks swiped: '+this.loot, W/2, 344, 20, '#fff');
+      text('Busted: '+this.busts+'   •   Score: '+scores.wagon, W/2, 378, 17, 'rgba(255,255,255,0.85)');
+      text('The parents pretend to be mad. They are not.', W/2, 420, 14, 'rgba(255,255,255,0.6)','center','500');
+      if(button('Fireworks Time  ▶', W/2, 560, 250, 60, taps, '#ff5a7a')){
+        totalScore += scores.wagon;
+        setScene(Story3);
+      }
+    }
+  }
+};
+
+// =====================================================
+//  CHAPTER 3 — FIREWORKS FINALE
 // =====================================================
 const FireworksLevel = {
   rockets:[], sparks:[], time:0, dur:30, launched:0, done:false, t:0, auto:0, nameTimer:0, nameIdx:0,
@@ -1335,7 +1599,7 @@ const FireworksLevel = {
       }
       if(button('Save 📮', W/2-88, 706, 156, 54, taps, '#4fa3d1')) this._saveReq = true;
       if(button('Again  ↺', W/2+88, 706, 156, 54, taps, '#ff5a7a')){
-        totalScore = 0; scores.road=0; scores.bubbles=0; scores.fireworks=0;
+        totalScore = 0; scores.road=0; scores.bubbles=0; scores.wagon=0; scores.fireworks=0;
         setScene(Title);
       }
     }
@@ -1397,8 +1661,8 @@ const FireworksLevel = {
     drawAdult(96, 420, 11, JAKE);
     drawAdult(384, 420, 11, JANE);
     ctx.restore();
-    const grand = scores.bubbles + this.launched*5 + this.hits*25;
-    text('FINAL SCORE  '+grand.toLocaleString()+'   •   🎆 '+this.launched+'   •   🎯 '+this.hits, W/2, 500, 18, '#5a4632', 'center', '800');
+    const grand = scores.bubbles + scores.wagon + this.launched*5 + this.hits*25;
+    text('FINAL SCORE  '+grand.toLocaleString()+'  •  🎆 '+this.launched+'  •  🎯 '+this.hits+'  •  🧃 '+WagonLevel.loot, W/2, 500, 15, '#5a4632', 'center', '800');
     text('Sienna & Phoebe: friends forever 💛', W/2, 534, 17, '#c22030', 'center', '700');
     text('Bubbles, fireworks & the best hosts in Rhode Island.', W/2, 564, 14, '#7a6a55', 'center', '500');
     text('XOXO — Mike, Allie & Sienna', W/2, 592, 15, '#5a4632', 'center', '700');
@@ -1435,9 +1699,10 @@ fit();
 const startHash = (location.hash || '').toLowerCase();
 if(startHash.includes('bubbles')) setScene(BubbleLevel);
 else if(startHash.includes('fireworks')) setScene(FireworksLevel);
+else if(startHash.includes('wagon')) setScene(WagonLevel);
 else setScene(Title);
 // debug hook (used for automated testing; no effect on gameplay)
-window.__debug = { tick: loop, bubble: BubbleLevel, fw: FireworksLevel, scores };
+window.__debug = { tick: loop, bubble: BubbleLevel, fw: FireworksLevel, wagon: WagonLevel, scores };
 requestAnimationFrame(raf);
 })();
 </script>
