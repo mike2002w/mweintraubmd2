@@ -437,7 +437,7 @@ function drawJoint(x, y, s, t){
 // ---------- global state ----------
 let scene;
 let totalScore = 0;
-const scores = { road:0, bubbles:0, wagon:0, fireworks:0 };
+const scores = { road:0, bubbles:0, wagon:0, fireworks:0, lander:0 };
 
 function setScene(s){ scene = s; if(s.enter) s.enter(); }
 
@@ -500,18 +500,18 @@ const Title = {
     text("SIENNA & PHOEBE'S", W/2, 282, 28, '#ffd23f');
     text("RHODE ISLAND", W/2, 322, 38, '#fff');
     text("ADVENTURE", W/2, 364, 38, '#4fd1ff');
-    text('A 4th of July adventure in 3 chapters', W/2, 404, 15, 'rgba(255,255,255,.65)', 'center', '500');
+    text('A 4th of July adventure — 3 chapters + a bonus dream', W/2, 404, 15, 'rgba(255,255,255,.65)', 'center', '500');
     text('CHOOSE A CHAPTER', W/2, 448, 14, '#ffd23f', 'center', '800');
     // chapter select cards
     const chapters = [
-      {icon:'🧋', name:'Bubbles',   num:'CHAPTER 1', color:'#4fd1ff', go:()=>Story2},
-      {icon:'🚨', name:'The Heist', num:'CHAPTER 2', color:'#ffb020', go:()=>StoryW},
-      {icon:'🎆', name:'Fireworks', num:'CHAPTER 3', color:'#ff5a7a', go:()=>Story3}
+      {icon:'🫧', name:'Bubbles',   num:'CHAPTER 1', color:'#4fd1ff', go:()=>Story2},
+      {icon:'🚨', name:'Heist',     num:'CHAPTER 2', color:'#ffb020', go:()=>StoryW},
+      {icon:'🎆', name:'Fireworks', num:'CHAPTER 3', color:'#ff5a7a', go:()=>Story3},
+      {icon:'🌙', name:'Moon',      num:'BONUS',     color:'#c4a7ff', go:()=>StoryL}
     ];
-    chapters[0].icon='🫧';
-    for(let i=0;i<3;i++){
+    for(let i=0;i<4;i++){
       const c = chapters[i];
-      const ccx = 90+i*150, ccy = 515, cw2 = 134, ch2 = 100;
+      const ccx = 64+i*117.5, ccy = 515, cw2 = 106, ch2 = 100;
       const x = ccx-cw2/2, y = ccy-ch2/2;
       rr(ctx, x, y, cw2, ch2, 14);
       ctx.fillStyle = 'rgba(255,255,255,0.07)'; ctx.fill();
@@ -520,9 +520,9 @@ const Title = {
       ctx.lineWidth = 2.5;
       rr(ctx, x, y, cw2, ch2, 14); ctx.stroke();
       ctx.globalAlpha = 1;
-      emoji(c.icon, ccx, ccy-22, 34);
-      text(c.num, ccx, ccy+12, 10, 'rgba(255,255,255,0.55)', 'center', '700');
-      text(c.name, ccx, ccy+32, 17, c.color, 'center', '800');
+      emoji(c.icon, ccx, ccy-22, 30);
+      text(c.num, ccx, ccy+12, 9, 'rgba(255,255,255,0.55)', 'center', '700');
+      text(c.name, ccx, ccy+32, 15, c.color, 'center', '800');
       for(const tp of taps){
         if(tp.x>=x && tp.x<=x+cw2 && tp.y>=y && tp.y<=y+ch2){ setScene(c.go()); }
       }
@@ -1409,6 +1409,197 @@ const WagonLevel = {
   }
 };
 
+
+const StoryL = StoryCard({
+  icon:'\u{1F319}', chapter:'BONUS CHAPTER', title:'Wagon to the Moon',
+  body:'That night the girls dream the fireworks carried the wagon all the way to the Moon! Hold to fire the bubble boosters, lean left and right to steer, and set down gently on a flag pad before the bubble fuel runs out. Three landings!',
+  color:'#c4a7ff', btn:'Blast Off  \u25B6', top:'#1a1033', bot:'#05060f',
+  next:()=>LanderLevel
+});
+
+// =====================================================
+//  BONUS — WAGON LANDER (bubble-powered moon landing)
+// =====================================================
+const LanderLevel = {
+  x:0, y:0, vx:0, vy:0, fuel:100, att:0, attMax:3, good:0,
+  state:'fly', stateT:0, roundPts:0, time:0,
+  terrain:[], pads:[], bubbles:[], stars:[],
+  enter(){
+    this.att=0; this.good=0; this.time=0;
+    scores.lander=0;
+    this.stars=[];
+    for(let i=0;i<70;i++) this.stars.push({x:rand(0,W), y:rand(0,H*0.7), tw:rand(0,6.28)});
+    this.newRound();
+  },
+  newRound(){
+    this.att++;
+    this.x=rand(110,W-110); this.y=95; this.vx=rand(-25,25); this.vy=0;
+    this.fuel=100; this.state='fly'; this.stateT=0; this.bubbles=[];
+    this.terrain=[]; this.pads=[];
+    const n=Math.ceil(W/20)+2;
+    let hgt=rand(H-190,H-130);
+    const padAt=[3+((Math.random()*5)|0), 15+((Math.random()*5)|0)];
+    for(let i=0;i<n;i++){
+      const inPad = padAt.some(function(pa){ return i>pa && i<=pa+4; });
+      if(!inPad) hgt=clamp(hgt+rand(-48,48), H-300, H-95);
+      this.terrain.push(hgt);
+    }
+    for(const pa of padAt){
+      this.pads.push({x0:pa*20, x1:(pa+4)*20, y:this.terrain[pa+2], mult:2+((Math.random()*2)|0)});
+    }
+  },
+  groundAt(x){
+    const i=clamp(Math.floor(x/20),0,this.terrain.length-2);
+    const f=(x-i*20)/20;
+    return this.terrain[i]*(1-f)+this.terrain[i+1]*f;
+  },
+  update(dt,taps){
+    this.time+=dt;
+    for(const b of this.bubbles){ b.t+=dt; b.x+=b.vx*dt; b.y+=b.vy*dt; b.vy+=60*dt; }
+    this.bubbles=this.bubbles.filter(function(b){ return b.t<1; });
+    if(this.state==='fly'){
+      let tx=0;
+      if(input.left) tx=-1;
+      if(input.right) tx=1;
+      let mainOn=false;
+      if(input.held){
+        mainOn=true;
+        tx=clamp((input.x-W/2)/(W/2)*1.6,-1,1);
+      }
+      if(this.fuel<=0){ mainOn=false; tx=0; }
+      this.vy += 42*dt;
+      if(mainOn){
+        this.vy -= 95*dt;
+        this.fuel=Math.max(0,this.fuel-15*dt);
+        this.bubbles.push({x:this.x+rand(-14,14), y:this.y+24, vx:rand(-20,20), vy:rand(40,90), t:0, r:rand(3,7)});
+        if(Math.random()<dt*3) popSound(rand(300,500));
+      }
+      if(tx!==0 && this.fuel>0){
+        this.vx += tx*70*dt;
+        this.fuel=Math.max(0,this.fuel-4*dt);
+        this.bubbles.push({x:this.x-tx*22, y:this.y+rand(-6,10), vx:-tx*rand(50,90), vy:rand(-10,20), t:0, r:rand(2,5)});
+      }
+      this.vx*=Math.pow(0.9,dt);
+      this.x+=this.vx*dt; this.y+=this.vy*dt;
+      this.x=clamp(this.x,30,W-30);
+      if(this.y<60){ this.y=60; this.vy=Math.max(0,this.vy); }
+      const gy=this.groundAt(this.x);
+      if(this.y+26>=gy){
+        const px2=this.x;
+        const pad=this.pads.find(function(p){ return px2>p.x0+8 && px2<p.x1-8; });
+        if(pad && this.vy<70 && Math.abs(this.vx)<45){
+          this.state='landed'; this.stateT=0; this.good++;
+          this.roundPts=100*pad.mult+Math.round(this.fuel);
+          scores.lander+=this.roundPts;
+          chime([523,659,784,1047]); buzz(30);
+        } else {
+          this.state='crashed'; this.stateT=0;
+          for(let k=0;k<28;k++) this.bubbles.push({x:this.x+rand(-22,22), y:gy-12, vx:rand(-130,130), vy:rand(-170,-20), t:0, r:rand(4,10)});
+          boom(); buzz(90);
+        }
+        this.y=gy-26; this.vy=0; this.vx=0;
+      }
+    } else if(this.state!=='done'){
+      this.stateT+=dt;
+      if(this.stateT>2.2){
+        if(this.att>=this.attMax){ this.state='done'; chime([523,659,784]); }
+        else this.newRound();
+      }
+    }
+  },
+  draw(taps){
+    const g=ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#05060f'); g.addColorStop(0.7,'#12102a'); g.addColorStop(1,'#1a1733');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    for(const s of this.stars){
+      ctx.globalAlpha=0.4+0.6*Math.abs(Math.sin(this.time*1.5+s.tw));
+      ctx.fillStyle='#fff'; ctx.fillRect(s.x,s.y,2,2);
+    }
+    ctx.globalAlpha=1;
+    ctx.fillStyle='#3b6ea5';
+    ctx.beginPath(); ctx.arc(W-80,110,34,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#6fae5a';
+    ctx.beginPath(); ctx.arc(W-90,100,12,0,Math.PI*2); ctx.arc(W-68,120,9,0,Math.PI*2); ctx.fill();
+    ctx.globalAlpha=0.5+0.5*Math.sin(this.time*3);
+    ctx.fillStyle='#ffd23f';
+    ctx.fillRect(W-84,96,2,2); ctx.fillRect(W-72,112,2,2);
+    ctx.globalAlpha=1;
+    text('home \u2764\uFE0F', W-80, 158, 11, 'rgba(255,255,255,0.5)', 'center', '600');
+    ctx.beginPath();
+    ctx.moveTo(0,this.terrain[0]);
+    for(let i=1;i<this.terrain.length;i++) ctx.lineTo(i*20,this.terrain[i]);
+    ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
+    ctx.fillStyle='#8e8a9c'; ctx.fill();
+    ctx.strokeStyle='#b8b4c4'; ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(0,this.terrain[0]);
+    for(let i=1;i<this.terrain.length;i++) ctx.lineTo(i*20,this.terrain[i]);
+    ctx.stroke();
+    ctx.fillStyle='rgba(60,55,75,0.35)';
+    for(let i=0;i<5;i++){
+      const cx3=(i*97+40)%W;
+      ctx.beginPath(); ctx.ellipse(cx3, this.groundAt(cx3)+40+i*8, 22-(i*3), 7, 0, 0, Math.PI*2); ctx.fill();
+    }
+    for(const p of this.pads){
+      ctx.fillStyle='#ffd23f';
+      ctx.fillRect(p.x0, p.y-3, p.x1-p.x0, 5);
+      emoji('\u{1F6A9}', p.x0+6, p.y-16, 18);
+      emoji('\u{1F6A9}', p.x1-6, p.y-16, 18);
+      text('\u00D7'+p.mult, (p.x0+p.x1)/2, p.y+16, 13, '#ffd23f', 'center', '800');
+    }
+    for(const b of this.bubbles){
+      ctx.globalAlpha=(1-b.t)*0.7;
+      ctx.strokeStyle='rgba(200,230,255,0.95)'; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+    if(this.state!=='crashed'){
+      ctx.save();
+      ctx.translate(this.x,this.y);
+      ctx.rotate(clamp(this.vx*0.003,-0.18,0.18));
+      ctx.scale(0.55,0.55);
+      drawMiniWagon(0, 22, this.time);
+      ctx.restore();
+    } else {
+      emoji('\u{1F4A5}', this.x, this.y, 46);
+    }
+    rr(ctx,12,12,W-24,58,14); ctx.fillStyle='rgba(20,15,35,0.55)'; ctx.fill();
+    text('BUBBLE FUEL', 24, 26, 10, 'rgba(255,255,255,0.6)', 'left', '700');
+    rr(ctx,24,34,140,10,5); ctx.fillStyle='rgba(255,255,255,0.15)'; ctx.fill();
+    rr(ctx,24,34,140*this.fuel/100,10,5);
+    ctx.fillStyle=this.fuel>30?'#4fd1ff':'#ff5a7a'; ctx.fill();
+    const fast=this.vy>=70;
+    text('\u2193 '+Math.max(0,Math.round(this.vy)), W/2, 40, 20, fast?'#ff5a7a':'#7CFC8A', 'center', '800');
+    text('\u{1F6DE} '+this.att+'/'+this.attMax, W-24, 28, 15, '#fff', 'right', '700');
+    text(scores.lander+' pts', W-24, 52, 15, '#ffd23f', 'right', '800');
+    if(this.state==='landed'){
+      text('PERFECT LANDING!', W/2, 300, 32, '#7CFC8A');
+      text('+'+this.roundPts+' pts', W/2, 344, 24, '#ffd23f');
+    }
+    if(this.state==='crashed'){
+      text('CRASHED!', W/2, 300, 34, '#ff5a7a');
+      text('...into a pile of bubbles. Everyone is fine.', W/2, 344, 15, 'rgba(255,255,255,0.75)', 'center', '600');
+    }
+    if(this.time<2.6 && this.att===1){
+      ctx.globalAlpha=clamp(2.6-this.time,0,1);
+      text('Hold to fire the bubble boosters!', W/2, 200, 18, '#c4a7ff', 'center', '700');
+      text('Land softly on a \u{1F6A9} pad', W/2, 230, 15, 'rgba(255,255,255,0.7)', 'center', '600');
+      ctx.globalAlpha=1;
+    }
+    if(this.state==='done'){
+      ctx.fillStyle='rgba(5,6,15,0.85)'; ctx.fillRect(0,0,W,H);
+      emoji('\u{1F319}', W/2, 200, 80);
+      text('DREAM COMPLETE', W/2, 290, 30, '#c4a7ff');
+      text('Landings: '+this.good+' / '+this.attMax, W/2, 344, 20, '#fff');
+      text('Moon score: '+scores.lander, W/2, 380, 20, '#ffd23f');
+      text('The girls wake up giggling. Leilani is holding a moon rock.', W/2, 424, 14, 'rgba(255,255,255,0.6)', 'center', '500');
+      if(button('Back to Earth  \u21A9', W/2, 560, 250, 60, taps, '#c4a7ff')){
+        setScene(Title);
+      }
+    }
+  }
+};
+
 // =====================================================
 //  CHAPTER 3 — FIREWORKS FINALE
 // =====================================================
@@ -1774,9 +1965,10 @@ const startHash = (location.hash || '').toLowerCase();
 if(startHash.includes('bubbles')) setScene(BubbleLevel);
 else if(startHash.includes('fireworks')) setScene(FireworksLevel);
 else if(startHash.includes('wagon')) setScene(WagonLevel);
+else if(startHash.includes('moon')||startHash.includes('lander')) setScene(LanderLevel);
 else setScene(Title);
 // debug hook (used for automated testing; no effect on gameplay)
-window.__debug = { tick: loop, bubble: BubbleLevel, fw: FireworksLevel, wagon: WagonLevel, scores };
+window.__debug = { tick: loop, bubble: BubbleLevel, fw: FireworksLevel, wagon: WagonLevel, lander: LanderLevel, scores };
 requestAnimationFrame(raf);
 })();
 </script>
