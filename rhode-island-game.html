@@ -1183,7 +1183,7 @@ const WagonLevel = {
       const lanes=[-0.6,0,0.6];
       const SNK=['\u{1F9C3}','\u{1F36A}','\u{1F353}','\u{1F968}','\u{1F366}','\u{1F349}'];
       const OBS=['\u{1F5D1}\uFE0F','\u{1F9F8}','\u26BD','\u{1FAB4}'];
-      const stars=Math.floor(this.wanted);
+      const stars=Math.min(5,Math.floor(this.wanted/5));
       const Z=this.MAXZ, roll=Math.random();
       if(roll<0.30){
         // chain: follow one lane for a payday
@@ -1200,7 +1200,7 @@ const WagonLevel = {
           if(l===safe) this.sprites.push({z:Z, x:lanes[l], kind:'loot', ch:SNK[(Math.random()*6)|0]});
           else this.sprites.push({z:Z, x:lanes[l], kind:'obst', ch:OBS[(Math.random()*4)|0]});
         }
-      } else if(roll<0.70+0.07*stars){
+      } else if(roll<0.70+Math.min(0.14,0.05*stars)){
         // parent roadblock with a marked escape lane
         const pl=(Math.random()*3)|0;
         this.sprites.push({z:Z, x:lanes[pl], kind:'parent', who:[JAKE,JANE,MIKE,ALLIE][(Math.random()*4)|0]});
@@ -1231,8 +1231,15 @@ const WagonLevel = {
         if(Math.abs(s.x-this.px)<(s.kind==='parent'?0.5:0.42)){
           if(s.kind==='loot'){
             this.loot++; scores.wagon+=10;
-            this.wanted=Math.min(5,this.wanted+0.25);
-            this.addFloat('+10','#fff');
+            const sb=Math.min(5,Math.floor(this.wanted/5));
+            this.wanted++;
+            const sa=Math.min(5,Math.floor(this.wanted/5));
+            if(sa>sb){
+              this.addFloat('WANTED '+'★'.repeat(sa)+'!', '#ffd23f');
+              chime([392,523,659]); buzz(18);
+            } else {
+              this.addFloat('+10','#fff');
+            }
             popSound(700); buzz(12);
           } else if(s.kind==='nitro'){
             this.nitro=2.2;
@@ -1257,7 +1264,6 @@ const WagonLevel = {
       if(this.scenery[i].z<=0.9) this.scenery.splice(i,1);
     }
     for(const c of this.clouds){ c.x+=c.v*dt; if(c.x>W+90) c.x=-90; }
-    this.wanted=Math.max(0,this.wanted-dt*0.05);
     for(const f of this.floats) f.t+=dt;
     this.floats=this.floats.filter(f=>f.t<1.1);
     if(this.time>=this.dur){ this.done=true; chime([523,659,784]); }
@@ -1431,10 +1437,11 @@ const WagonLevel = {
     text(''+this.loot, 66, 34, 22, '#fff', 'left');
     const timeLeft=Math.max(0,Math.ceil(this.dur-this.time));
     text('⏱ '+timeLeft+'s', W-24, 34, 20, '#fff', 'right');
-    const stars=Math.floor(this.wanted);
+    const stars=Math.min(5,Math.floor(this.wanted/5));
     let sstr='';
     for(let i=0;i<5;i++) sstr += (i<stars?'★':'☆');
     text(sstr, W/2, 34, 20, stars>0?'#ffd23f':'rgba(255,255,255,0.4)');
+    if(stars<5) text((this.wanted%5)+'/5 to next ★', W/2, 52, 10, 'rgba(255,255,255,0.5)', 'center', '600');
     // speedometer gag
     text(Math.round(this.speed*4)+' mph', W-24, 66, 13, this.nitro>0?'#4fd1ff':'rgba(255,255,255,0.55)', 'right', '700');
     if(!this.done && homeButton(taps)){ setScene(Title); return; }
