@@ -1128,7 +1128,7 @@ const WagonLevel = {
   loot:0, wanted:0, busts:0,
   sprites:[], scenery:[], floats:[], clouds:[],
   spawnT:0, sceneT:0, nitro:0, crash:0, shake:0,
-  HY:300, RW0:270, MAXZ:30,
+  HY:300, RW0:270, MAXZ:20,
   enter(){
     this.time=0; this.done=false; this.intro=0;
     this.px=0; this.speed=14; this.baseSpeed=14; this.playerZ=0; this.steerVis=0;
@@ -1161,8 +1161,8 @@ const WagonLevel = {
     if(input.right) steer=1;
     if(input.held && input.pointer) steer=clamp((input.x-W/2)/120,-1,1);
     this.steerVis += (steer-this.steerVis)*Math.min(1,dt*8);
-    this.px += steer*2.4*dt;
-    this.px -= this.cur*this.speed*dt*0.02;
+    this.px += steer*3.0*dt;
+    this.px -= this.cur*this.speed*dt*0.012;
     this.px = clamp(this.px,-1.6,1.6);
     const offRoad = Math.abs(this.px)>1.05;
     // speed
@@ -1179,14 +1179,40 @@ const WagonLevel = {
     // things on the road ahead
     this.spawnT-=dt;
     if(this.spawnT<=0){
-      this.spawnT=rand(0.5,0.85)*(14/this.speed);
-      const lane=[-0.6,0,0.6][(Math.random()*3)|0]+rand(-0.12,0.12);
-      const roll=Math.random();
+      this.spawnT=rand(1.25,1.7)*(14/this.speed);
+      const lanes=[-0.6,0,0.6];
+      const SNK=['\u{1F9C3}','\u{1F36A}','\u{1F353}','\u{1F968}','\u{1F366}','\u{1F349}'];
+      const OBS=['\u{1F5D1}\uFE0F','\u{1F9F8}','\u26BD','\u{1FAB4}'];
       const stars=Math.floor(this.wanted);
-      if(roll<0.07) this.sprites.push({z:this.MAXZ,x:lane,kind:'nitro',ch:'⚡'});
-      else if(roll<0.07+0.055*stars) this.sprites.push({z:this.MAXZ,x:lane,kind:'parent',who:[JAKE,JANE,MIKE,ALLIE][(Math.random()*4)|0]});
-      else if(roll<0.33+0.055*stars) this.sprites.push({z:this.MAXZ,x:lane,kind:'obst',ch:['\u{1F5D1}\uFE0F','\u{1F9F8}','\u26BD','\u{1FAB4}'][(Math.random()*4)|0]});
-      else this.sprites.push({z:this.MAXZ,x:lane,kind:'loot',ch:['\u{1F9C3}','\u{1F36A}','\u{1F353}','\u{1F968}','\u{1F366}','\u{1F349}'][(Math.random()*6)|0]});
+      const Z=this.MAXZ, roll=Math.random();
+      if(roll<0.30){
+        // chain: follow one lane for a payday
+        const ln=lanes[(Math.random()*3)|0], ch=SNK[(Math.random()*6)|0];
+        for(let k=0;k<4;k++) this.sprites.push({z:Z+k*2.2, x:ln, kind:'loot', ch});
+      } else if(roll<0.50){
+        // zigzag: snacks hop across lanes
+        const base=(Math.random()*3)|0, dir=Math.random()<0.5?1:2;
+        for(let k=0;k<4;k++) this.sprites.push({z:Z+k*2.6, x:lanes[(base+k*dir)%3], kind:'loot', ch:SNK[(Math.random()*6)|0]});
+      } else if(roll<0.70){
+        // gate: one safe lane, pick it
+        const safe=(Math.random()*3)|0;
+        for(let l=0;l<3;l++){
+          if(l===safe) this.sprites.push({z:Z, x:lanes[l], kind:'loot', ch:SNK[(Math.random()*6)|0]});
+          else this.sprites.push({z:Z, x:lanes[l], kind:'obst', ch:OBS[(Math.random()*4)|0]});
+        }
+      } else if(roll<0.70+0.07*stars){
+        // parent roadblock with a marked escape lane
+        const pl=(Math.random()*3)|0;
+        this.sprites.push({z:Z, x:lanes[pl], kind:'parent', who:[JAKE,JANE,MIKE,ALLIE][(Math.random()*4)|0]});
+        this.sprites.push({z:Z, x:lanes[(pl+1)%3], kind:'loot', ch:SNK[(Math.random()*6)|0]});
+      } else if(roll<0.85){
+        this.sprites.push({z:Z, x:lanes[(Math.random()*3)|0], kind:'nitro', ch:'⚡'});
+      } else {
+        // staggered obstacles
+        const l1=(Math.random()*3)|0;
+        this.sprites.push({z:Z, x:lanes[l1], kind:'obst', ch:OBS[(Math.random()*4)|0]});
+        this.sprites.push({z:Z+3, x:lanes[(l1+2)%3], kind:'obst', ch:OBS[(Math.random()*4)|0]});
+      }
     }
     // roadside scenery
     this.sceneT-=dt;
@@ -1194,18 +1220,18 @@ const WagonLevel = {
       this.sceneT=0.4*(14/this.speed);
       const side=Math.random()<0.5?-1:1;
       const kind=Math.random()<0.45?'house':'tree';
-      this.scenery.push({z:this.MAXZ, x:side*(kind==='house'?2.7:rand(1.8,3.4)), kind,
+      this.scenery.push({z:28, x:side*(kind==='house'?2.7:rand(1.8,3.4)), kind,
         hue:Math.floor(Math.random()*4), tr:['\u{1F333}','\u{1F332}','\u{1F334}'][(Math.random()*3)|0]});
     }
     // advance & collide
     for(let i=this.sprites.length-1;i>=0;i--){
       const s=this.sprites[i];
       s.z-=this.speed*dt;
-      if(s.z<=1){
-        if(Math.abs(s.x-this.px)<(s.kind==='parent'?0.55:0.45)){
+      if(s.z<=1.45){
+        if(Math.abs(s.x-this.px)<(s.kind==='parent'?0.5:0.42)){
           if(s.kind==='loot'){
             this.loot++; scores.wagon+=10;
-            this.wanted=Math.min(5,this.wanted+0.4);
+            this.wanted=Math.min(5,this.wanted+0.25);
             this.addFloat('+10','#fff');
             popSound(700); buzz(12);
           } else if(s.kind==='nitro'){
@@ -1307,18 +1333,28 @@ const WagonLevel = {
       if(o.kind==='tree'){ emoji(o.tr,p.x,p.y-90*p.s,Math.max(8,220*p.s)); }
       else if(o.kind==='house'){ this.drawHouse(p.x,p.y,p.s,o.hue); }
       else if(o.kind==='parent'){
-        const s3=Math.max(3,34*p.s);
-        drawAdult(p.x,p.y-s3*1.5,s3,o.who);
-        if(p.s>0.1) emoji('\u270B',p.x+s3*1.3,p.y-s3*2.2,s3*0.9);
+        const bw=130*p.s, bh=Math.max(3,15*p.s);
+        for(let st=0; st<6; st++){
+          ctx.fillStyle= st%2?'#fff':'#ff5a7a';
+          ctx.fillRect(p.x-bw/2+st*bw/6, p.y-bh, bw/6, bh);
+        }
+        const s3=Math.max(4,40*p.s);
+        drawAdult(p.x,p.y-bh-s3*1.5,s3,o.who);
+        if(p.s>0.08) emoji('\u270B',p.x+s3*1.3,p.y-bh-s3*2.2,s3*0.9);
       }
       else{
-        if(o.kind==='loot'||o.kind==='nitro'){
-          ctx.globalAlpha=0.3;
-          ctx.fillStyle=o.kind==='nitro'?'#4fd1ff':'#ffd23f';
-          ctx.beginPath(); ctx.ellipse(p.x,p.y,46*p.s,14*p.s,0,0,Math.PI*2); ctx.fill();
-          ctx.globalAlpha=1;
-        }
-        emoji(o.ch,p.x,p.y-34*p.s,Math.max(6,84*p.s));
+        // badge chips: gold = grab, red = avoid, blue = boost
+        const ringC = o.kind==='nitro' ? '#4fd1ff' : o.kind==='obst' ? '#ff5a7a' : '#ffd23f';
+        const cy4=p.y-30*p.s;
+        const cr=Math.max(6,52*p.s);
+        ctx.globalAlpha=0.28;
+        ctx.fillStyle='#000';
+        ctx.beginPath(); ctx.ellipse(p.x,p.y+4*p.s,cr*0.8,cr*0.25,0,0,Math.PI*2); ctx.fill();
+        ctx.globalAlpha=1;
+        ctx.beginPath(); ctx.arc(p.x,cy4,cr,0,Math.PI*2);
+        ctx.fillStyle='rgba(255,252,240,0.95)'; ctx.fill();
+        ctx.lineWidth=Math.max(2,8*p.s); ctx.strokeStyle=ringC; ctx.stroke();
+        emoji(o.ch,p.x,cy4,Math.max(8,66*p.s));
       }
     }
     // nitro speed streaks
