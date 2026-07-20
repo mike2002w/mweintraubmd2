@@ -159,8 +159,8 @@ function boom(){
 }
 
 // ---------- gramophone band: an old-timey rag through a tinny horn ----------
-let musicBus = null, noiseBuf = null;
-const music = { next:0, step:0 };
+let musicBus = null, popBus = null, noiseBuf = null;
+const music = { next:0, step:0, style:'pop' };
 function ensureMusic(){
   if(!AC || musicBus) return;
   const bp = AC.createBiquadFilter();
@@ -168,11 +168,50 @@ function ensureMusic(){
   const mg = AC.createGain(); mg.gain.value = 0.5;
   bp.connect(mg); mg.connect(AC.destination);
   musicBus = bp;
+  const pg = AC.createGain(); pg.gain.value = 0.42;
+  pg.connect(AC.destination);
+  popBus = pg;
   noiseBuf = AC.createBuffer(1, (AC.sampleRate*0.05)|0, AC.sampleRate);
   const d = noiseBuf.getChannelData(0);
   for(let i=0;i<d.length;i++) d[i] = (Math.random()*2-1)*Math.exp(-i/(d.length*0.3));
   music.next = AC.currentTime + 0.1;
 }
+function pnote(freq, t, dur, vol, type){
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type = type || 'square';
+  o.frequency.setValueAtTime(freq, t);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.linearRampToValueAtTime(vol, t+0.012);
+  g.gain.exponentialRampToValueAtTime(0.001, t+dur);
+  o.connect(g); g.connect(popBus);
+  o.start(t); o.stop(t+dur+0.03);
+}
+function kickDrum(t){
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type='sine';
+  o.frequency.setValueAtTime(130, t);
+  o.frequency.exponentialRampToValueAtTime(45, t+0.12);
+  g.gain.setValueAtTime(0.34, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t+0.16);
+  o.connect(g); g.connect(popBus);
+  o.start(t); o.stop(t+0.18);
+}
+function hatTick(t){
+  const s = AC.createBufferSource(); s.buffer = noiseBuf;
+  const hp = AC.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=6000;
+  const g = AC.createGain(); g.gain.value = 0.05;
+  s.connect(hp); hp.connect(g); g.connect(popBus);
+  s.start(t);
+}
+// original club-pop loop (C - G - Am - F), nothing borrowed
+const P_CHORDS = [[262,330,392],[262,330,392],[196,247,294],[196,247,294],[220,262,330],[220,262,330],[175,220,262],[175,220,262]];
+const P_BASS = [131,131,98,98,110,110,87,87];
+const P_MELODY = [
+  330,392,0,392,440,392,330,0,  523,0,494,440,392,0,330,0,
+  294,392,494,0,587,494,392,0,  440,0,494,392,294,0,0,0,
+  440,523,659,0,523,440,330,0,  392,0,440,523,440,0,0,0,
+  349,440,523,0,440,349,262,0,  392,0,330,294,262,0,0,0
+];
 function mnote(freq, t, dur, vol, type){
   const o = AC.createOscillator(), g = AC.createGain();
   o.type = type || 'square';
@@ -198,21 +237,32 @@ function musicTick(){
   while(music.next < AC.currentTime + 0.35){
     const i = music.step, t = music.next;
     const bar = (i>>3)%8;
-    if(i%2===0){
-      mnote(M_BASS[bar]*(i%4===0?1:1.5), t, 0.22, 0.2, 'triangle');
+    if(music.style==='pop'){
+      if(i%4===0) kickDrum(t);
+      if(i%2===1) hatTick(t);
+      if(i%2===0) pnote(P_BASS[bar], t, 0.18, 0.12, 'triangle');
+      if(i%4===2){ for(const f of P_CHORDS[bar]) pnote(f, t, 0.14, 0.028, 'sawtooth'); }
+      const mel = P_MELODY[i%64];
+      if(mel) pnote(mel, t, 0.2, 0.05, 'square');
+      music.step = (music.step+1)%64;
+      music.next += 0.21;
     } else {
-      for(const f of M_CHORDS[bar]) mnote(f, t, 0.1, 0.035, 'square');
+      if(i%2===0){
+        mnote(M_BASS[bar]*(i%4===0?1:1.5), t, 0.22, 0.2, 'triangle');
+      } else {
+        for(const f of M_CHORDS[bar]) mnote(f, t, 0.1, 0.035, 'square');
+      }
+      const mel = M_MELODY[i%64];
+      if(mel) mnote(mel, t, 0.24, 0.055, 'square');
+      if(Math.random()<0.4 && noiseBuf){
+        const srcN = AC.createBufferSource(); srcN.buffer = noiseBuf;
+        const ng = AC.createGain(); ng.gain.value = rand(0.008,0.03);
+        srcN.connect(ng); ng.connect(musicBus);
+        srcN.start(t+rand(0,0.2));
+      }
+      music.step = (music.step+1)%64;
+      music.next += 0.26;
     }
-    const mel = M_MELODY[i%64];
-    if(mel) mnote(mel, t, 0.24, 0.055, 'square');
-    if(Math.random()<0.4 && noiseBuf){
-      const srcN = AC.createBufferSource(); srcN.buffer = noiseBuf;
-      const ng = AC.createGain(); ng.gain.value = rand(0.008,0.03);
-      srcN.connect(ng); ng.connect(musicBus);
-      srcN.start(t+rand(0,0.2));
-    }
-    music.step = (music.step+1)%64;
-    music.next += 0.26;
   }
 }
 
@@ -442,7 +492,12 @@ const scores = { road:0, bubbles:0, wagon:0, fireworks:0, lander:0 };
 function bestGet(k){ try{ return parseInt(localStorage.getItem('riw_'+k))||0; }catch(e){ return 0; } }
 function bestPut(k,v){ try{ if(v>bestGet(k)){ localStorage.setItem('riw_'+k, ''+v); return true; } }catch(e){} return false; }
 
-function setScene(s){ scene = s; if(s.enter) s.enter(); }
+function setScene(s){
+  scene = s;
+  if(s.enter) s.enter();
+  // Chapter 1 keeps the gramophone rag; everything else gets the club track
+  try{ music.style = (s===BubbleLevel || s===Story2) ? 'rag' : 'pop'; }catch(e){}
+}
 
 function button(label, cx, cy, w, h, taps, color){
   const x = cx - w/2, y = cy - h/2;
