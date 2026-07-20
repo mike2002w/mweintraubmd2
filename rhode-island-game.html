@@ -456,6 +456,18 @@ function button(label, cx, cy, w, h, taps, color){
   return hit;
 }
 
+// small in-game exit button (top-left, under the HUD)
+function homeButton(taps){
+  ctx.beginPath(); ctx.arc(32, 94, 17, 0, Math.PI*2);
+  ctx.fillStyle='rgba(20,15,35,0.45)'; ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.5)'; ctx.lineWidth=1.5; ctx.stroke();
+  emoji('\u{1F3E0}', 32, 94, 16);
+  for(const t of taps){
+    if(Math.hypot(t.x-32, t.y-94) <= 22) return true;
+  }
+  return false;
+}
+
 // =====================================================
 //  TITLE
 // =====================================================
@@ -1062,6 +1074,7 @@ const BubbleLevel = {
     const tp2=clamp(1-this.time/this.dur,0,1);
     rr(ctx, 12, 62, W-24, 8, 4); ctx.fillStyle='rgba(0,0,0,0.18)'; ctx.fill();
     rr(ctx, 12, 62, (W-24)*tp2, 8, 4); ctx.fillStyle=this.frenzy>0?'#ffb020':'#4fd1ff'; ctx.fill();
+    if(!this.done && homeButton(taps)){ setScene(Title); return; }
 
     if(this.done){
       ctx.fillStyle='rgba(17,20,45,0.86)'; ctx.fillRect(0,0,W,H);
@@ -1083,7 +1096,8 @@ const BubbleLevel = {
       text('Bubbles popped: '+this.popped+'   •   Score: '+scores.bubbles, W/2, 398, 19, '#fff');
       text('Best combo: ×'+this.best+'   •   Cats: '+this.cats+' 🐱', W/2, 430, 17, 'rgba(255,255,255,0.85)');
       text('Now the sun is going down...', W/2, 470, 16, 'rgba(255,255,255,0.7)','center','500');
-      if(button('The Heist  ▶', W/2, 560, 250, 60, taps, '#ffb020')){
+      if(button('Menu  ⌂', W/2-88, 560, 156, 56, taps, '#4fa3d1')){ setScene(Title); }
+      if(button('The Heist  ▶', W/2+88, 560, 156, 56, taps, '#ffb020')){
         totalScore += scores.bubbles; setScene(StoryW);
       }
     }
@@ -1387,6 +1401,7 @@ const WagonLevel = {
     text(sstr, W/2, 34, 20, stars>0?'#ffd23f':'rgba(255,255,255,0.4)');
     // speedometer gag
     text(Math.round(this.speed*4)+' mph', W-24, 66, 13, this.nitro>0?'#4fd1ff':'rgba(255,255,255,0.55)', 'right', '700');
+    if(!this.done && homeButton(taps)){ setScene(Title); return; }
     if(this.intro<2.4){
       ctx.globalAlpha=clamp(2.4-this.intro,0,1);
       ctx.fillStyle='rgba(5,6,15,0.55)'; ctx.fillRect(0,H/2-90,W,150);
@@ -1401,7 +1416,8 @@ const WagonLevel = {
       text('Snacks swiped: '+this.loot, W/2, 344, 20, '#fff');
       text('Busted: '+this.busts+'   •   Score: '+scores.wagon, W/2, 378, 17, 'rgba(255,255,255,0.85)');
       text('The parents pretend to be mad. They are not.', W/2, 420, 14, 'rgba(255,255,255,0.6)','center','500');
-      if(button('Fireworks Time  ▶', W/2, 560, 250, 60, taps, '#ff5a7a')){
+      if(button('Menu  ⌂', W/2-88, 560, 156, 56, taps, '#4fa3d1')){ setScene(Title); }
+      if(button('Fireworks  ▶', W/2+88, 560, 156, 56, taps, '#ff5a7a')){
         totalScore += scores.wagon;
         setScene(Story3);
       }
@@ -1572,6 +1588,7 @@ const LanderLevel = {
     text('\u2193 '+Math.max(0,Math.round(this.vy)), W/2, 40, 20, fast?'#ff5a7a':'#7CFC8A', 'center', '800');
     text('\u{1F6DE} '+this.att+'/'+this.attMax, W-24, 28, 15, '#fff', 'right', '700');
     text(scores.lander+' pts', W-24, 52, 15, '#ffd23f', 'right', '800');
+    if(this.state!=='done' && homeButton(taps)){ setScene(Title); return; }
     if(this.state==='landed'){
       text('PERFECT LANDING!', W/2, 300, 32, '#7CFC8A');
       text('+'+this.roundPts+' pts', W/2, 344, 24, '#ffd23f');
@@ -1846,6 +1863,7 @@ const FireworksLevel = {
       text('🎆 '+this.launched+'   🎯 '+this.hits, 30, 32, 18, '#fff', 'left');
       text('⏱ ' + timeLeft + 's', W-24, 32, 18, '#fff', 'right');
       text('Hit the rings!', W/2, 32, 16, '#ffd23f');
+      if(homeButton(taps)){ setScene(Title); return; }
     }
     if(this.done){
       for(const tp of taps){
@@ -1863,7 +1881,7 @@ const FireworksLevel = {
         }catch(e){}
       }
       if(button('Save 📮', W/2-88, 706, 156, 54, taps, '#4fa3d1')) this._saveReq = true;
-      if(button('Again  ↺', W/2+88, 706, 156, 54, taps, '#ff5a7a')){
+      if(button('Menu  ⌂', W/2+88, 706, 156, 54, taps, '#ff5a7a')){
         totalScore = 0; scores.road=0; scores.bubbles=0; scores.wagon=0; scores.fireworks=0;
         setScene(Title);
       }
