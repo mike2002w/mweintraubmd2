@@ -1168,7 +1168,7 @@ const BubbleLevel = {
 
 const Story3 = StoryCard({
   icon:'🎆', chapter:'CHAPTER 3', title:'4th of July Finale',
-  body:'The sky goes dark over the coast and it is time for fireworks! Tap the sky to launch rockets, and hit the glowing golden rings for DIRECT HIT bonuses. Then hold on for the grand finale!',
+  body:'Storm clouds are rolling in to rain out the fireworks show! Slide the wagon along the shore, blast the grumpy clouds with rockets, and dodge the raindrops. Clear three waves to save the grand finale!',
   color:'#4fd1ff', btn:'Light the Sky  ▶', top:'#141a3a', bot:'#05060f', next:()=>FireworksLevel
 });
 
@@ -1726,27 +1726,33 @@ const LanderLevel = {
 };
 
 // =====================================================
-//  CHAPTER 3 — FIREWORKS FINALE
+//  CHAPTER 3 — FIREWORKS DEFENSE (save the show from the rain)
 // =====================================================
 const FireworksLevel = {
-  rockets:[], sparks:[], time:0, dur:30, launched:0, done:false, t:0, auto:0, nameTimer:0, nameIdx:0,
-  finale:false, finaleT:0, finaleSpawn:0, _saveReq:false, _photoSide:false,
-  targets:[], tSpawn:0, hits:0, msgs:[],
-  _showName:null, _showNameT:0, _showNameX:0, _showNameY:0, _showNameC:'#fff',
+  time:0, done:false, t:0, finale:false, finaleT:0, finaleSpawn:0,
+  _saveReq:false, _photoSide:false, _autoFlipped:false, _rainWon:false, newBest:false,
+  wx:240, lives:3, wave:1, waveMax:3, clouds:[], drops:[], rockets:[], sparks:[], msgs:[],
+  hits:0, launched:0, shootCD:0, cdir:1, rainT:2, waveBanner:0, inv:0, flash:0,
+  nameIdx:0, _showName:null, _showNameT:0,
   names:['SIENNA','PHOEBE','LEILANI','ALLIE','MIKE','JAKE','JANE'],
   palette:['#ff5a7a','#ffd23f','#4fd1ff','#7CFC8A','#ff8ad2','#fff2a8'],
   enter(){
-    this.rockets=[]; this.sparks=[]; this.time=0; this.launched=0;
-    this.done=false; this.t=0; this.auto=0; this.nameTimer=0; this.nameIdx=0; this._showName=null;
-    this.finale=false; this.finaleT=0; this.finaleSpawn=0; this._photoSide=false;
-    this.targets=[]; this.tSpawn=1.2; this.hits=0; this.msgs=[];
+    this.time=0; this.done=false; this.t=0; this.finale=false; this.finaleT=0; this.finaleSpawn=0;
+    this._saveReq=false; this._photoSide=false; this._autoFlipped=false; this._rainWon=false; this.newBest=false;
+    this.wx=W/2; this.lives=3; this.wave=1;
+    this.clouds=[]; this.drops=[]; this.rockets=[]; this.sparks=[]; this.msgs=[];
+    this.hits=0; this.launched=0; this.shootCD=0; this.rainT=2; this.waveBanner=2.2; this.inv=0; this.flash=0;
+    this.nameIdx=0; this._showName=null; this._showNameT=0;
+    scores.fireworks=0;
+    this.spawnWave();
   },
-  launch(tx, ty, user){
-    ty = clamp(ty, 120, H*0.6);
-    tx = clamp(tx, 40, W-40);
-    this.rockets.push({ x:tx, y:H-20, tx, ty, user:!!user, color:this.palette[(Math.random()*this.palette.length)|0] });
-    this.launched++;
-    if(user){ whistle(); buzz(16); }
+  spawnWave(){
+    this.clouds=[];
+    const rows=this.wave>=3?4:3, cols=5;
+    for(let r2=0;r2<rows;r2++) for(let c2=0;c2<cols;c2++){
+      this.clouds.push({x:68+c2*86, y:104+r2*52, ph:rand(0,6.28)});
+    }
+    this.cdir=1; this.rainT=1.5; this.bounceCD=0;
   },
   addSpark(x,y,ang,sp,color,life,grav,streak,flicker,size){
     this.sparks.push({
@@ -1755,24 +1761,8 @@ const FireworksLevel = {
       grav, streak, flicker, ph:rand(0,6.28)
     });
   },
-  burst(x,y,color,userRocket){
+  burst(x,y,color){
     boom();
-    // only player-launched rockets can score on target rings
-    for(let ti=userRocket ? this.targets.length-1 : -1; ti>=0; ti--){
-      const tg=this.targets[ti];
-      if(Math.hypot(x-tg.x, y-tg.y) < tg.r+16){
-        this.hits++;
-        this.msgs.push({x:tg.x, y:Math.max(60,tg.y-40), txt:'DIRECT HIT! +25', t:0});
-        this.targets.splice(ti,1);
-        const n2=20;
-        for(let i2=0;i2<n2;i2++){
-          this.addSpark(tg.x, tg.y, i2/n2*Math.PI*2, rand(150,170), '#ffd23f', rand(0.7,1.1), 60, false, true);
-        }
-        chime([784,988,1175]);
-        buzz(20);
-        break;
-      }
-    }
     const kind = ['peony','peony','ring','willow','twinkle'][(Math.random()*5)|0];
     let n = 26 + (Math.random()*14|0);
     if(kind==='ring') n = 30;
@@ -1799,64 +1789,137 @@ const FireworksLevel = {
       this.addSpark(x,y,Math.atan2(hy,hx),sp,'#ff6fae',1.7,40,false,true,3);
     }
   },
-  update(dt, taps){
-    this.time += dt;
-    for(const tp of taps){ if(!this.done && !this.finale) this.launch(tp.x, tp.y, true); }
-    this.auto -= dt;
-    if(this.auto<=0 && !this.done && !this.finale){
-      this.auto = rand(0.7,1.3);
-      this.launch(rand(60,W-60), rand(140, H*0.5));
-    }
-    for(const r of this.rockets){
-      const dx=r.tx-r.x, dy=r.ty-r.y;
-      const d=Math.hypot(dx,dy);
-      const step = 520*dt;
-      if(d < step){ this.burst(r.tx, r.ty, r.color, r.user); r.done=true; }
-      else { r.x += dx/d*step; r.y += dy/d*step; }
-    }
-    this.rockets = this.rockets.filter(r=>!r.done);
-    // bonus target rings
-    this.tSpawn -= dt;
-    if(this.tSpawn<=0 && this.targets.length<3 && !this.done && !this.finale){
-      this.tSpawn = rand(1.4,2.2);
-      this.targets.push({x:rand(70,W-70), y:rand(140,H*0.5), r:34, age:0, life:4.5, vx:rand(-28,28)});
-    }
-    for(const tg of this.targets){ tg.age+=dt; tg.x+=tg.vx*dt; if(tg.x<50||tg.x>W-50) tg.vx*=-1; }
-    this.targets = this.targets.filter(tg=>tg.age<tg.life);
-    for(const m of this.msgs) m.t+=dt;
-    this.msgs = this.msgs.filter(m=>m.t<1.2);
+  hurt(){
+    if(this.finale || this.done || this.lives<=0) return;
+    this.lives--; this.inv=1.2; this.flash=0.35;
+    boom(); buzz(70);
+    this.msgs.push({x:this.wx, y:H-190, txt:'☔ SOAKED!', t:0});
+    if(this.lives<=0 && !this.finale){ this._rainWon=true; this.startFinale(); }
+  },
+  startFinale(){
+    this.finale=true; this.finaleT=0; this.finaleSpawn=0.4;
+    this.heartBurst(W/2,250);
+  },
+  update(dt,taps){
+    this.time+=dt;
+    if(this.flash>0) this.flash-=dt;
+    if(this.inv>0) this.inv-=dt;
     for(const s of this.sparks){
       s.age += dt;
       s.x += s.vx*dt; s.y += s.vy*dt;
       s.vy += s.grav*dt; s.vx *= 0.99;
     }
-    this.sparks = this.sparks.filter(s=>s.age<s.life);
-    this.nameTimer -= dt;
-    if(this.nameTimer<=0 && !this.done && !this.finale){
-      this.nameTimer = 3.2;
-      this._showName = this.names[this.nameIdx % this.names.length];
-      this._showNameT = 0;
-      this._showNameX = rand(120, W-120);
-      this._showNameY = rand(180, 360);
-      this._showNameC = this.palette[(this.nameIdx)%this.palette.length];
-      this.burst(this._showNameX, this._showNameY, this._showNameC);
-      this.nameIdx++;
-    }
-    if(this._showName!=null) this._showNameT += dt;
-    // grand finale volley, then the summary card
-    if(this.time >= this.dur && !this.finale && !this.done){
-      this.finale = true; this.finaleT = 0; this.finaleSpawn = 0.4;
-      this.heartBurst(W/2, 250);
-    }
-    if(this.finale && !this.done){
+    this.sparks = this.sparks.filter(function(s){ return s.age<s.life; });
+    for(const m of this.msgs) m.t+=dt;
+    this.msgs = this.msgs.filter(function(m){ return m.t<1.3; });
+    if(this._showName!=null) this._showNameT+=dt;
+    if(this.done){ this.t += dt; return; }
+    if(this.finale){
       this.finaleT += dt; this.finaleSpawn -= dt;
       if(this.finaleSpawn<=0){
         this.finaleSpawn = 0.2;
         this.burst(rand(60,W-60), rand(120,H*0.5), this.palette[(Math.random()*this.palette.length)|0]);
       }
-      if(this.finaleT > 3.2){ this.done = true; this.t = 0; this.newBest=bestPut('fireworks', this.launched*5+this.hits*25); chime([523,659,784,1047]); }
+      if(this.finaleT > 3.2){
+        this.done = true; this.t = 0;
+        this.newBest = bestPut('fireworks', scores.fireworks);
+        chime([523,659,784,1047]);
+      }
+      return;
     }
-    if(this.done){ this.t += dt; }
+    if(this.waveBanner>0) this.waveBanner-=dt;
+    // slide the wagon
+    if(input.left) this.wx-=300*dt;
+    if(input.right) this.wx+=300*dt;
+    if(input.held && input.pointer){
+      const dx=input.x-this.wx;
+      this.wx += clamp(dx, -320*dt, 320*dt);
+    }
+    this.wx=clamp(this.wx, 60, W-60);
+    // fire rockets: tap, or hold for continuous
+    this.shootCD-=dt;
+    if((taps.length>0 || input.held) && this.shootCD<=0 && this.waveBanner<=0){
+      this.shootCD=0.3;
+      this.rockets.push({x:this.wx, y:H-148, color:this.palette[(Math.random()*6)|0]});
+      this.launched++;
+      whistle(); buzz(8);
+    }
+    for(const rk of this.rockets) rk.y-=520*dt;
+    outer:
+    for(let i=this.rockets.length-1;i>=0;i--){
+      const rk=this.rockets[i];
+      if(rk.y<64){ this.rockets.splice(i,1); continue; }
+      for(let j=this.clouds.length-1;j>=0;j--){
+        const cl=this.clouds[j];
+        if(Math.abs(rk.x-cl.x)<38 && Math.abs(rk.y-cl.y)<26){
+          this.clouds.splice(j,1); this.rockets.splice(i,1);
+          this.hits++; scores.fireworks+=20;
+          this.burst(cl.x, cl.y, this.palette[(Math.random()*6)|0]);
+          this.msgs.push({x:cl.x, y:cl.y-30, txt:'+20', t:0});
+          buzz(12);
+          continue outer;
+        }
+      }
+    }
+    if(this.waveBanner<=0 && this.clouds.length){
+      if(this.bounceCD>0) this.bounceCD-=dt;
+      const total=this.wave>=3?20:15;
+      const sp=(26+this.wave*12) + (1-this.clouds.length/total)*46;
+      let hitEdge=false;
+      for(const cl of this.clouds){ cl.x+=this.cdir*sp*dt; if(cl.x<38||cl.x>W-38) hitEdge=true; }
+      if(hitEdge && this.bounceCD<=0){
+        this.cdir*=-1; this.bounceCD=0.5;
+        for(const cl of this.clouds){ cl.y+=20; cl.x+=this.cdir*8; }
+      }
+      this.rainT-=dt;
+      if(this.rainT<=0){
+        this.rainT=Math.max(0.45, 1.5-this.wave*0.3)*rand(0.7,1.3);
+        const cl=this.clouds[(Math.random()*this.clouds.length)|0];
+        this.drops.push({x:cl.x+rand(-14,14), y:cl.y+18});
+      }
+      for(let j=this.clouds.length-1;j>=0;j--){
+        if(this.clouds[j].y>H-230){ this.clouds.splice(j,1); this.hurt(); }
+      }
+    }
+    for(let i=this.drops.length-1;i>=0;i--){
+      const d=this.drops[i];
+      d.y+=(150+this.wave*30)*dt;
+      if(d.y>H-150 && d.y<H-88 && Math.abs(d.x-this.wx)<44 && this.inv<=0){
+        this.drops.splice(i,1); this.hurt();
+      } else if(d.y>H-70){
+        this.addSpark(d.x, H-72, -Math.PI/2, 30, '#4fd1ff', 0.3, 60, false, false, 2);
+        this.drops.splice(i,1);
+      }
+    }
+    if(this.clouds.length===0 && this.waveBanner<=0){
+      scores.fireworks+=50;
+      this.msgs.push({x:W/2, y:280, txt:'WAVE '+this.wave+' CLEAR! +50', t:0});
+      this._showName=this.names[this.nameIdx++ % this.names.length];
+      this._showNameT=0;
+      this.burst(rand(100,W-100), rand(140,300), this.palette[(Math.random()*6)|0]);
+      chime([523,659,784]);
+      this.wave++;
+      if(this.wave>this.waveMax){ this.startFinale(); }
+      else { this.waveBanner=2.2; this.spawnWave(); }
+    }
+  },
+  drawCloud(cl){
+    ctx.save();
+    ctx.translate(cl.x, cl.y+Math.sin(this.time*2+cl.ph)*3);
+    ctx.fillStyle='#59627a';
+    ctx.beginPath();
+    ctx.arc(-18,4,15,0,Math.PI*2); ctx.arc(0,-6,19,0,Math.PI*2);
+    ctx.arc(19,4,14,0,Math.PI*2); ctx.arc(0,7,17,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle='#495168';
+    ctx.beginPath(); ctx.ellipse(0,14,26,7,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#fff';
+    ctx.beginPath(); ctx.arc(-8,-2,4,0,Math.PI*2); ctx.arc(8,-2,4,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#20242e';
+    ctx.beginPath(); ctx.arc(-7,-1,2,0,Math.PI*2); ctx.arc(9,-1,2,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#20242e'; ctx.lineWidth=1.6; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(-5,6); ctx.quadraticCurveTo(0,3,5,6); ctx.stroke();
+    ctx.restore();
   },
   draw(taps){
     const WL = H*0.72;
@@ -1864,7 +1927,6 @@ const FireworksLevel = {
     g.addColorStop(0,'#05060f'); g.addColorStop(0.6,'#0e1330'); g.addColorStop(0.72,'#122447'); g.addColorStop(1,'#08122b');
     ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
     for(let i=0;i<50;i++){ const sx=(i*89%W), sy=(i*47%420); ctx.fillStyle='rgba(255,255,255,.5)'; ctx.fillRect(sx,sy,2,2); }
-    // water with shimmer
     ctx.fillStyle='rgba(255,255,255,.05)'; ctx.fillRect(0,WL,W,H-WL);
     for(let i=0;i<9;i++){
       const sy=WL+14+i*14;
@@ -1873,7 +1935,6 @@ const FireworksLevel = {
       ctx.fillRect((i*53+this.time*12)%W-40, sy, 80, 2);
     }
     ctx.globalAlpha=1;
-    // spark reflections in the water
     for(const s of this.sparks){
       if(s.y < WL){
         ctx.globalAlpha=(1-s.age/s.life)*0.16;
@@ -1882,54 +1943,23 @@ const FireworksLevel = {
       }
     }
     ctx.globalAlpha=1;
-    // shore: the family + the wagon
-    drawAdult(40, H-56, 13, MIKE);
-    drawAdult(92, H-54, 13, ALLIE);
-    drawGirl(140, H-54, 11, SIENNA);
-    drawGirl(188, H-52, 10, PHOEBE);
-    drawAdult(244, H-58, 13, JAKE);
-    drawAdult(300, H-56, 13, JANE);
-    // wagon silhouette on the shore
-    ctx.strokeStyle='#5e1019'; ctx.lineWidth=3;
-    ctx.beginPath(); ctx.moveTo(W-110,H-64); ctx.lineTo(W-108,H-100); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(W-36,H-64); ctx.lineTo(W-38,H-100); ctx.stroke();
-    ctx.fillStyle='#7a1420';
-    ctx.beginPath();
-    ctx.moveTo(W-124,H-98);
-    ctx.quadraticCurveTo(W-72,H-114,W-20,H-98);
-    ctx.lineTo(W-20,H-92); ctx.lineTo(W-124,H-92); ctx.closePath(); ctx.fill();
-    ctx.fillStyle='#5e1019';
-    rr(ctx, W-118, H-64, 92, 24, 7); ctx.fill();
-    for(const wx of [W-98, W-46]){
-      ctx.fillStyle='#0c0d12'; ctx.beginPath(); ctx.arc(wx,H-36,10,0,Math.PI*2); ctx.fill();
-    }
-    drawHulaDoll(W-72, H-88, 8);
-    // bonus target rings
-    for(const tg of this.targets){
-      const lifeK = 1 - tg.age/tg.life;
-      const blink = tg.age>tg.life-1 ? (Math.sin(tg.age*12)>0?1:0.25) : 1;
-      ctx.globalAlpha = 0.85*blink;
-      ctx.strokeStyle='#ffd23f'; ctx.lineWidth=3;
-      ctx.setLineDash([8,6]); ctx.lineDashOffset=-this.time*30;
-      ctx.beginPath(); ctx.arc(tg.x,tg.y,tg.r*(0.8+0.2*lifeK),0,Math.PI*2); ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.strokeStyle='rgba(255,210,63,0.5)'; ctx.lineWidth=1.5;
-      ctx.beginPath(); ctx.arc(tg.x,tg.y,tg.r*0.45,0,Math.PI*2); ctx.stroke();
-      ctx.fillStyle='#ffd23f';
-      ctx.beginPath(); ctx.arc(tg.x,tg.y,3,0,Math.PI*2); ctx.fill();
-      ctx.globalAlpha=1;
-    }
-    // rockets with sparkle trails
-    for(const r of this.rockets){
-      const dx=r.tx-r.x, dy=r.ty-r.y, d=Math.hypot(dx,dy)||1;
-      for(let k=1;k<=4;k++){
-        ctx.globalAlpha=0.5-k*0.11;
-        ctx.fillStyle=r.color;
-        ctx.beginPath(); ctx.arc(r.x-dx/d*k*11, r.y-dy/d*k*11, 2.2-k*0.3, 0, Math.PI*2); ctx.fill();
-      }
+    // the grown-ups watching from the corner
+    drawAdult(28, H-52, 10, MIKE);
+    drawAdult(62, H-50, 10, ALLIE);
+    drawAdult(418, H-52, 10, JAKE);
+    drawAdult(452, H-50, 10, JANE);
+    // clouds
+    for(const cl of this.clouds) this.drawCloud(cl);
+    // raindrops
+    for(const d of this.drops) emoji('\u{1F4A7}', d.x, d.y, 18);
+    // rockets
+    for(const rk of this.rockets){
+      ctx.globalAlpha=0.4;
+      ctx.fillStyle=rk.color;
+      ctx.beginPath(); ctx.arc(rk.x, rk.y+14, 2.2, 0, Math.PI*2); ctx.fill();
       ctx.globalAlpha=1;
       ctx.fillStyle='#fff8e8';
-      ctx.beginPath(); ctx.arc(r.x,r.y,3,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(rk.x, rk.y, 3.2, 0, Math.PI*2); ctx.fill();
     }
     // sparks
     for(const s of this.sparks){
@@ -1948,38 +1978,61 @@ const FireworksLevel = {
       }
     }
     ctx.globalAlpha=1;
+    // the wagon battery (player)
+    if(!(this.inv>0 && Math.sin(this.time*30)<0)){
+      ctx.save();
+      ctx.translate(this.wx, H-96);
+      ctx.scale(0.5,0.5);
+      drawMiniWagon(0, 10, this.time);
+      ctx.restore();
+    }
+    // floating msgs
     for(const m of this.msgs){
-      const k=m.t/1.2;
+      const k=m.t/1.3;
       ctx.globalAlpha=1-k;
-      text(m.txt, m.x, m.y-k*30, 20, '#ffd23f','center','800');
+      text(m.txt, m.x, m.y-k*34, 20, '#ffd23f', 'center', '800');
       ctx.globalAlpha=1;
     }
-    if(this._showName!=null && this._showNameT<2.2 && !this.finale){
+    // name in lights on wave clear
+    if(this._showName!=null && this._showNameT<2.2 && !this.done){
       ctx.globalAlpha = clamp(1.2 - this._showNameT/2.2, 0, 1);
-      text(this._showName, this._showNameX, this._showNameY, 30, this._showNameC);
+      text(this._showName, W/2, 340, 30, this.palette[this.nameIdx%6]);
       ctx.globalAlpha=1;
     }
     if(this.finale && !this.done){
       ctx.globalAlpha=Math.min(1,this.finaleT/0.6);
       text('HAPPY 4TH!', W/2, 180, 46, '#ffd23f');
-      text('❤️ GRAND FINALE ❤️', W/2, 226, 18, '#ff8ad2');
+      text(this._rainWon ? '☔ the rain tried... the show goes on!' : '❤️ SHOW SAVED — GRAND FINALE ❤️', W/2, 226, 17, '#ff8ad2');
       ctx.globalAlpha=1;
     }
     if(!this.done && !this.finale){
-      const timeLeft = Math.max(0, Math.ceil(this.dur - this.time));
-      rr(ctx, 12, 12, W-24, 40, 12); ctx.fillStyle='rgba(0,0,0,.3)'; ctx.fill();
-      text('🎆 '+this.launched+'   🎯 '+this.hits, 30, 32, 18, '#fff', 'left');
-      text('⏱ ' + timeLeft + 's', W-24, 32, 18, '#fff', 'right');
-      text('Hit the rings!', W/2, 32, 16, '#ffd23f');
-      text((this.launched*5+this.hits*25)+' pts', 30, 66, 13, '#ffd23f', 'left', '700');
+      rr(ctx, 12, 12, W-24, 40, 12); ctx.fillStyle='rgba(0,0,0,.35)'; ctx.fill();
+      text(scores.fireworks+' pts', 26, 32, 17, '#ffd23f', 'left', '800');
+      text('WAVE '+Math.min(this.wave,this.waveMax)+'/'+this.waveMax, W/2, 32, 17, '#fff');
+      let umb='';
+      for(let i=0;i<this.lives;i++) umb+='☂️';
+      text(umb||'—', W-24, 32, 17, '#fff', 'right');
+      if(this.waveBanner>0){
+        ctx.globalAlpha=clamp(this.waveBanner,0,1);
+        text('WAVE '+this.wave, W/2, 300, 42, '#4fd1ff');
+        text('storm clouds want to rain out the show!', W/2, 346, 15, 'rgba(255,255,255,0.8)', 'center', '600');
+        ctx.globalAlpha=1;
+      }
       if(homeButton(taps)){ setScene(Title); return; }
+    }
+    if(this.flash>0){
+      ctx.fillStyle='rgba(80,120,255,'+(this.flash*0.6).toFixed(3)+')';
+      ctx.fillRect(0,0,W,H);
     }
     if(this.done){
       for(const tp of taps){
         if(tripPhotoReady && tp.x>40 && tp.x<W-40 && tp.y>110 && tp.y<650) this._photoSide = !this._photoSide;
       }
+      // the real photo reveals itself after a few seconds
+      if(tripPhotoReady && !this._autoFlipped && this.t>5){
+        this._autoFlipped=true; this._photoSide=true;
+      }
       this.drawPostcard();
-      // a save was requested last frame: the canvas now holds the clean postcard
       if(this._saveReq){
         this._saveReq = false;
         try{
@@ -1989,7 +2042,7 @@ const FireworksLevel = {
           a.click();
         }catch(e){}
       }
-      if(button('Save 📮', W/2-88, 706, 156, 54, taps, '#4fa3d1')) this._saveReq = true;
+      if(button('Save \u{1F4EE}', W/2-88, 706, 156, 54, taps, '#4fa3d1')) this._saveReq = true;
       if(button('Menu  ⌂', W/2+88, 706, 156, 54, taps, '#ff5a7a')){
         totalScore = 0; scores.road=0; scores.bubbles=0; scores.wagon=0; scores.fireworks=0;
         setScene(Title);
@@ -2004,8 +2057,7 @@ const FireworksLevel = {
     ctx.fillStyle='#fdf6e8'; ctx.fill();
     ctx.restore();
     if(this._photoSide && tripPhotoReady){
-      // the real photo, full-frame
-      text('THE REAL THING 📷', W/2, 138, 20, '#c22030', 'center', '900');
+      text('THE REAL THING \u{1F4F7}', W/2, 138, 20, '#c22030', 'center', '900');
       const px=44, py=160, pw=W-88, ph=294;
       ctx.save();
       rr(ctx, px, py, pw, ph, 6); ctx.clip();
@@ -2014,22 +2066,19 @@ const FireworksLevel = {
       if(ir>br){ dh=ph; dw=ph*ir; } else { dw=pw; dh=pw/ir; }
       ctx.drawImage(TRIP_PHOTO, px+(pw-dw)/2, py+(ph-dh)/2, dw, dh);
       ctx.restore();
-      text('The real Rhode Island Flyer crew 💛', W/2, 490, 17, '#5a4632','center','700');
+      text('The real Rhode Island Flyer crew \u{1F49B}', W/2, 490, 17, '#5a4632','center','700');
       text('Sienna, Phoebe & one million bubbles', W/2, 520, 14, '#7a6a55','center','500');
       text('July 4th', W/2, 548, 13, '#a08a6a','center','600');
       text('tap the card to flip back ↻', W/2, 630, 12, '#a08a6a','center','600');
       return;
     }
-    // stamp + postmark
     rr(ctx, W-96, 116, 52, 62, 4);
     ctx.strokeStyle='#c9a86b'; ctx.lineWidth=2; ctx.setLineDash([3,3]); ctx.stroke(); ctx.setLineDash([]);
-    emoji('🎆', W-70, 146, 30);
+    emoji('\u{1F386}', W-70, 146, 30);
     ctx.strokeStyle='rgba(90,70,50,0.4)'; ctx.lineWidth=1.5;
     for(let k=0;k<3;k++){ ctx.beginPath(); ctx.arc(W-120, 140, 26+k*7, -0.6, 1.2); ctx.stroke(); }
-    // headline
     text('GREETINGS FROM', W/2, 152, 15, '#b06a00', 'center', '700');
     text('RHODE ISLAND!', W/2, 190, 38, '#c22030', 'center', '900');
-    // scene window
     ctx.save();
     rr(ctx, 52, 222, W-104, 250, 8);
     ctx.clip();
@@ -2053,14 +2102,14 @@ const FireworksLevel = {
     drawAdult(96, 420, 11, JAKE);
     drawAdult(384, 420, 11, JANE);
     ctx.restore();
-    const grand = scores.bubbles + scores.wagon + this.launched*5 + this.hits*25;
-    text('FINAL SCORE  '+grand.toLocaleString()+'  •  🎆 '+this.launched+'  •  🎯 '+this.hits+'  •  🧃 '+WagonLevel.loot, W/2, 500, 15, '#5a4632', 'center', '800');
-    text('Chapter best: '+bestGet('fireworks')+(this.newBest?'  🏆 NEW BEST!':''), W/2, 518, 11, this.newBest?'#b06a00':'#a08a6a', 'center', '700');
-    text('Sienna & Phoebe: friends forever 💛', W/2, 536, 17, '#c22030', 'center', '700');
+    const grand = scores.bubbles + scores.wagon + scores.fireworks;
+    text('FINAL SCORE  '+grand.toLocaleString()+'  •  \u{1F386} '+this.launched+'  •  ☁️ '+this.hits+'  •  \u{1F9C3} '+WagonLevel.loot, W/2, 500, 14, '#5a4632', 'center', '800');
+    text('Chapter best: '+bestGet('fireworks')+(this.newBest?'  \u{1F3C6} NEW BEST!':''), W/2, 518, 11, this.newBest?'#b06a00':'#a08a6a', 'center', '700');
+    text('Sienna & Phoebe: friends forever \u{1F49B}', W/2, 536, 17, '#c22030', 'center', '700');
     text('Bubbles, fireworks & the best hosts in Rhode Island.', W/2, 564, 14, '#7a6a55', 'center', '500');
     text('XOXO — Mike, Allie & Sienna', W/2, 592, 15, '#5a4632', 'center', '700');
     text('July 4th', W/2, 622, 13, '#a08a6a', 'center', '600');
-    if(tripPhotoReady) text('tap the card to see the real photo 📷', W/2, 644, 12, '#a08a6a', 'center', '600');
+    if(tripPhotoReady) text('tap the card to see the real photo \u{1F4F7}', W/2, 644, 12, '#a08a6a', 'center', '600');
   }
 };
 
