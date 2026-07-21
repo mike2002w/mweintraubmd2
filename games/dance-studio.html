@@ -1,6 +1,13 @@
 <meta charset="utf-8">
 <title>Dance Studio</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta property="og:title" content="Dance Studio 💃">
+<meta property="og:description" content="Watch the cousins' made-up dance, then copy it! A memory game for Emma, Ava and Sienna.">
+<meta property="og:image" content="https://michaelweintraubmd.com/games/arcade-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <style>
   :root{
     --grape:#7A4FBF; --grape-dark:#54348A; --lav:#F0E9FF; --lav-deep:#D9C9F5;
@@ -43,13 +50,14 @@
   .dancer svg{width:clamp(64px,20vw,120px)}
   .dancer b{font-size:clamp(14px,3.6vw,20px);color:var(--grape)}
   .dancer.lit{background:var(--gold);box-shadow:0 5px 0 #C9A227, 0 0 24px rgba(255,201,60,.8)}
-  .dancer.lit svg{animation:none}
-  .dancer.m-spin svg{animation:spin .55s ease-in-out}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .dancer.m-hop svg{animation:hop .55s cubic-bezier(.34,1.6,.6,1)}
-  @keyframes hop{40%{transform:translateY(-22px)}}
-  .dancer.m-wiggle svg{animation:wiggle .55s ease-in-out}
-  @keyframes wiggle{25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}}
+  .dancer.m-spin svg{animation:spin .7s ease-in-out}
+  @keyframes spin{50%{transform:rotate(180deg) scale(1.15)}to{transform:rotate(360deg)}}
+  .dancer.m-hop svg{animation:hop .7s cubic-bezier(.34,1.6,.6,1)}
+  @keyframes hop{30%{transform:translateY(-30px) scale(1.08)}55%{transform:translateY(0)}
+    75%{transform:translateY(-14px)}}
+  .dancer.m-wiggle svg{animation:wiggle .7s ease-in-out}
+  @keyframes wiggle{20%{transform:rotate(-16deg)}40%{transform:rotate(14deg)}
+    60%{transform:rotate(-11deg)}80%{transform:rotate(8deg)}}
   .dancer.oops{animation:oopsShake .4s}
   @keyframes oopsShake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 
@@ -262,7 +270,7 @@ function flash(i,long){
   el.classList.remove("lit",d.move,"oops"); void el.offsetWidth;
   el.classList.add("lit",d.move);
   tone(d.tone,.3,"triangle",0,.2);
-  timers.push(setTimeout(()=>{ el.classList.remove("lit",d.move); }, long?520:380));
+  timers.push(setTimeout(()=>{ el.classList.remove("lit",d.move); }, long?700:600));
 }
 function notes(){
   const n=document.createElement("div"); n.className="note";
@@ -300,7 +308,7 @@ function playSeq(){
 }
 function tap(i){
   ac();
-  if(phase!=="input") return;
+  if(phase!=="input"){ flash(i,false); return; } // dancers always dance when tapped
   if(seq[inputIdx]===i){
     flash(i,false);
     inputIdx++;
