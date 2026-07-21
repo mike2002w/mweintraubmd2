@@ -1,0 +1,393 @@
+<meta charset="utf-8">
+<title>Dance Studio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<style>
+  :root{
+    --grape:#7A4FBF; --grape-dark:#54348A; --lav:#F0E9FF; --lav-deep:#D9C9F5;
+    --gold:#FFC93C; --cream:#FFF8F0; --choc:#54341F; --berry:#E0403E;
+    --display:"Chalkboard SE","Comic Sans MS","Marker Felt",ui-rounded,-apple-system,sans-serif;
+    --ui:-apple-system,"SF Pro Rounded",Segoe UI,Roboto,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+  html,body{height:100%;overflow:hidden}
+  body{font-family:var(--display);color:var(--choc);
+    background:linear-gradient(#54348A 0 14%, var(--lav) 14% 100%)}
+  button{font-family:inherit;border:none;cursor:pointer;background:none;color:inherit}
+  svg{display:block}
+  .kO{display:none}
+
+  #stage{position:fixed;inset:0;display:flex;flex-direction:column}
+  #top{flex:0 0 auto;text-align:center;padding-top:6px;position:relative;z-index:5}
+  #sign{display:inline-block;background:var(--cream);border:4px solid var(--grape);
+    border-radius:18px;padding:3px 20px 5px;box-shadow:0 4px 0 var(--grape-dark)}
+  #sign h1{font-size:clamp(17px,4vw,28px);color:var(--grape);line-height:1.1}
+  #sign small{display:block;font-size:clamp(10px,2vw,13px);color:#8A6B9E}
+
+  #hud{position:absolute;top:6px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-start;z-index:30;pointer-events:none}
+  #hudLeft{display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+  .hudBox{background:var(--cream);border:3px solid var(--choc);border-radius:14px;
+    padding:4px 12px;font-family:var(--ui);font-weight:800;font-size:clamp(14px,3.4vw,19px);
+    font-variant-numeric:tabular-nums;box-shadow:0 3px 0 rgba(84,52,31,.25)}
+  #roundBox{font-size:clamp(20px,5.4vw,30px);border-color:#C9A227;border-width:4px;background:#FFFDF4}
+  #roundBox.bump{animation:bump .35s cubic-bezier(.34,1.6,.6,1)}
+  @keyframes bump{40%{transform:scale(1.3);background:var(--gold)}}
+  #hudRight{display:flex;gap:6px}
+  #sndBtn,#homeBtn{pointer-events:auto;width:44px;font-size:19px}
+
+  /* dance floor */
+  #floor{flex:1 1 auto;display:flex;align-items:center;justify-content:center;gap:3vw;padding:0 3vw;position:relative}
+  .dancer{flex:1;max-width:190px;background:var(--cream);border:4px solid var(--choc);
+    border-radius:22px;padding:12px 6px 8px;display:flex;flex-direction:column;align-items:center;
+    box-shadow:0 5px 0 var(--grape-dark);transition:transform .08s, box-shadow .2s, background .2s;cursor:pointer}
+  .dancer:active{transform:translateY(3px)}
+  .dancer svg{width:clamp(64px,20vw,120px)}
+  .dancer b{font-size:clamp(14px,3.6vw,20px);color:var(--grape)}
+  .dancer.lit{background:var(--gold);box-shadow:0 5px 0 #C9A227, 0 0 24px rgba(255,201,60,.8)}
+  .dancer.lit svg{animation:none}
+  .dancer.m-spin svg{animation:spin .55s ease-in-out}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .dancer.m-hop svg{animation:hop .55s cubic-bezier(.34,1.6,.6,1)}
+  @keyframes hop{40%{transform:translateY(-22px)}}
+  .dancer.m-wiggle svg{animation:wiggle .55s ease-in-out}
+  @keyframes wiggle{25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}}
+  .dancer.oops{animation:oopsShake .4s}
+  @keyframes oopsShake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+  #banner{position:absolute;left:50%;top:12%;transform:translate(-50%,0) scale(0);z-index:20;
+    background:var(--gold);border:4px solid var(--choc);border-radius:18px;padding:6px 22px;
+    font-size:clamp(18px,4.8vw,28px);white-space:nowrap;box-shadow:0 5px 0 rgba(84,52,31,.3)}
+  #banner.show{animation:bannerPop 1.4s cubic-bezier(.34,1.6,.6,1) forwards}
+  @keyframes bannerPop{15%{transform:translate(-50%,0) scale(1)}
+    82%{transform:translate(-50%,0) scale(1);opacity:1}
+    100%{transform:translate(-50%,0) scale(.7);opacity:0}}
+  #banner.stay{animation:none;transform:translate(-50%,0) scale(1)}
+
+  .note{position:fixed;z-index:55;font-size:clamp(20px,5vw,32px);color:var(--grape);pointer-events:none;
+    animation:noteUp 1.4s ease-out forwards}
+  @keyframes noteUp{to{transform:translateY(-110px) rotate(20deg);opacity:0}}
+  .bit{position:fixed;z-index:60;width:10px;height:14px;border-radius:3px;pointer-events:none}
+
+  /* overlays */
+  .overlay{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;
+    align-items:center;text-align:center;padding:16px;overflow-y:auto;
+    background:rgba(240,233,255,.97)}
+  .overlay > :first-child{margin-top:auto}
+  .overlay > :last-child{margin-bottom:auto}
+  .overlay.hidden{display:none}
+  .bigTitle{font-size:clamp(30px,8vw,54px);color:var(--grape);text-shadow:0 3px 0 #fff,0 5px 0 var(--lav-deep);
+    line-height:1.05;text-wrap:balance}
+  .subTitle{font-size:clamp(14px,3.4vw,19px);color:#6E5490;margin:6px 0 10px;max-width:52ch}
+  #castRow{display:flex;gap:4vw;justify-content:center;align-items:flex-end;margin:6px 0 2px}
+  #castRow .c{display:flex;flex-direction:column;align-items:center}
+  #castRow svg{width:clamp(54px,14vw,88px)}
+  #castRow b{font-size:clamp(11px,2.6vw,14px);color:var(--grape)}
+  .menuBtn{display:block;width:min(320px,84vw);margin:7px auto;background:var(--grape);color:#fff;
+    border-radius:18px;padding:12px;font-size:clamp(17px,4.4vw,23px);font-family:var(--display);
+    box-shadow:0 5px 0 var(--grape-dark);transition:transform .08s}
+  .menuBtn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--grape-dark)}
+  .menuBtn.alt{background:var(--berry);box-shadow:0 5px 0 #B02B2E}
+  .menuBtn.alt:active{box-shadow:0 1px 0 #B02B2E}
+  .menuBtn small{display:block;font-size:clamp(11px,2.6vw,14px);font-family:var(--ui);
+    font-weight:600;opacity:.92;margin-top:2px}
+  .btnStars{display:block;font-size:clamp(13px,3.4vw,17px);margin-top:2px;letter-spacing:2px}
+  .starOff{opacity:.3;filter:grayscale(1)}
+  #starRow{font-size:clamp(34px,10vw,54px);letter-spacing:6px;margin:2px 0}
+  .tinyNote{font-size:clamp(11px,2.6vw,14px);color:#6E5490;margin-top:8px;max-width:48ch}
+  .arcadeLink{display:block;width:min(320px,84vw);margin:10px auto 0;background:var(--choc);color:#fff;
+    border-radius:18px;padding:10px;font-size:clamp(15px,4vw,20px);font-family:var(--display);
+    box-shadow:0 5px 0 #3A2415;text-decoration:none;text-align:center;transition:transform .08s}
+  .arcadeLink:active{transform:translateY(4px);box-shadow:0 1px 0 #3A2415}
+  .arcadeLink.hidden{display:none}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01s !important;transition-duration:.01s !important}
+  }
+</style>
+
+<div id="stage">
+  <div id="top">
+    <div id="sign"><h1>💃 Dance Studio</h1><small>Copy the cousins' made-up dance!</small></div>
+    <div id="hud">
+      <div id="hudLeft">
+        <div class="hudBox" id="roundBox">🎵 <span id="round">0</span></div>
+        <div class="hudBox" id="heartsBox">❤️❤️❤️</div>
+      </div>
+      <div id="hudRight">
+        <button id="homeBtn" class="hudBox" aria-label="Back to the title screen">🏠</button>
+        <button id="sndBtn" class="hudBox">🔊</button>
+      </div>
+    </div>
+  </div>
+  <div id="floor">
+    <div id="banner"></div>
+  </div>
+</div>
+
+<div class="overlay" id="titleScreen">
+  <div class="bigTitle">💃 Dance Studio 🎵</div>
+  <div class="subTitle">Emma, Ava and Sienna made up a dance. Watch the moves, then tap the dancers
+    in the same order. Every round adds one more move!</div>
+  <div id="castRow"></div>
+  <button class="menuBtn" id="btnEasy">🐣 Easy Mode
+    <small>slow dance · starts with 1 move · replays after an oops</small>
+    <span class="btnStars" id="stars-easy"></span></button>
+  <button class="menuBtn alt" id="btnHard">🔥 Hard Mode
+    <small>fast dance · starts with 3 moves</small>
+    <span class="btnStars" id="stars-hard"></span></button>
+  <div class="tinyNote">Emma spins, Ava hops, Sienna wiggles. Three oopsies and the show is over.
+    How many rounds can you remember?</div>
+  <a class="arcadeLink hidden" id="arcadeLink" href="index.html">🕹️ Back to the Arcade</a>
+</div>
+
+<div class="overlay hidden" id="endScreen">
+  <div class="bigTitle">Show's over! 💃</div>
+  <div class="subTitle" id="endLine"></div>
+  <div id="starRow"></div>
+  <div class="bigTitle" style="font-size:clamp(40px,12vw,72px)">🎵 <span id="endScore">0</span></div>
+  <div class="subTitle" id="bestLine"></div>
+  <button class="menuBtn alt" id="btnAgain">💃 Dance Again</button>
+  <button class="menuBtn" id="btnMenu">🎵 Back to the Studio</button>
+</div>
+
+<script>
+"use strict";
+/* hand-drawn girls (same portraits as Schmackberry's) */
+function kidGirl(k){
+  const lash=`<circle cx="42.5" cy="45" r="2.6" fill="#3A2415"/><circle cx="57.5" cy="45" r="2.6" fill="#3A2415"/>
+    <path d="M38.5 41.5 q4 -3 8 0" fill="none" stroke="#3A2415" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M53.5 41.5 q4 -3 8 0" fill="none" stroke="#3A2415" stroke-width="1.6" stroke-linecap="round"/>`;
+  const dressPath=`M28 118 L34 74 a16 16 0 0 1 32 0 L72 118 z`;
+  if(k==="emma"){
+    return `<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs><clipPath id="dEm"><path d="${dressPath}"/></clipPath></defs>
+      <path d="${dressPath}" fill="#FFF6E8"/>
+      <g clip-path="url(#dEm)">
+        <rect x="20" y="79" width="60" height="6.5" fill="#F8B84E"/>
+        <rect x="20" y="91" width="60" height="6.5" fill="#F49FB6"/>
+        <rect x="20" y="103" width="60" height="6.5" fill="#FFE07A"/>
+      </g>
+      <circle cx="50" cy="38" r="25" fill="#3B2716"/>
+      <circle cx="70" cy="23" r="6.5" fill="#3B2716"/>
+      <circle cx="50" cy="45" r="20.5" fill="#F5CBA8"/>
+      ${lash}
+      <circle cx="35.5" cy="51" r="3.4" fill="#F79FA8" opacity=".65"/><circle cx="64.5" cy="51" r="3.4" fill="#F79FA8" opacity=".65"/>
+      <path d="M42 52 A 8.5 7.5 0 0 0 58 52 z" fill="#8C4A42"/>
+      <rect x="44" y="52" width="12" height="2.8" rx="1.2" fill="#fff"/>
+    </svg>`;
+  }
+  if(k==="ava"){
+    return `<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="21" y="34" width="14" height="54" rx="7" fill="#43301C"/>
+      <rect x="65" y="34" width="14" height="54" rx="7" fill="#43301C"/>
+      <path d="${dressPath}" fill="#FFFFFF"/>
+      <path d="M43 93 a7 7 0 0 1 14 0" fill="none" stroke="#F06292" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M45.5 93 a4.5 4.5 0 0 1 9 0" fill="none" stroke="#FFD54F" stroke-width="2.2" stroke-linecap="round"/>
+      <circle cx="50" cy="37" r="25" fill="#43301C"/>
+      <circle cx="50" cy="45" r="20.5" fill="#F5CBA8"/>
+      <circle cx="33" cy="23" r="4" fill="#59C6DE"/><circle cx="43" cy="17.5" r="4" fill="#59C6DE"/>
+      <circle cx="54" cy="16.5" r="4" fill="#59C6DE"/><circle cx="64.5" cy="20.5" r="4" fill="#59C6DE"/>
+      ${lash}
+      <circle cx="35.5" cy="51" r="3.4" fill="#F79FA8" opacity=".65"/><circle cx="64.5" cy="51" r="3.4" fill="#F79FA8" opacity=".65"/>
+      <path d="M43 53 Q50 59.5 57 53" fill="none" stroke="#3A2415" stroke-width="2.8" stroke-linecap="round"/>
+    </svg>`;
+  }
+  return `<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs><clipPath id="dSi"><path d="${dressPath}"/></clipPath></defs>
+    <path d="${dressPath}" fill="#F9CBD6"/>
+    <g clip-path="url(#dSi)">
+      <circle cx="40" cy="88" r="2.4" fill="#E0403E"/><circle cx="57" cy="83" r="2.4" fill="#E0403E"/>
+      <circle cx="48" cy="99" r="2.4" fill="#E0403E"/><circle cx="63" cy="97" r="2.4" fill="#E0403E"/>
+    </g>
+    <circle cx="50" cy="39" r="22.5" fill="#6B4B2E"/>
+    <ellipse cx="50" cy="46" rx="20.8" ry="20" fill="#F7D3B3"/>
+    <ellipse cx="63" cy="22" rx="5.5" ry="3.6" fill="#F585A8" transform="rotate(20 63 22)"/>
+    <ellipse cx="72" cy="26" rx="5.5" ry="3.6" fill="#F585A8" transform="rotate(-20 72 26)"/>
+    <circle cx="42.5" cy="45" r="2.9" fill="#3A2415"/><circle cx="57.5" cy="45" r="2.9" fill="#3A2415"/>
+    <circle cx="34" cy="53" r="4.4" fill="#F79FA8" opacity=".7"/><circle cx="66" cy="53" r="4.4" fill="#F79FA8" opacity=".7"/>
+    <path d="M44.5 54 Q50 58.5 55.5 54" fill="none" stroke="#3A2415" stroke-width="2.6" stroke-linecap="round"/>
+  </svg>`;
+}
+const DANCERS=[
+  {id:"emma",  name:"Emma",  move:"m-spin",  tone:523},
+  {id:"ava",   name:"Ava",   move:"m-hop",   tone:659},
+  {id:"sienna",name:"Sienna",move:"m-wiggle",tone:784}
+];
+
+/* ---------- audio ---------- */
+let AC=null, soundOn=true;
+function ac(){ if(!AC){ try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){} } if(AC&&AC.state==="suspended")AC.resume(); return AC; }
+function tone(freq,dur,type,when,vol){
+  const a=ac(); if(!a||!soundOn)return;
+  const o=a.createOscillator(),g=a.createGain(),t=a.currentTime+(when||0);
+  o.type=type||"triangle"; o.frequency.value=freq;
+  g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(vol||0.18,t+0.015);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+(dur||0.15));
+  o.connect(g).connect(a.destination); o.start(t); o.stop(t+(dur||0.15)+0.05);
+}
+const sfx={
+  cheer(){ [523,659,784,1047].forEach((f,i)=>tone(f,.16,"triangle",i*.09,.16)); },
+  womp(){ tone(320,.16,"sawtooth",0,.12); tone(230,.2,"sawtooth",.14,.12); tone(150,.3,"sawtooth",.3,.12); },
+  over(){ [784,659,523,392].forEach((f,i)=>tone(f,.22,"triangle",i*.15,.15)); }
+};
+
+/* ---------- state ---------- */
+const $=id=>document.getElementById(id);
+let mode=null, phase="idle", seq=[], inputIdx=0, hearts=3, rounds=0, timers=[];
+const STAR_THRESH={easy:[4,7,10],hard:[3,6,9]};
+function clearTimers(){ timers.forEach(clearTimeout); timers=[]; }
+function tempo(){
+  const base=(mode==="hard")?500:750;
+  return Math.max(320, base - rounds*14);
+}
+function setRound(n){
+  rounds=n; $("round").textContent=n;
+  const b=$("roundBox"); b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump");
+}
+function renderHearts(){ $("heartsBox").textContent="❤️".repeat(hearts)+"🖤".repeat(3-hearts); }
+function showBanner(txt,stay){
+  const b=$("banner"); b.textContent=txt;
+  b.classList.remove("show","stay"); void b.offsetWidth;
+  b.classList.add(stay?"stay":"show");
+}
+function hideBanner(){ $("banner").classList.remove("show","stay"); $("banner").textContent=""; }
+
+/* ---------- build ---------- */
+function buildFloor(){
+  $("floor").innerHTML=`<div id="banner"></div>`+DANCERS.map((d,i)=>`
+    <div class="dancer" id="d-${i}">${kidGirl(d.id)}<b>${d.name}</b></div>`).join("");
+  DANCERS.forEach((d,i)=>$("d-"+i).addEventListener("pointerdown",()=>tap(i)));
+}
+function flash(i,long){
+  const el=$("d-"+i), d=DANCERS[i];
+  el.classList.remove("lit",d.move,"oops"); void el.offsetWidth;
+  el.classList.add("lit",d.move);
+  tone(d.tone,.3,"triangle",0,.2);
+  timers.push(setTimeout(()=>{ el.classList.remove("lit",d.move); }, long?520:380));
+}
+function notes(){
+  const n=document.createElement("div"); n.className="note";
+  n.textContent=["🎵","🎶","✨"][Math.floor(Math.random()*3)];
+  n.style.left=(15+Math.random()*70)+"vw"; n.style.top=(30+Math.random()*40)+"vh";
+  document.body.appendChild(n); setTimeout(()=>n.remove(),1400);
+}
+const BITCOLORS=["#7A4FBF","#FFC93C","#E0403E","#59C6DE","#F585A8"];
+function confetti(x,y,n){
+  for(let i=0;i<(n||14);i++){
+    const b=document.createElement("div"); b.className="bit";
+    b.style.left=x+"px"; b.style.top=y+"px";
+    b.style.background=BITCOLORS[i%BITCOLORS.length];
+    document.body.appendChild(b);
+    const ang=Math.random()*Math.PI*2, dist=60+Math.random()*110;
+    b.animate([
+      {transform:"translate(0,0) rotate(0)",opacity:1},
+      {transform:`translate(${Math.cos(ang)*dist}px,${Math.sin(ang)*dist+80}px) rotate(${360+Math.random()*360}deg)`,opacity:0}
+    ],{duration:900+Math.random()*500,easing:"cubic-bezier(.2,.6,.4,1)"}).onfinish=()=>b.remove();
+  }
+}
+
+/* ---------- game flow ---------- */
+function playSeq(){
+  phase="watch"; inputIdx=0;
+  showBanner("WATCH! 👀",true);
+  const t=tempo();
+  seq.forEach((gi,idx)=>{
+    timers.push(setTimeout(()=>{ flash(gi,true); notes(); }, 700+idx*t));
+  });
+  timers.push(setTimeout(()=>{
+    phase="input";
+    showBanner("YOUR TURN! 👆",true);
+  }, 700+seq.length*t));
+}
+function tap(i){
+  ac();
+  if(phase!=="input") return;
+  if(seq[inputIdx]===i){
+    flash(i,false);
+    inputIdx++;
+    if(inputIdx===seq.length){
+      phase="between";
+      setRound(seq.length);
+      sfx.cheer(); hideBanner();
+      const el=$("d-"+i).getBoundingClientRect();
+      confetti(el.left+el.width/2,el.top,16);
+      showBanner("ROUND "+seq.length+" DONE! ⭐");
+      timers.push(setTimeout(()=>{
+        seq.push(Math.floor(Math.random()*3));
+        playSeq();
+      },1500));
+    }
+  }else{
+    phase="between";
+    sfx.womp();
+    hearts--; renderHearts();
+    const el=$("d-"+i);
+    el.classList.remove("oops"); void el.offsetWidth; el.classList.add("oops");
+    if(hearts<=0){ timers.push(setTimeout(endGame,700)); return; }
+    showBanner("OOPS! Watch again! 🙈");
+    timers.push(setTimeout(()=>{ playSeq(); },1600));
+  }
+}
+function startGame(m){
+  mode=m; clearTimers();
+  hearts=3; renderHearts();
+  seq=[];
+  const startLen=(m==="hard")?3:1;
+  for(let i=0;i<startLen;i++) seq.push(Math.floor(Math.random()*3));
+  setRound(0);
+  $("titleScreen").classList.add("hidden");
+  $("endScreen").classList.add("hidden");
+  playSeq();
+}
+function starsFor(m,s){ const t=STAR_THRESH[m]||[4,7,10]; return s>=t[2]?3:s>=t[1]?2:s>=t[0]?1:0; }
+function renderTitleStars(){
+  for(const m of ["easy","hard"]){
+    let st=0; try{ st=+localStorage.getItem("dance_stars_"+m)||0; }catch(e){}
+    const el=$("stars-"+m);
+    if(el) el.innerHTML=st?("⭐".repeat(st)+`<span class="starOff">${"⭐".repeat(3-st)}</span>`):"";
+  }
+}
+function endGame(){
+  phase="idle"; clearTimers(); hideBanner(); sfx.over();
+  $("endScore").textContent=rounds;
+  $("endLine").textContent=
+    rounds>=10?"INCREDIBLE! A whole recital from memory!":
+    rounds>=6?"Amazing! The cousins want you in the show!":
+    rounds>=3?"Great dancing! Robe and Gaga are clapping!":
+    "The cousins say: one more try!";
+  const st=starsFor(mode,rounds);
+  $("starRow").innerHTML="⭐".repeat(st)+`<span class="starOff">${"⭐".repeat(3-st)}</span>`;
+  try{
+    if(rounds>(+localStorage.getItem("dance_best_"+mode)||0)) localStorage.setItem("dance_best_"+mode,rounds);
+    if(st>(+localStorage.getItem("dance_stars_"+mode)||0)) localStorage.setItem("dance_stars_"+mode,st);
+  }catch(e){}
+  let best=0; try{ best=+localStorage.getItem("dance_best_"+mode)||0; }catch(e){}
+  $("bestLine").textContent=(rounds>=best&&rounds>0)?"🏆 NEW RECORD!":"Best so far: 🎵 "+best;
+  renderTitleStars();
+  $("endScreen").classList.remove("hidden");
+  confetti(innerWidth/2,innerHeight/3,22);
+}
+function toMenu(){
+  phase="idle"; clearTimers(); hideBanner();
+  $("endScreen").classList.add("hidden");
+  $("titleScreen").classList.remove("hidden");
+}
+
+/* ---------- wire ---------- */
+buildFloor();
+$("castRow").innerHTML=DANCERS.map(d=>`<div class="c">${kidGirl(d.id)}<b>${d.name}</b></div>`).join("");
+$("btnEasy").addEventListener("pointerdown",()=>{ ac(); startGame("easy"); });
+$("btnHard").addEventListener("pointerdown",()=>{ ac(); startGame("hard"); });
+$("btnAgain").addEventListener("pointerdown",()=>{ ac(); startGame(mode||"easy"); });
+$("btnMenu").addEventListener("pointerdown",toMenu);
+$("homeBtn").addEventListener("pointerdown",toMenu);
+$("sndBtn").addEventListener("pointerdown",()=>{
+  soundOn=!soundOn; $("sndBtn").textContent=soundOn?"🔊":"🔇"; ac();
+  try{ localStorage.setItem("arcade_sound",soundOn?"1":"0"); }catch(e){}
+});
+try{ soundOn=(localStorage.getItem("arcade_sound")||"1")!=="0"; }catch(e){}
+$("sndBtn").textContent=soundOn?"🔊":"🔇";
+renderTitleStars();
+document.addEventListener("gesturestart",e=>e.preventDefault());
+if(/michaelweintraubmd|localhost|127\.0\.0\.1|github\.io/.test(location.hostname))
+  $("arcadeLink").classList.remove("hidden");
+</script>

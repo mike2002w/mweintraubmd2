@@ -21,15 +21,18 @@
   h1{font-size:clamp(26px,7vw,46px);line-height:1.1;color:var(--berry);
     text-shadow:0 2px 0 #fff}
   .marquee small{display:block;font-size:clamp(13px,3.2vw,17px);color:#8A6B45}
-  #cards{display:flex;gap:clamp(10px,3vw,26px);justify-content:center;align-items:stretch;
-    margin-top:16px;width:100%;max-width:760px}
-  .gameCard{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px;
+  #cards{display:flex;flex-wrap:wrap;gap:clamp(10px,3vw,26px);justify-content:center;align-items:stretch;
+    margin-top:16px;width:100%;max-width:980px}
+  .gameCard{flex:1 1 240px;max-width:320px;min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px;
     border-radius:22px;padding:16px 10px 14px;text-decoration:none;color:inherit;
     border:4px solid var(--choc);transition:transform .12s;position:relative}
   .gameCard:hover,.gameCard:focus-visible{transform:translateY(-4px) scale(1.02)}
   .gameCard:active{transform:translateY(2px)}
   .gameCard.berrycard{background:var(--pink);box-shadow:0 6px 0 var(--berry-dark)}
   .gameCard.bearcard{background:var(--parch);box-shadow:0 6px 0 var(--wood-dark)}
+  .gameCard.dancecard{background:#F0E9FF;box-shadow:0 6px 0 #54348A}
+  .dancecard h2{color:#7A4FBF}
+  .dancecard .playBtn{background:#7A4FBF;box-shadow:0 4px 0 #54348A}
   .art{font-size:clamp(44px,12vw,76px);line-height:1.15}
   .gameCard h2{font-size:clamp(17px,4.4vw,26px);line-height:1.15;text-wrap:balance}
   .berrycard h2{color:var(--berry)}
@@ -63,6 +66,13 @@
       <p class="bestLine" id="bestB"></p>
       <span class="playBtn">PLAY ▶</span>
     </a>
+    <a class="gameCard dancecard" href="dance-studio.html">
+      <div class="art">💃🎵</div>
+      <h2>Dance Studio</h2>
+      <p>Watch the cousins' made-up dance, then tap the moves back in order. Every round adds one more!</p>
+      <p class="bestLine" id="bestD"></p>
+      <span class="playBtn">PLAY ▶</span>
+    </a>
   </div>
   <footer>Chefs Erica &amp; Alex · Cleanup by Allie &amp; Michael · Challah by Robe · Cheers by Gaga</footer>
   <script>
@@ -74,6 +84,9 @@
     const ba=g("beartavern_best_aster"), bf=g("beartavern_best_forever");
     if(ba||bf) document.getElementById("bestB").textContent=
       "Best: "+ba+" Asteroids · "+bf+" Blaster";
+    const de=g("dance_best_easy"), dh=g("dance_best_hard");
+    if(de||dh) document.getElementById("bestD").textContent=
+      "Best: "+de+" Easy"+stars("dance_stars_easy")+" · "+dh+" Hard"+stars("dance_stars_hard");
   </script>
 </body>
 </html>
