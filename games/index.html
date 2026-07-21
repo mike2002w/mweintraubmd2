@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Cousins' Arcade</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --berry:#E0403E; --berry-dark:#B02B2E; --pink:#FFE9EC; --cream:#FFF8F0;
+    --wood:#6B4423; --wood-dark:#4A2E15; --parch:#FFF3DF; --choc:#54341F;
+    --display:"Chalkboard SE","Comic Sans MS","Marker Felt",ui-rounded,-apple-system,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{min-height:100%}
+  body{font-family:var(--display);color:var(--choc);text-align:center;
+    background:linear-gradient(105deg,var(--pink) 0 50%,#EBD6B0 50% 100%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:22px 12px;gap:6px}
+  .marquee{display:inline-block;background:var(--cream);border:5px solid var(--choc);
+    border-radius:22px;padding:8px 26px 12px;box-shadow:0 6px 0 rgba(84,52,31,.35)}
+  h1{font-size:clamp(26px,7vw,46px);line-height:1.1;color:var(--berry);
+    text-shadow:0 2px 0 #fff}
+  .marquee small{display:block;font-size:clamp(13px,3.2vw,17px);color:#8A6B45}
+  #cards{display:flex;gap:clamp(10px,3vw,26px);justify-content:center;align-items:stretch;
+    margin-top:16px;width:100%;max-width:760px}
+  .gameCard{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px;
+    border-radius:22px;padding:16px 10px 14px;text-decoration:none;color:inherit;
+    border:4px solid var(--choc);transition:transform .12s;position:relative}
+  .gameCard:hover,.gameCard:focus-visible{transform:translateY(-4px) scale(1.02)}
+  .gameCard:active{transform:translateY(2px)}
+  .gameCard.berrycard{background:var(--pink);box-shadow:0 6px 0 var(--berry-dark)}
+  .gameCard.bearcard{background:var(--parch);box-shadow:0 6px 0 var(--wood-dark)}
+  .art{font-size:clamp(44px,12vw,76px);line-height:1.15}
+  .gameCard h2{font-size:clamp(17px,4.4vw,26px);line-height:1.15;text-wrap:balance}
+  .berrycard h2{color:var(--berry)}
+  .bearcard h2{color:var(--wood)}
+  .gameCard p{font-size:clamp(11px,2.8vw,15px);color:#7A5233;line-height:1.3;max-width:26ch}
+  .playBtn{margin-top:auto;display:inline-block;font-family:var(--display);
+    font-size:clamp(15px,4vw,21px);color:#fff;border-radius:14px;padding:8px 26px}
+  .berrycard .playBtn{background:var(--berry);box-shadow:0 4px 0 var(--berry-dark)}
+  .bearcard .playBtn{background:var(--wood);box-shadow:0 4px 0 var(--wood-dark)}
+  footer{margin-top:18px;font-size:clamp(11px,2.8vw,14px);color:#8A6B45}
+</style>
+</head>
+<body>
+  <div class="marquee">
+    <h1>🕹️ The Cousins' Arcade</h1>
+    <small>Made with love for Emma, Ava &amp; Sienna 💕</small>
+  </div>
+  <div id="cards">
+    <a class="gameCard berrycard" href="schmackberrys.html">
+      <div class="art">🍓🥄</div>
+      <h2>Welcome to Schmackberry's</h2>
+      <p>Fling chicken balls, crunchy bread, cupcakes and Chobani into the cousins' mouths. Watch out for Robe and Gaga!</p>
+      <span class="playBtn">PLAY ▶</span>
+    </a>
+    <a class="gameCard bearcard" href="bear-tavern.html">
+      <div class="art">🐻🚀</div>
+      <h2>Bear Tavern: Kidney Stone Rescue</h2>
+      <p>Blast the kidney stones on the X-ray, fly the rocket, and serve every bear a Shir Ami challah.</p>
+      <span class="playBtn">PLAY ▶</span>
+    </a>
+  </div>
+  <footer>Chefs Erica &amp; Alex · Cleanup by Allie &amp; Michael · Challah by Robe · Cheers by Gaga</footer>
+</body>
+</html>

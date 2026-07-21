@@ -1,0 +1,1010 @@
+<meta charset="utf-8">
+<title>Bear Tavern: Kidney Stone Rescue</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<style>
+  :root{
+    --wood:#6B4423; --wood-dark:#4A2E15; --amber:#C98A3B; --parch:#FFF3DF;
+    --bearA:#8B5E3C; --teal:#2E9E9B; --zap:#FFD54A; --berry:#E0403E; --leaf:#3E9B5C;
+    --screen:#0E2A33;
+    --display:"Chalkboard SE","Comic Sans MS","Marker Felt",ui-rounded,-apple-system,sans-serif;
+    --ui:-apple-system,"SF Pro Rounded",Segoe UI,Roboto,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+  html,body{height:100%;overflow:hidden}
+  body{font-family:var(--display);color:var(--wood-dark);
+    background:
+      linear-gradient(#3E2814 0 12%, rgba(0,0,0,0) 12% 88%, #B98A55 88% 100%),
+      repeating-linear-gradient(90deg, rgba(74,46,21,.10) 0 3px, rgba(0,0,0,0) 3px 48px),
+      linear-gradient(#EBD6B0,#DEC49C)}
+  button{font-family:inherit;border:none;cursor:pointer;background:none;color:inherit}
+  svg{display:block}
+
+  #stage{position:fixed;inset:0;display:flex;flex-direction:column}
+
+  /* ===== tavern sign ===== */
+  #top{flex:0 0 auto;text-align:center;padding-top:6px;position:relative;z-index:5}
+  #sign{display:inline-block;background:var(--wood);border:4px solid var(--wood-dark);
+    border-radius:14px;padding:3px 18px 5px;color:var(--parch);
+    box-shadow:0 4px 0 var(--wood-dark), inset 0 0 0 2px rgba(255,243,223,.25)}
+  #sign h1{font-size:clamp(15px,3.6vw,26px);line-height:1.1;letter-spacing:.5px}
+  #sign small{display:block;font-size:clamp(9px,1.9vw,12px);color:#EFD9B8}
+
+  #hud{position:absolute;top:8px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-start;z-index:30;pointer-events:none}
+  #hudLeft{display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+  .hudBox{background:var(--parch);border:3px solid var(--wood-dark);border-radius:14px;
+    padding:3px 11px;font-family:var(--ui);font-weight:800;font-size:clamp(13px,3vw,18px);
+    font-variant-numeric:tabular-nums;box-shadow:0 3px 0 rgba(74,46,21,.3)}
+  #timerBox{color:var(--berry)}
+  #comboBox{color:#B85C10}
+  #scoreBox{font-size:clamp(18px,4.6vw,27px);padding:4px 15px}
+  #scoreBox.bump{animation:bump .35s cubic-bezier(.34,1.6,.6,1)}
+  @keyframes bump{40%{transform:scale(1.3);background:var(--zap)}}
+  #hud .hidden{display:none}
+  #hudRight{display:flex;gap:6px}
+  #sndBtn,#homeBtn{pointer-events:auto;width:44px;font-size:19px}
+  /* Robe delivering the challah */
+  .robeCarry{position:fixed;z-index:40;width:clamp(56px,14vw,86px);pointer-events:none;
+    transition:transform 1.2s ease-in-out;will-change:transform}
+  .robeCarry svg{animation:waddle .32s ease-in-out infinite alternate}
+  @keyframes waddle{from{transform:rotate(-4deg)}to{transform:rotate(4deg) translateY(-3px)}}
+  .robeTag{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:2px;
+    background:var(--parch);border:2px solid var(--wood-dark);border-radius:8px;
+    padding:0 7px;font-size:clamp(10px,2.3vw,13px);white-space:nowrap}
+
+  /* ===== bear row ===== */
+  #bearRow{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:10px;padding:4px 8px 2px;position:relative}
+  .barTable{position:absolute;bottom:0;width:clamp(46px,12vw,74px);pointer-events:none;z-index:0}
+  .barTable.left{left:4px}
+  .barTable.right{right:4px}
+  .barTable svg{animation:sway 3.4s ease-in-out infinite alternate;transform-origin:50% 90%}
+  .barTable.right svg{animation-duration:2.6s}
+  @keyframes sway{from{transform:rotate(-2.5deg)}to{transform:rotate(2.5deg)}}
+  #bearWrap{width:clamp(54px,13vw,84px);transition:opacity .3s}
+  #bearWrap.gone{opacity:0}
+  #bearWrap.ouch{animation:ouch .5s ease-in-out infinite}
+  @keyframes ouch{0%,100%{rotate:0deg}30%{rotate:-2deg}70%{rotate:2deg}}
+  #bearWrap.joy{animation:joy .45s ease-in-out 4}
+  @keyframes joy{50%{transform:translateY(-10px)}}
+  .m-sad,.m-open,.m-happy{display:none}
+  #bearWrap[data-face="sad"] .m-sad{display:block}
+  #bearWrap[data-face="open"] .m-open{display:block}
+  #bearWrap[data-face="happy"] .m-happy{display:block}
+  #bearMeta{display:flex;flex-direction:column;gap:3px;align-items:flex-start}
+  #bearName{background:var(--parch);border:3px solid var(--wood-dark);border-radius:12px;
+    padding:0 12px;font-size:clamp(12px,2.8vw,16px);white-space:nowrap}
+  #stoneCount{background:var(--screen);color:#9FE8E3;border:3px solid var(--wood-dark);border-radius:12px;
+    padding:0 12px;font-size:clamp(12px,2.8vw,16px);font-family:var(--ui);font-weight:800;
+    font-variant-numeric:tabular-nums}
+
+  /* ===== X-ray monitor ===== */
+  #screenWrap{position:relative;flex:1 1 auto;min-height:0;margin:2px 10px 6px;
+    border:6px solid var(--wood-dark);border-radius:18px;overflow:hidden;
+    box-shadow:0 5px 0 var(--wood-dark), inset 0 0 0 3px rgba(159,232,227,.25);
+    background:var(--screen)}
+  #xray{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair}
+  #clearFlash{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    pointer-events:none;font-size:clamp(26px,7vw,44px);color:var(--zap);
+    text-shadow:0 0 18px rgba(255,213,74,.8),0 3px 0 #4A2E15}
+  #clearFlash.show{display:flex;animation:flashIn .5s cubic-bezier(.34,1.6,.6,1)}
+  @keyframes flashIn{from{transform:scale(.3);opacity:0}}
+
+  /* ===== counter ===== */
+  #counter{flex:0 0 auto;position:relative;background:var(--wood);
+    border-top:5px solid var(--wood-dark);padding:6px 10px 10px;z-index:10;
+    display:flex;justify-content:center;align-items:center;gap:3%}
+  #docs{display:flex;flex-direction:column;align-items:center}
+  #docs .row{display:flex}
+  #docs svg{width:clamp(30px,7.5vw,50px)}
+  #docs .who{background:var(--parch);border:2px solid var(--amber);border-radius:10px;
+    padding:0 6px;font-size:clamp(8px,1.9vw,11px);text-align:center;line-height:1.25}
+  #docSvgs svg{transition:transform .3s}
+  #docSvgs svg.active{transform:scale(1.2) translateY(-4px)}
+  #docs.cheer svg{animation:cheer .5s ease-in-out 4}
+  @keyframes cheer{50%{transform:translateY(-6px) rotate(-4deg)}}
+  #tip{max-width:30%;color:#EFD9B8;font-size:clamp(10px,2.3vw,14px);line-height:1.3;text-align:center}
+  #challahBtn{background:var(--parch);border:3px solid var(--wood-dark);border-radius:18px;
+    padding:5px 14px 4px;display:flex;flex-direction:column;align-items:center;
+    box-shadow:0 4px 0 var(--wood-dark);transition:transform .08s}
+  #challahBtn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--wood-dark)}
+  #challahBtn svg{width:clamp(58px,17vw,100px);height:auto}
+  #challahBtn span{font-size:clamp(10px,2.4vw,14px)}
+  #challahBtn small{font-size:clamp(8px,1.9vw,11px);color:#8A6B45}
+  #challahBtn.glow{animation:glow .6s ease-in-out infinite alternate}
+  @keyframes glow{from{box-shadow:0 4px 0 var(--wood-dark),0 0 0 0 rgba(255,213,74,.9)}
+    to{box-shadow:0 4px 0 var(--wood-dark),0 0 0 14px rgba(255,213,74,0)}}
+  #challahBtn.nope{animation:nope .35s}
+  @keyframes nope{25%{transform:translateX(-6px) rotate(-2deg)}75%{transform:translateX(6px) rotate(2deg)}}
+
+  .fly{position:fixed;z-index:40;pointer-events:none;transition:transform .5s cubic-bezier(.3,.9,.6,1);will-change:transform}
+  .fly svg{width:clamp(44px,12vw,64px)}
+  .pop{position:fixed;z-index:45;pointer-events:none;font-weight:bold;color:var(--zap);
+    font-size:clamp(15px,3.8vw,22px);text-shadow:0 0 8px rgba(0,0,0,.6);animation:popUp 1s ease-out forwards}
+  .pop.dark{color:var(--berry);text-shadow:0 2px 0 #fff}
+  @keyframes popUp{to{transform:translateY(-52px);opacity:0}}
+  .bit{position:fixed;z-index:60;width:10px;height:12px;border-radius:3px;pointer-events:none}
+  .heart{position:fixed;z-index:55;font-size:clamp(18px,4.5vw,28px);pointer-events:none;
+    animation:heartUp 1.4s ease-out forwards}
+  @keyframes heartUp{to{transform:translateY(-110px) rotate(15deg);opacity:0}}
+
+  /* ===== overlays ===== */
+  .overlay{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;
+    align-items:center;text-align:center;padding:16px;overflow-y:auto;
+    background:rgba(255,243,223,.97)}
+  .overlay > :first-child{margin-top:auto}
+  .overlay > :last-child{margin-bottom:auto}
+  .overlay.hidden{display:none}
+  .bigTitle{font-size:clamp(28px,7.5vw,50px);color:var(--wood);text-shadow:0 3px 0 #fff,0 5px 0 #E3C79A;
+    line-height:1.05;text-wrap:balance}
+  .subTitle{font-size:clamp(13px,3.2vw,18px);color:#8A6B45;margin:6px 0 10px;max-width:52ch}
+  #castRow{display:flex;gap:3vw;justify-content:center;align-items:flex-end;margin:4px 0;flex-wrap:wrap}
+  #castRow .c{display:flex;flex-direction:column;align-items:center}
+  #castRow svg{width:clamp(48px,12vw,76px)}
+  #castRow b{font-size:clamp(10px,2.4vw,13px);color:var(--wood)}
+  #castRow i{font-size:clamp(9px,2vw,11px);font-style:normal;color:#8A6B45}
+  .menuBtn{display:block;width:min(320px,84vw);margin:7px auto;background:var(--wood);color:var(--parch);
+    border-radius:18px;padding:12px;font-size:clamp(17px,4.4vw,23px);font-family:var(--display);
+    box-shadow:0 5px 0 var(--wood-dark);transition:transform .08s}
+  .menuBtn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--wood-dark)}
+  .menuBtn.alt{background:var(--teal);box-shadow:0 5px 0 #1B6663}
+  .menuBtn.alt:active{box-shadow:0 1px 0 #1B6663}
+  .menuBtn.aster{background:#59284B;box-shadow:0 5px 0 #3A1A32}
+  .menuBtn.aster:active{box-shadow:0 1px 0 #3A1A32}
+  .tinyNote{font-size:clamp(11px,2.6vw,14px);color:#8A6B45;margin-top:8px;max-width:48ch}
+  .arcadeLink{display:block;text-align:center;margin-top:10px;color:var(--wood);
+    font-size:clamp(13px,3.2vw,17px);text-decoration:none;font-weight:bold;font-family:var(--display)}
+  .arcadeLink.hidden{display:none}
+
+  #party{background:linear-gradient(180deg,#2A1A3E,#59284B)}
+  #party .bigTitle{color:var(--zap);text-shadow:0 3px 0 #2A1A3E}
+  #party .subTitle{color:#F3D9B0}
+  #partyFloor{display:flex;gap:4vw;margin:10px 0 auto;align-items:flex-end}
+  #partyFloor svg{width:clamp(70px,17vw,115px)}
+  #partyFloor .d1{animation:dance1 .6s ease-in-out infinite alternate}
+  #partyFloor .d2{animation:dance2 .5s ease-in-out infinite alternate}
+  #partyFloor .d3{animation:dance1 .45s ease-in-out infinite alternate-reverse}
+  @keyframes dance1{from{transform:rotate(-8deg)}to{transform:rotate(8deg) translateY(-12px)}}
+  @keyframes dance2{from{transform:translateY(0)}to{transform:translateY(-16px) scale(1.07)}}
+  .note{position:fixed;z-index:55;font-size:clamp(20px,5vw,32px);color:#F3D9B0;pointer-events:none;
+    animation:noteUp 1.6s ease-out forwards}
+  @keyframes noteUp{to{transform:translateY(-120px) rotate(20deg);opacity:0}}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01s !important;transition-duration:.01s !important}
+  }
+</style>
+
+<div id="stage">
+  <div id="top">
+    <div id="sign"><h1>🐻 The Bear Tavern</h1><small>Kidney Stone Blaster 3000</small></div>
+    <div id="hud">
+      <div id="hudLeft">
+        <div class="hudBox" id="scoreBox">⭐ <span id="score">0</span></div>
+        <div class="hudBox">🐻 <span id="cured">0</span></div>
+        <div class="hudBox hidden" id="timerBox">⏰ <span id="timeLeft">60</span></div>
+        <div class="hudBox hidden" id="comboBox">🔥 <span id="comboN">0</span></div>
+      </div>
+      <div id="hudRight">
+        <button id="homeBtn" class="hudBox" aria-label="Back to the title screen">🏠</button>
+        <button id="sndBtn" class="hudBox">🔊</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="bearRow">
+    <div class="barTable left" id="barL"></div>
+    <div class="barTable right" id="barR"></div>
+    <div id="bearWrap" data-face="sad"></div>
+    <div id="bearMeta">
+      <div id="bearName"></div>
+      <div id="stoneCount">stones: 0</div>
+    </div>
+  </div>
+
+  <div id="screenWrap">
+    <canvas id="xray"></canvas>
+    <div id="clearFlash">✨ ALL CLEAR! ✨</div>
+  </div>
+
+  <div id="counter">
+    <div id="docs">
+      <div class="row" id="docSvgs"></div>
+      <div class="who" id="attendTag">Dr. Emma, Dr. Ava<br>&amp; Dr. Sienna</div>
+    </div>
+    <div id="tip">Tap the screen to blast the stones! Big ones split!</div>
+    <button id="challahBtn" aria-label="Serve a challah slice">
+      <span id="challahArt"></span>
+      <span>Challah Slice</span>
+      <small>fresh from Shir Ami 🕯️</small>
+    </button>
+  </div>
+</div>
+
+<div class="overlay" id="titleScreen">
+  <div class="bigTitle">Bear Tavern:<br>Kidney Stone Rescue!</div>
+  <div class="subTitle">The bears' kidney stones are floating across the X-ray screen like asteroids!
+    Doctors Emma, Ava &amp; Sienna take turns operating — with Dr. Alex on X-rays, Dr. Allie's
+    triple laser, Dr. Erica's ER rush, Dr. Michael watching the honey, and Robe on challah duty!</div>
+  <div id="castRow"></div>
+  <button class="menuBtn aster" id="btnAster">🚀 Real Asteroids (60 sec)</button>
+  <button class="menuBtn" id="btnForever">🩺 Fixed Blaster (60 sec)</button>
+  <div class="tinyNote">Little stones are worth the most: big +1, medium +2, small +3 — and a 5-hit streak
+    doubles everything! 🔥 Curing a bear pays +5 and arms Dr. Allie's TRIPLE LASER for the next wave.
+    The last 10 seconds are Dr. Erica's ER RUSH: all points ×2! In Real Asteroids, hold to fly the
+    rocket (or arrows + space); in Fixed Blaster, tap or press space to fire the sweeping cannon.
+    Clear the screen, then serve the Shir Ami challah!</div>
+  <a class="arcadeLink hidden" id="arcadeLink" href="index.html">🕹️ Back to the Arcade</a>
+</div>
+
+<div class="overlay hidden" id="party">
+  <div class="bigTitle">🍯 BEAR DANCE PARTY! 🍯</div>
+  <div class="subTitle">The bears feel SO much better, they made up a dance! Tap anywhere!</div>
+  <div id="partyFloor"></div>
+</div>
+
+<div class="overlay hidden" id="endScreen">
+  <div class="bigTitle">Rush Hour is over!</div>
+  <div class="subTitle" id="endLine"></div>
+  <div class="bigTitle" style="font-size:clamp(40px,12vw,72px)">⭐ <span id="endScore">0</span></div>
+  <div class="subTitle" id="bestLine"></div>
+  <button class="menuBtn alt" id="btnAgain">⏰ Play Again</button>
+  <button class="menuBtn" id="btnMenu">🐻 Back to the Tavern</button>
+</div>
+
+<script>
+"use strict";
+/* ---------- bear & friends (SVG) ---------- */
+function bearSVG(fur,scarf){
+  const dark="#4A2E15", muzzle="#D9B084";
+  return `<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="55" cy="38" r="22" fill="${fur}"/><circle cx="145" cy="38" r="22" fill="${fur}"/>
+    <circle cx="55" cy="42" r="11" fill="${muzzle}"/><circle cx="145" cy="42" r="11" fill="${muzzle}"/>
+    <ellipse cx="100" cy="170" rx="72" ry="66" fill="${fur}"/>
+    <ellipse cx="38" cy="160" rx="16" ry="30" fill="${fur}" transform="rotate(18 38 160)"/>
+    <ellipse cx="162" cy="160" rx="16" ry="30" fill="${fur}" transform="rotate(-18 162 160)"/>
+    <circle cx="100" cy="62" r="46" fill="${fur}"/>
+    <ellipse cx="100" cy="76" rx="24" ry="17" fill="${muzzle}"/>
+    <ellipse cx="100" cy="70" rx="9" ry="6.5" fill="${dark}"/>
+    <circle cx="82" cy="56" r="4.5" fill="${dark}"/><circle cx="118" cy="56" r="4.5" fill="${dark}"/>
+    <g class="m-sad">
+      <path d="M92 88 Q100 82 108 88" fill="none" stroke="${dark}" stroke-width="3.4" stroke-linecap="round"/>
+      <path d="M74 46 L88 50" stroke="${dark}" stroke-width="3" stroke-linecap="round"/>
+      <path d="M126 46 L112 50" stroke="${dark}" stroke-width="3" stroke-linecap="round"/>
+      <text x="146" y="34" font-size="20" fill="#E0403E" font-family="inherit">✦</text>
+    </g>
+    <g class="m-open"><ellipse cx="100" cy="88" rx="9" ry="11" fill="${dark}"/>
+      <ellipse cx="100" cy="92" rx="5" ry="5" fill="#C96A6A"/></g>
+    <g class="m-happy"><path d="M88 84 Q100 96 112 84" fill="none" stroke="${dark}" stroke-width="3.4" stroke-linecap="round"/>
+      <circle cx="76" cy="72" r="6" fill="#E89A9A" opacity=".6"/><circle cx="124" cy="72" r="6" fill="#E89A9A" opacity=".6"/></g>
+    <rect x="62" y="100" width="76" height="14" rx="7" fill="${scarf}"/>
+    <rect x="118" y="106" width="14" height="26" rx="7" fill="${scarf}"/>
+    <circle cx="100" cy="172" r="42" fill="#0E2A33" stroke="#BEE8F5" stroke-width="4" stroke-dasharray="9 6"/>
+    <ellipse cx="86" cy="168" rx="13" ry="19" fill="none" stroke="#2E9E9B" stroke-width="3" opacity=".85" transform="rotate(-12 86 168)"/>
+    <ellipse cx="116" cy="170" rx="13" ry="19" fill="none" stroke="#2E9E9B" stroke-width="3" opacity=".85" transform="rotate(12 116 170)"/>
+  </svg>`;
+}
+function challahSVG(){
+  return `<svg viewBox="0 0 130 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <ellipse cx="65" cy="52" rx="60" ry="7" fill="#fff" stroke="#4A2E15" stroke-width="2.5"/>
+    <rect x="10" y="14" width="110" height="32" rx="16" fill="#E0A85C" stroke="#A9722E" stroke-width="2.5"/>
+    <path d="M22 16 Q32 30 24 44" fill="none" stroke="#A9722E" stroke-width="3" stroke-linecap="round"/>
+    <path d="M44 14 Q54 30 46 46" fill="none" stroke="#A9722E" stroke-width="3" stroke-linecap="round"/>
+    <path d="M66 14 Q76 30 68 46" fill="none" stroke="#A9722E" stroke-width="3" stroke-linecap="round"/>
+    <path d="M88 14 Q98 30 90 46" fill="none" stroke="#A9722E" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="35" cy="22" r="1.6" fill="#FFF3DF"/><circle cx="58" cy="20" r="1.6" fill="#FFF3DF"/>
+    <circle cx="80" cy="23" r="1.6" fill="#FFF3DF"/><circle cx="102" cy="21" r="1.6" fill="#FFF3DF"/></svg>`;
+}
+/* a tavern regular enjoying a honey brew at their table */
+function barBear(fur,mugUp){
+  const dark="#4A2E15", muzzle="#D9B084";
+  const mug=(tx,ty,rot)=>`<g transform="translate(${tx},${ty}) rotate(${rot||0})">
+    <rect x="0" y="0" width="16" height="20" rx="3" fill="#C98A3B" stroke="${dark}" stroke-width="2"/>
+    <rect x="-1" y="-5" width="18" height="8" rx="4" fill="#FFF3DF" stroke="${dark}" stroke-width="2"/>
+    <rect x="15" y="5" width="7" height="10" rx="3.5" fill="none" stroke="${dark}" stroke-width="2"/></g>`;
+  return `<svg viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="34" cy="24" r="10" fill="${fur}"/><circle cx="76" cy="24" r="10" fill="${fur}"/>
+    <circle cx="34" cy="26" r="5" fill="${muzzle}"/><circle cx="76" cy="26" r="5" fill="${muzzle}"/>
+    <circle cx="55" cy="42" r="26" fill="${fur}"/>
+    <ellipse cx="55" cy="50" rx="12" ry="9" fill="${muzzle}"/>
+    <ellipse cx="55" cy="47" rx="5" ry="3.5" fill="${dark}"/>
+    <circle cx="45" cy="37" r="2.6" fill="${dark}"/><circle cx="65" cy="37" r="2.6" fill="${dark}"/>
+    <path d="M48 56 Q55 61 62 56" stroke="${dark}" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="55" cy="80" rx="30" ry="17" fill="${fur}"/>
+    ${mugUp?`<circle cx="88" cy="44" r="7" fill="${fur}"/>${mug(80,18,14)}`:""}
+    <ellipse cx="55" cy="94" rx="44" ry="13" fill="#8A5A2B" stroke="${dark}" stroke-width="2.5"/>
+    <ellipse cx="55" cy="90" rx="44" ry="12" fill="#A9722E"/>
+    ${mugUp?"":mug(28,66,0)}
+  </svg>`;
+}
+/* Robe (grandma) carrying a challah slice: curly auburn hair, black floral blouse */
+function robeSVG(){
+  const s="#F5CBA8", curl="#8A4A2E";
+  return `<svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g fill="${curl}">
+      <circle cx="28" cy="25" r="10"/><circle cx="40" cy="16" r="11"/><circle cx="54" cy="13" r="11"/>
+      <circle cx="67" cy="18" r="10"/><circle cx="75" cy="30" r="9"/><circle cx="24" cy="36" r="9"/>
+      <circle cx="77" cy="43" r="8"/><circle cx="22" cy="48" r="8"/>
+    </g>
+    <path d="M28 122 L34 74 a16 16 0 0 1 32 0 L72 122 z" fill="#23211F"/>
+    <g fill="#fff">
+      <circle cx="40" cy="84" r="2"/><circle cx="56" cy="90" r="2"/><circle cx="46" cy="100" r="2"/>
+      <circle cx="62" cy="106" r="2"/><circle cx="36" cy="110" r="2"/>
+    </g>
+    <circle cx="43" cy="87" r="1.2" fill="#E86A9E"/><circle cx="59" cy="97" r="1.2" fill="#E86A9E"/>
+    <circle cx="50" cy="42" r="20.5" fill="${s}"/>
+    <circle cx="31" cy="30" r="7" fill="${curl}"/><circle cx="69" cy="30" r="7" fill="${curl}"/>
+    <circle cx="42.5" cy="42" r="2.6" fill="#3A2415"/><circle cx="57.5" cy="42" r="2.6" fill="#3A2415"/>
+    <path d="M38.5 38.5 q4 -3 8 0" fill="none" stroke="#3A2415" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M53.5 38.5 q4 -3 8 0" fill="none" stroke="#3A2415" stroke-width="1.6" stroke-linecap="round"/>
+    <circle cx="35" cy="48" r="3.8" fill="#F79FA8" opacity=".75"/><circle cx="65" cy="48" r="3.8" fill="#F79FA8" opacity=".75"/>
+    <path d="M42 52 Q50 59 58 52" fill="none" stroke="#B0485C" stroke-width="3" stroke-linecap="round"/>
+    <g transform="translate(19,86) scale(0.48)">${challahSVG()}</g>
+    <circle cx="22" cy="98" r="6" fill="${s}"/><circle cx="78" cy="98" r="6" fill="${s}"/>
+  </svg>`;
+}
+function doc(o){
+  const s="#F6C9A0";
+  let hair="";
+  if(o.style==="bob") hair=`<ellipse cx="50" cy="26" rx="25" ry="13" fill="${o.hair}"/><rect x="24" y="30" width="11" height="28" rx="5.5" fill="${o.hair}"/><rect x="65" y="30" width="11" height="28" rx="5.5" fill="${o.hair}"/>`;
+  if(o.style==="pig") hair=`<ellipse cx="50" cy="26" rx="24" ry="13" fill="${o.hair}"/><circle cx="24" cy="28" r="8" fill="${o.hair}"/><circle cx="76" cy="28" r="8" fill="${o.hair}"/>`;
+  if(o.style==="tuft") hair=`<ellipse cx="50" cy="26" rx="23" ry="11" fill="${o.hair}"/><circle cx="50" cy="14" r="7" fill="${o.hair}"/>`;
+  return `<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M28 118 L34 74 a16 16 0 0 1 32 0 L72 118 z" fill="#fff"/>
+    <path d="M46 76 L54 76 L54 116 L46 116 z" fill="${o.dress}"/>
+    <circle cx="50" cy="42" r="24" fill="${s}"/>${hair}
+    <circle cx="42" cy="42" r="3" fill="#3A2415"/><circle cx="58" cy="42" r="3" fill="#3A2415"/>
+    <circle cx="34" cy="50" r="4" fill="#F79FA8" opacity=".7"/><circle cx="66" cy="50" r="4" fill="#F79FA8" opacity=".7"/>
+    <path d="M42 53 Q50 60 58 53" fill="none" stroke="#3A2415" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="50" cy="86" r="6" fill="none" stroke="#7A8AA0" stroke-width="3"/>
+    <path d="M44 74 Q50 80 56 74" fill="none" stroke="#7A8AA0" stroke-width="3"/>
+  </svg>`;
+}
+const DOCS=[
+  {style:"bob",hair:"#54341F",dress:"#7A4FBF",a:"Dr. Emma"},
+  {style:"pig",hair:"#7A5233",dress:"#3E9B5C",a:"Dr. Ava"},
+  {style:"tuft",hair:"#8A5A2B",dress:"#FFC93C",a:"Dr. Sienna"}
+];
+const BEARS=[
+  {name:"Barnaby",fur:"#8B5E3C",scarf:"#E0403E"},
+  {name:"Honeybelle",fur:"#A9784C",scarf:"#7A4FBF"},
+  {name:"Rumble",fur:"#6E4526",scarf:"#3E9B5C"},
+  {name:"Marmalade",fur:"#C08A52",scarf:"#2E9E9B"},
+  {name:"Professor Growl",fur:"#5C3A21",scarf:"#FFC93C"},
+  {name:"Babka",fur:"#9C6B3E",scarf:"#E86A9E"}
+];
+
+/* ---------- audio ---------- */
+let AC=null, soundOn=true;
+function ac(){ if(!AC){ try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){} } if(AC&&AC.state==="suspended")AC.resume(); return AC; }
+function tone(freq,dur,type,when,vol){
+  const a=ac(); if(!a||!soundOn)return;
+  const o=a.createOscillator(),g=a.createGain(),t=a.currentTime+(when||0);
+  o.type=type||"triangle"; o.frequency.value=freq;
+  g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(vol||0.18,t+0.015);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+(dur||0.15));
+  o.connect(g).connect(a.destination); o.start(t); o.stop(t+(dur||0.15)+0.05);
+}
+function pew(){ const a=ac(); if(!a||!soundOn)return;
+  const o=a.createOscillator(),g=a.createGain(),t=a.currentTime;
+  o.type="sawtooth"; o.frequency.setValueAtTime(1400,t); o.frequency.exponentialRampToValueAtTime(300,t+0.13);
+  g.gain.setValueAtTime(0.09,t); g.gain.exponentialRampToValueAtTime(0.0001,t+0.15);
+  o.connect(g).connect(a.destination); o.start(t); o.stop(t+0.18);
+}
+const sfx={
+  crack(){ tone(500,.06,"square",0,.09); tone(240,.1,"square",.04,.09); },
+  boom(){ tone(180,.14,"square",0,.11); tone(90,.2,"square",.05,.11); },
+  ready(){ tone(659,.12); tone(880,.18,"triangle",.1); },
+  chomp(){ for(let i=0;i<3;i++) tone(160+(i%2)*50,.07,"square",i*.1,.07); },
+  cured(){ [523,659,784,1047].forEach((f,i)=>tone(f,.16,"triangle",i*.09,.16)); },
+  nope(){ tone(196,.18,"sawtooth",0,.05); },
+  honey(){ tone(1047,.1); tone(1319,.1,"triangle",.07); tone(1568,.2,"triangle",.14); },
+  party(){ [523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",i*.12,.15)); },
+  over(){ [784,659,523,392].forEach((f,i)=>tone(f,.22,"triangle",i*.15,.15)); }
+};
+
+/* ---------- state ---------- */
+const $=id=>document.getElementById(id);
+let mode=null, running=false, phase="idle";
+let score=0, curedCount=0, bearIdx=0, timeLeft=60, timers=[];
+const PARTY_EVERY=5;
+function setScore(n){
+  const grew=n>score;
+  score=n; $("score").textContent=n;
+  if(grew){ const b=$("scoreBox"); b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump"); }
+}
+function setCured(n){ curedCount=n; $("cured").textContent=n; }
+function updateCombo(){
+  $("comboBox").classList.toggle("hidden",streak<3);
+  $("comboN").textContent=streak+(streak>=5?" ×2":"");
+}
+
+/* ---------- canvas world ---------- */
+const cv=$("xray"), ctx=cv.getContext("2d");
+let W=300,H=300,DPR=1;
+function fitCanvas(){
+  const r=$("screenWrap").getBoundingClientRect();
+  DPR=Math.min(window.devicePixelRatio||1,2);
+  W=Math.max(r.width,50); H=Math.max(r.height,50);
+  cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+window.addEventListener("resize",fitCanvas);
+
+let stones=[], bolts=[], parts=[], honeyPot=null, cannon={flash:0};
+let sweepT=0, lastFire=0, ouchCd=0;
+let ship=null, held=false, aimTarget={x:0,y:0}, fireCd=0;
+let streak=0, tripleT=0, shakeT=0;
+const keys={left:false,right:false,up:false};
+let lastKeyFire=0;
+const SIZES={3:{r:30,sink:16},2:{r:19,sink:26},1:{r:11,sink:40}};
+function rnd(a,b){ return a+Math.random()*(b-a); }
+function aimAngle(){ // radians from straight-up, sweeps left-right
+  const sp=(mode==="rush"?2.3:1.55);
+  return Math.sin(sweepT*sp)*1.02;
+}
+function makeStone(size,x,y){
+  const s=SIZES[size];
+  const verts=[];
+  for(let i=0;i<8;i++) verts.push(rnd(.72,1.15));
+  if(mode==="aster"){ // classic asteroids: random drift direction
+    const a=rnd(0,Math.PI*2), spd=s.sink*rnd(1.6,2.6);
+    return {size,x,y,r:s.r,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,
+      rot:rnd(0,Math.PI*2),vrot:rnd(-1.2,1.2),verts};
+  }
+  return {size,x,y,r:s.r,
+    vx:rnd(-1,1)*s.sink*1.4,
+    vy:rnd(.6,1.1)*s.sink*(mode==="rush"?1.7:1),
+    rot:rnd(0,Math.PI*2),vrot:rnd(-1.2,1.2),verts};
+}
+function stonesLeftTotal(){ // remaining taps: each stone yields 2^(size-1+..) pieces; show piece count
+  return stones.length;
+}
+function updateStoneCount(){
+  $("stoneCount").textContent="stones: "+stones.length;
+}
+function spawnWave(){
+  stones=[];
+  const timed = mode!=="forever";
+  const bigs = timed ? 1 : Math.min(1+Math.floor(curedCount/3),3);
+  const meds = timed ? 1 : (curedCount>=1?1:0);
+  for(let i=0;i<bigs;i++)
+    stones.push(makeStone(3, rnd(W*.2,W*.8), rnd(H*.15,H*.5)));
+  for(let i=0;i<meds;i++)
+    stones.push(makeStone(2, rnd(W*.15,W*.85), rnd(H*.1,H*.6)));
+  updateStoneCount();
+}
+
+/* ---------- game loop ---------- */
+let lastT=0;
+function loop(t){
+  requestAnimationFrame(loop);
+  const dt=Math.min((t-lastT)/1000,0.05); lastT=t;
+  if(running&&phase==="stones"){
+    sweepT+=dt; ouchCd=Math.max(0,ouchCd-dt);
+    for(const s of stones){
+      s.x+=s.vx*dt; s.y+=s.vy*dt; s.rot+=s.vrot*dt;
+      const m=s.r+4;
+      if(s.x<-m)s.x=W+m; if(s.x>W+m)s.x=-m;      // wrap sideways like Asteroids
+      if(mode==="aster"){                        // full-wrap drift, no gravity
+        if(s.y<-m)s.y=H+m; if(s.y>H+m)s.y=-m;
+      }else{
+        if(s.y<s.r&&s.vy<0) s.vy=Math.abs(s.vy); // bounce off the top
+        if(s.y>H-44-s.r&&s.vy>0){                // sinks to the cannon: bounce + OUCH
+          s.vy=-Math.abs(s.vy);
+          if(ouchCd<=0){
+            ouchCd=1.2; tone(160,.16,"square",0,.1);
+            const pr=cv.getBoundingClientRect();
+            addPop(pr.left+s.x,pr.top+H-60,"OUCH! 🐻",true);
+            const bw=$("bearWrap");
+            bw.classList.remove("joy"); void bw.offsetWidth; bw.classList.add("joy");
+          }
+        }
+      }
+    }
+    // Real Asteroids mode: fly the Challah Copter
+    if(mode==="aster"&&ship){
+      const kb=keys.left||keys.right||keys.up;
+      if(keys.left) ship.ang-=4.6*dt;
+      if(keys.right) ship.ang+=4.6*dt;
+      if(keys.up){
+        ship.vx+=Math.cos(ship.ang)*430*dt; ship.vy+=Math.sin(ship.ang)*430*dt;
+      }
+      if(held&&!kb){
+        const ta=Math.atan2(aimTarget.y-ship.y,aimTarget.x-ship.x);
+        let da=ta-ship.ang;
+        while(da>Math.PI)da-=2*Math.PI; while(da<-Math.PI)da+=2*Math.PI;
+        ship.ang+=Math.max(-5*dt,Math.min(5*dt,da));
+        ship.vx+=Math.cos(ship.ang)*430*dt; ship.vy+=Math.sin(ship.ang)*430*dt;
+      }
+      const drg=Math.exp(-1.3*dt); ship.vx*=drg; ship.vy*=drg;
+      ship.x+=ship.vx*dt; ship.y+=ship.vy*dt;
+      const mm=18;
+      if(ship.x<-mm)ship.x=W+mm; if(ship.x>W+mm)ship.x=-mm;
+      if(ship.y<-mm)ship.y=H+mm; if(ship.y>H+mm)ship.y=-mm;
+      ship.inv=Math.max(0,ship.inv-dt);
+      for(const s of stones){
+        if(ship.inv<=0&&Math.hypot(s.x-ship.x,s.y-ship.y)<s.r+13){
+          ship.inv=2; tone(160,.2,"square",0,.12);
+          const pr=cv.getBoundingClientRect();
+          addPop(pr.left+ship.x,pr.top+ship.y,"OUCH! 🐻",true);
+          const bw=$("bearWrap"); bw.classList.remove("joy"); void bw.offsetWidth; bw.classList.add("joy");
+          ship.vx+=(ship.x-s.x)*6; ship.vy+=(ship.y-s.y)*6;
+          streak=0; updateCombo();
+          break;
+        }
+      }
+      fireCd-=dt;
+      if(fireCd<=0){ fireCd=0.3; shipFire(); }
+    }
+    // bolts fly, gently home (Forever), and smash the first stone they touch
+    for(const b of bolts){
+      if(mode==="forever"){
+        let near=null,nd=1e9;
+        for(const s of stones){ const d=Math.abs(s.x-b.x); if(d<90&&s.y<b.y&&d<nd){near=s;nd=d;} }
+        if(near) b.vx+=(near.x-b.x)*4*dt;
+      }
+      b.x+=b.vx*dt; b.y+=b.vy*dt;
+      for(const s of stones){
+        if(b.dead) break;
+        if(Math.hypot(s.x-b.x,s.y-b.y)<s.r+8){ b.dead=true; smash(s); }
+      }
+      if(!b.dead&&honeyPot){
+        const hy=honeyPot.y+Math.sin(honeyPot.bob)*6;
+        if(Math.hypot(honeyPot.x-b.x,hy-b.y)<28){
+          b.dead=true; sfx.honey();
+          const pr=cv.getBoundingClientRect();
+          addPop(pr.left+honeyPot.x,pr.top+hy,"+2 🍯 Dr. Michael: easy on the sugar!");
+          burst(honeyPot.x,hy,["#E8A33D","#FFD54A","#C98A3B"],10);
+          setScore(score+2); honeyPot=null;
+        }
+      }
+      if(b.y<-20||b.x<-20||b.x>W+20){ b.dead=true; if(streak>0){streak=0; updateCombo();} }
+    }
+    bolts=bolts.filter(b=>!b.dead);
+  }
+  if(honeyPot){
+    honeyPot.x+=honeyPot.vx*dt;
+    honeyPot.bob+=dt*4;
+    if(honeyPot.x<-40||honeyPot.x>W+40) honeyPot=null;
+  }
+  for(const p of parts){ p.x+=p.vx*dt; p.y+=p.vy*dt; p.vy+=60*dt; p.life-=dt; }
+  parts=parts.filter(p=>p.life>0);
+  cannon.flash=Math.max(0,cannon.flash-dt);
+  tripleT=Math.max(0,tripleT-dt);
+  shakeT=Math.max(0,shakeT-dt);
+  draw();
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  ctx.save();
+  if(shakeT>0) ctx.translate(rnd(-4,4)*Math.min(shakeT*5,1),rnd(-4,4)*Math.min(shakeT*5,1));
+  // scanner backdrop
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,"#0B222B"); g.addColorStop(1,"#123A44");
+  ctx.fillStyle=g; ctx.fillRect(-8,-8,W+16,H+16);
+  ctx.strokeStyle="rgba(46,158,155,.14)"; ctx.lineWidth=1;
+  const grid=34;
+  for(let x=grid;x<W;x+=grid){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  for(let y=grid;y<H;y+=grid){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  // faint kidneys
+  ctx.save(); ctx.globalAlpha=.16; ctx.strokeStyle="#2E9E9B";
+  // AP view: hila face the spine; the (viewer-left) kidney sits lower, upper poles tilt medially
+  kidney(W*.32,H*.45,Math.min(W,H)*.16,0.15,false);
+  kidney(W*.68,H*.42,Math.min(W,H)*.16,-0.15,true);
+  ctx.restore();
+  // sweeping aim line with target reticle
+  if(running&&phase==="stones"&&mode!=="aster"){
+    const a=aimAngle(), cx0=W/2, cy0=H-38;
+    const dx=Math.sin(a), dy=-Math.cos(a);
+    let px=cx0+dx*40, py=cy0+dy*40, hitStone=null;
+    ctx.fillStyle="rgba(255,213,74,.5)";
+    for(let i=0;i<26&&!hitStone;i++){
+      ctx.beginPath(); ctx.arc(px,py,2.6,0,Math.PI*2); ctx.fill();
+      px+=dx*24; py+=dy*24;
+      if(py<0||px<0||px>W) break;
+      for(const s of stones){ if(Math.hypot(s.x-px,s.y-py)<s.r+9){ hitStone=s; break; } }
+    }
+    if(hitStone){
+      ctx.save(); ctx.strokeStyle="#FFD54A"; ctx.lineWidth=3;
+      ctx.setLineDash([6,5]); ctx.shadowColor="#FFD54A"; ctx.shadowBlur=8;
+      ctx.beginPath(); ctx.arc(hitStone.x,hitStone.y,hitStone.r+10,0,Math.PI*2); ctx.stroke();
+      ctx.restore();
+    }
+  }
+  // bolts
+  for(const b of bolts){
+    ctx.save();
+    ctx.translate(b.x,b.y); ctx.rotate(Math.atan2(b.vy,b.vx)+Math.PI/2);
+    ctx.shadowColor="#FFD54A"; ctx.shadowBlur=12;
+    ctx.fillStyle="#FFD54A";
+    ctx.beginPath(); ctx.roundRect(-3.5,-14,7,24,4); ctx.fill();
+    ctx.fillStyle="#FFF3DF";
+    ctx.beginPath(); ctx.roundRect(-1.5,-11,3,12,2); ctx.fill();
+    ctx.restore();
+  }
+  // stones
+  for(const s of stones){
+    ctx.save(); ctx.translate(s.x,s.y); ctx.rotate(s.rot);
+    ctx.beginPath();
+    for(let i=0;i<s.verts.length;i++){
+      const a=i/s.verts.length*Math.PI*2, rr=s.r*s.verts[i];
+      i?ctx.lineTo(Math.cos(a)*rr,Math.sin(a)*rr):ctx.moveTo(Math.cos(a)*rr,Math.sin(a)*rr);
+    }
+    ctx.closePath();
+    ctx.fillStyle=s.size===3?"#8E979F":s.size===2?"#9AA3AB":"#A8B1B8";
+    ctx.fill(); ctx.strokeStyle="#5F6870"; ctx.lineWidth=2.5; ctx.stroke();
+    ctx.strokeStyle="rgba(95,104,112,.8)"; ctx.lineWidth=1.8;
+    ctx.beginPath(); ctx.moveTo(-s.r*.35,-s.r*.15); ctx.lineTo(s.r*.1,s.r*.05); ctx.lineTo(-s.r*.1,s.r*.4); ctx.stroke();
+    ctx.restore();
+  }
+  // honey pot
+  if(honeyPot){
+    const y=honeyPot.y+Math.sin(honeyPot.bob)*6;
+    ctx.save(); ctx.translate(honeyPot.x,y);
+    ctx.fillStyle="#E8A33D"; ctx.strokeStyle="#A9722E"; ctx.lineWidth=2.5;
+    ctx.beginPath();
+    ctx.moveTo(-13,-8); ctx.quadraticCurveTo(-17,8,-9,15); ctx.lineTo(9,15);
+    ctx.quadraticCurveTo(17,8,13,-8); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle="#C98A3B";
+    ctx.beginPath(); ctx.roundRect(-11,-16,22,9,3); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle="#A9722E"; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(-6,2); ctx.quadraticCurveTo(0,7,6,2); ctx.stroke();
+    ctx.restore();
+  }
+  // particles
+  for(const p of parts){
+    ctx.globalAlpha=Math.max(p.life/p.max,0);
+    ctx.fillStyle=p.color;
+    ctx.fillRect(p.x-2.5,p.y-2.5,5,5);
+  }
+  ctx.globalAlpha=1;
+  if(mode!=="aster"){
+    // cannon, swiveling with the sweep
+    const cx=W/2, cy=H-8;
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(aimAngle());
+    ctx.fillStyle="#C98A3B"; ctx.strokeStyle="#4A2E15"; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.roundRect(-8,-42,16,36,6); ctx.fill(); ctx.stroke();
+    ctx.fillStyle="#E8C07A";
+    ctx.beginPath(); ctx.roundRect(-4,-40,8,10,3); ctx.fill();
+    if(cannon.flash>0){
+      ctx.fillStyle="rgba(255,213,74,"+Math.min(cannon.flash*6,1)+")";
+      ctx.beginPath(); ctx.arc(0,-46,11,0,Math.PI*2); ctx.fill();
+    }
+    ctx.restore();
+    ctx.fillStyle="#8A9299"; ctx.strokeStyle="#4A2E15";
+    ctx.beginPath(); ctx.arc(cx,cy+4,19,Math.PI,0); ctx.fill(); ctx.stroke();
+  }else if(ship){
+    // the Ambulance Rocket
+    ctx.save(); ctx.translate(ship.x,ship.y); ctx.rotate(ship.ang+Math.PI/2);
+    if(ship.inv>0) ctx.globalAlpha=0.45+0.4*Math.sin(performance.now()/70);
+    if(held||keys.up){
+      ctx.fillStyle="#FFD54A";
+      ctx.beginPath(); ctx.moveTo(-6,17); ctx.lineTo(0,29+rnd(0,7)); ctx.lineTo(6,17); ctx.closePath(); ctx.fill();
+    }
+    ctx.fillStyle="#F4F7F8"; ctx.strokeStyle="#4A2E15"; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.moveTo(0,-19); ctx.lineTo(14,16); ctx.quadraticCurveTo(0,8,-14,16);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle="#E0403E";
+    ctx.fillRect(-2.5,-8,5,13); ctx.fillRect(-6.5,-4,13,5);
+    ctx.restore(); ctx.globalAlpha=1;
+  }
+  ctx.restore();
+}
+function kidney(x,y,r,tilt,flip){
+  // a proper kidney bean — hilum notch faces the midline, ureter trailing down
+  ctx.save(); ctx.translate(x,y); ctx.rotate(tilt); ctx.scale(flip?-r:r,r);
+  ctx.lineWidth=5/r;
+  ctx.beginPath();
+  ctx.moveTo(0.15,-0.95);
+  ctx.bezierCurveTo(-0.75,-1.05,-0.98,-0.35,-0.88,0.15);
+  ctx.bezierCurveTo(-0.78,0.72,-0.25,1.02,0.22,0.92);
+  ctx.bezierCurveTo(0.62,0.83,0.76,0.52,0.55,0.36);
+  ctx.bezierCurveTo(0.28,0.18,0.28,-0.18,0.55,-0.36);
+  ctx.bezierCurveTo(0.76,-0.52,0.62,-0.86,0.15,-0.95);
+  ctx.closePath(); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(0.42,0.30);
+  ctx.quadraticCurveTo(0.62,0.75,0.52,1.25);
+  ctx.stroke();
+  ctx.restore();
+}
+
+/* ---------- shooting ---------- */
+function fire(){
+  if(!running||phase!=="stones") return;
+  ac();
+  const now=performance.now();
+  if(now-lastFire<170) return; // pew-pew, not a firehose
+  lastFire=now;
+  const a0=aimAngle();
+  const angs=(tripleT>0)?[a0-0.24,a0,a0+0.24]:[a0];
+  for(const a of angs){
+    const dx=Math.sin(a), dy=-Math.cos(a);
+    bolts.push({x:W/2+dx*44, y:H-38+dy*44, vx:dx*720, vy:dy*720});
+  }
+  cannon.flash=0.12; pew();
+}
+function shipFire(){
+  if(!ship) return;
+  const angs=(tripleT>0)?[ship.ang-0.24,ship.ang,ship.ang+0.24]:[ship.ang];
+  for(const a of angs)
+    bolts.push({x:ship.x+Math.cos(a)*20,y:ship.y+Math.sin(a)*20,
+      vx:Math.cos(a)*720,vy:Math.sin(a)*720});
+  pew();
+}
+window.addEventListener("keydown",e=>{
+  if(e.key==="ArrowLeft"){ keys.left=true; e.preventDefault(); }
+  else if(e.key==="ArrowRight"){ keys.right=true; e.preventDefault(); }
+  else if(e.key==="ArrowUp"){ keys.up=true; e.preventDefault(); }
+  else if(e.key===" "||e.code==="Space"){
+    e.preventDefault();
+    if(e.repeat||!running||phase!=="stones") return;
+    ac();
+    if(mode==="aster"&&ship){
+      const now=performance.now();
+      if(now-lastKeyFire>160){ lastKeyFire=now; shipFire(); }
+    }else fire();
+  }
+});
+window.addEventListener("keyup",e=>{
+  if(e.key==="ArrowLeft") keys.left=false;
+  if(e.key==="ArrowRight") keys.right=false;
+  if(e.key==="ArrowUp") keys.up=false;
+});
+function asterAim(e){
+  const r=cv.getBoundingClientRect();
+  aimTarget.x=e.clientX-r.left; aimTarget.y=e.clientY-r.top;
+}
+cv.addEventListener("pointerdown",e=>{
+  if(mode==="aster"){
+    if(!running||phase!=="stones") return;
+    ac(); held=true; asterAim(e);
+  }else fire();
+});
+cv.addEventListener("pointermove",e=>{ if(mode==="aster"&&held) asterAim(e); });
+window.addEventListener("pointerup",()=>held=false);
+window.addEventListener("pointercancel",()=>held=false);
+function smash(s){
+  stones.splice(stones.indexOf(s),1);
+  const pr=cv.getBoundingClientRect();
+  burst(s.x,s.y,s.size===1?["#A8B1B8","#FFD54A"]:["#8E979F","#6C747B","#FFD54A"],s.size*5+4);
+  streak++; updateCombo();
+  const base=4-s.size;                 // big=1, medium=2, small=3
+  const mult=(streak>=5)?2:1;          // 5+ hit streak doubles everything
+  const er=(timeLeft<=10&&timeLeft>0)?2:1; // Dr. Erica's ER RUSH doubles the final 10s
+  const pts=base*mult*er;
+  if(s.size>1){
+    sfx.crack();
+    if(s.size===3) shakeT=0.22;
+    for(let i=0;i<2;i++){
+      const c=makeStone(s.size-1,s.x+rnd(-8,8),s.y+rnd(-8,8));
+      stones.push(c);
+    }
+    addPop(pr.left+s.x,pr.top+s.y,"CRACK! +"+pts+(mult>1?" 🔥":""));
+  }else{
+    sfx.boom();
+    addPop(pr.left+s.x,pr.top+s.y,"+"+pts+(mult>1?" 🔥":""));
+  }
+  setScore(score+pts);
+  updateStoneCount();
+  if(stones.length===0) waveClear();
+}
+function burst(x,y,colors,n){
+  for(let i=0;i<n;i++){
+    const a=rnd(0,Math.PI*2), sp=rnd(30,130);
+    parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:rnd(.4,.9),max:.9,
+      color:colors[i%colors.length]});
+  }
+}
+function waveClear(){
+  phase="challah"; bolts=[]; sfx.ready();
+  $("bearWrap").classList.remove("ouch");
+  $("bearWrap").dataset.face="open";
+  $("challahBtn").classList.add("glow");
+  $("tip").textContent="All clear! Now serve the challah!";
+  $("clearFlash").classList.remove("show"); void $("clearFlash").offsetWidth;
+  $("clearFlash").classList.add("show");
+  timers.push(setTimeout(()=>$("clearFlash").classList.remove("show"),1400));
+}
+
+/* ---------- honey bonus ---------- */
+function spawnHoney(){
+  if(!running||honeyPot) return;
+  const fromLeft=Math.random()<.5;
+  honeyPot={x:fromLeft?-30:W+30, y:rnd(H*.12,H*.5),
+    vx:(fromLeft?1:-1)*rnd(35,55), bob:0};
+}
+/* honey pots are shot down by bolts now — see the bolt collision in the loop */
+
+/* ---------- bears ---------- */
+function newBear(){
+  if(!running) return;
+  const b=BEARS[bearIdx%BEARS.length]; bearIdx++;
+  $("bearName").textContent=b.name;
+  $("bearWrap").innerHTML=bearSVG(b.fur,b.scarf);
+  $("bearWrap").dataset.face="sad";
+  $("bearWrap").classList.remove("gone","joy");
+  $("bearWrap").classList.add("ouch");
+  phase="stones";
+  spawnWave();
+  // the cousins take turns as attending; Dr. Alex reads every scan
+  const attIdx=bearIdx%DOCS.length;
+  $("attendTag").innerHTML=DOCS[attIdx].a+"'s turn<br>to operate!";
+  [...$("docSvgs").children].forEach((el,i)=>el.classList.toggle("active",i===attIdx));
+  const scr=$("screenWrap").getBoundingClientRect();
+  addPop(scr.left+scr.width/2,scr.top+scr.height*0.22,
+    "Dr. Alex reads the X-ray: "+stones.length+" stones! 🩻");
+  $("tip").textContent=(mode==="aster")
+    ?"Hold to fly at "+b.name+"'s stones (or arrows ⬅️⬆️➡️ + space to fire)!"
+    :"Tap or press space to FIRE! Time the sweep to hit "+b.name+"'s stones!";
+  $("challahBtn").classList.remove("glow");
+}
+$("challahBtn").addEventListener("pointerdown",()=>{
+  ac();
+  if(!running) return;
+  const btn=$("challahBtn");
+  if(phase!=="challah"){ btn.classList.remove("nope"); void btn.offsetWidth; btn.classList.add("nope"); sfx.nope(); return; }
+  phase="feeding"; btn.classList.remove("glow");
+  const from=btn.getBoundingClientRect(), to=$("bearWrap").getBoundingClientRect();
+  const robe=document.createElement("div"); robe.className="robeCarry";
+  robe.innerHTML=`<div class="robeTag">Robe! 🍞</div>`+robeSVG();
+  document.body.appendChild(robe);
+  const rw=robe.offsetWidth||70;
+  robe.style.left=(from.left+from.width/2-rw/2)+"px";
+  robe.style.top=(from.top-rw*0.4)+"px";
+  addPop(from.left+from.width/2,from.top,"Here comes Robe!");
+  const tx=(to.left+to.width/2)-(from.left+from.width/2), ty=(to.top+to.height*0.55)-(from.top-rw*0.4)-rw;
+  requestAnimationFrame(()=>{ robe.style.transform=`translate(${tx}px,${ty}px)`; });
+  setTimeout(()=>{
+    sfx.chomp();
+    robe.style.transition="transform .9s ease-in, opacity .9s";
+    robe.style.transform+=" translateX(-60vw)";
+    robe.style.opacity="0";
+    setTimeout(()=>robe.remove(),950);
+    setTimeout(()=>{
+      if(!running) return;
+      const wrap=$("bearWrap");
+      wrap.dataset.face="happy"; wrap.classList.add("joy");
+      sfx.cured();
+      const r=wrap.getBoundingClientRect(), cx2=r.left+r.width/2;
+      addPop(cx2,r.top,"+5 ❤️",true);
+      for(let i=0;i<5;i++){
+        const h=document.createElement("div"); h.className="heart"; h.textContent="❤️";
+        h.style.left=(cx2-50+Math.random()*100)+"px"; h.style.top=(r.top+10+Math.random()*40)+"px";
+        h.style.animationDelay=(i*0.12)+"s";
+        document.body.appendChild(h); setTimeout(()=>h.remove(),1800);
+      }
+      $("docs").classList.remove("cheer"); void $("docs").offsetWidth; $("docs").classList.add("cheer");
+      setScore(score+5); setCured(curedCount+1);
+      tripleT=7; // challah power: spread shot for the next wave's opening
+      const scr=$("screenWrap").getBoundingClientRect();
+      addPop(scr.left+scr.width/2,scr.top+scr.height*0.4,"DR. ALLIE'S TRIPLE LASER! ⚡");
+      $("tip").textContent=$("bearName").textContent+" feels ALL better!";
+      timers.push(setTimeout(()=>{
+        $("bearWrap").classList.add("gone");
+        timers.push(setTimeout(()=>{ newBear(); },400));
+      },1100));
+    },350);
+  },1250);
+});
+
+/* ---------- effects ---------- */
+function addPop(x,y,txt,dark){
+  const p=document.createElement("div"); p.className="pop"+(dark?" dark":"");
+  p.textContent=txt; p.style.left=x+"px"; p.style.top=y+"px";
+  document.body.appendChild(p); setTimeout(()=>p.remove(),1000);
+}
+function bits(x,y,colors,n){
+  for(let i=0;i<n;i++){
+    const b=document.createElement("div"); b.className="bit";
+    b.style.left=x+"px"; b.style.top=y+"px";
+    b.style.background=colors[i%colors.length];
+    document.body.appendChild(b);
+    const ang=Math.random()*Math.PI*2, dist=60+Math.random()*110;
+    b.animate([
+      {transform:"translate(0,0) rotate(0)",opacity:1},
+      {transform:`translate(${Math.cos(ang)*dist}px,${Math.sin(ang)*dist+80}px) rotate(${300+Math.random()*300}deg)`,opacity:0}
+    ],{duration:900+Math.random()*400,easing:"cubic-bezier(.2,.6,.4,1)"}).onfinish=()=>b.remove();
+  }
+}
+
+/* ---------- party ---------- */
+let partying=false;
+function startParty(){
+  if(partying) return; partying=true;
+  sfx.party();
+  $("party").classList.remove("hidden");
+  const nt=setInterval(()=>{
+    if(!partying){clearInterval(nt);return}
+    const n=document.createElement("div"); n.className="note";
+    n.textContent=["🎵","🎶","🍯"][Math.floor(Math.random()*3)];
+    n.style.left=(10+Math.random()*80)+"vw"; n.style.top=(30+Math.random()*50)+"vh";
+    document.body.appendChild(n); setTimeout(()=>n.remove(),1600);
+    sfx.party();
+  },1300);
+  timers.push(setTimeout(()=>{
+    partying=false; clearInterval(nt);
+    $("party").classList.add("hidden");
+  },5000));
+}
+$("party").addEventListener("pointerdown",e=>{
+  bits(e.clientX,e.clientY,["#FFD54A","#E0403E","#3E9B5C","#E86A9E","#2E9E9B"],14);
+  tone(880+Math.random()*400,.12);
+});
+
+/* ---------- flow ---------- */
+function clearTimers(){ timers.forEach(clearTimeout); timers=[]; }
+function startGame(m){
+  mode=m; running=true; partying=false;
+  setScore(0); setCured(0); bearIdx=Math.floor(Math.random()*BEARS.length);
+  stones=[]; bolts=[]; parts=[]; honeyPot=null; sweepT=0; lastFire=0; ouchCd=0;
+  held=false; fireCd=0; streak=0; tripleT=0; shakeT=0; updateCombo();
+  keys.left=keys.right=keys.up=false;
+  fitCanvas();
+  ship=(m==="aster")?{x:W/2,y:H*0.62,ang:-Math.PI/2,vx:0,vy:0,inv:2}:null;
+  clearTimers();
+  $("titleScreen").classList.add("hidden");
+  $("endScreen").classList.add("hidden");
+  $("party").classList.add("hidden");
+  $("timerBox").classList.remove("hidden");
+  newBear();
+  const honeyLoop=()=>{ if(!running)return; spawnHoney(); timers.push(setTimeout(honeyLoop,11000+Math.random()*8000)); };
+  timers.push(setTimeout(honeyLoop,9000));
+  timeLeft=60; $("timeLeft").textContent=timeLeft;
+  const tick=()=>{ if(!running)return;
+    timeLeft--; $("timeLeft").textContent=timeLeft;
+    if(timeLeft===10){
+      const sc=$("screenWrap").getBoundingClientRect();
+      addPop(sc.left+sc.width/2,sc.top+sc.height*0.4,"DR. ERICA'S ER RUSH! ×2 🚨");
+      sfx.party();
+    }
+    if(timeLeft<=5&&timeLeft>0) tone(660,.08,"square",0,.08);
+    if(timeLeft<=0){ endRush(); return; }
+    timers.push(setTimeout(tick,1000));
+  };
+  timers.push(setTimeout(tick,1000));
+}
+function endRush(){
+  running=false; phase="idle"; clearTimers(); sfx.over();
+  $("endScore").textContent=score;
+  $("endLine").textContent=
+    curedCount>=8?"INCREDIBLE! "+curedCount+" bears cured — the whole tavern is dancing!":
+    curedCount>=5?"Amazing! "+curedCount+" bears are pain-free and full of challah!":
+    curedCount>=2?"Great blasting, doctors! "+curedCount+" happy bears!":
+    "The bears say: more challah next time!";
+  const bestKey="beartavern_best_"+mode;
+  let best=0; try{ best=+localStorage.getItem(bestKey)||0; }catch(e){}
+  if(score>best){ best=score; try{localStorage.setItem(bestKey,best)}catch(e){}
+    $("bestLine").textContent="🏆 NEW RECORD!"; }
+  else $("bestLine").textContent="Best so far: ⭐ "+best;
+  $("endScreen").classList.remove("hidden");
+  bits(innerWidth/2,innerHeight/3,["#FFD54A","#E0403E","#3E9B5C","#E86A9E"],22);
+}
+function toMenu(){
+  running=false; phase="idle"; clearTimers(); partying=false;
+  $("party").classList.add("hidden"); $("endScreen").classList.add("hidden");
+  $("titleScreen").classList.remove("hidden");
+}
+
+/* ---------- wire ---------- */
+$("challahArt").innerHTML=challahSVG();
+$("barL").innerHTML=barBear("#A9784C",false);
+$("barR").innerHTML=barBear("#6E4526",true);
+$("docSvgs").innerHTML=DOCS.map(doc).join("");
+$("castRow").innerHTML=DOCS.map(d=>`<div class="c">${doc(d)}<b>${d.a}</b></div>`)
+  .join("")+`<div class="c">${bearSVG("#8B5E3C","#E0403E")}<b>the Bear Tavern bears</b><i>(ouch… kidney stones)</i></div>`;
+$("partyFloor").innerHTML=
+  `<div class="d1">${bearSVG("#A9784C","#7A4FBF")}</div>
+   <div class="d2">${doc(DOCS[1])}</div>
+   <div class="d3">${bearSVG("#6E4526","#3E9B5C")}</div>`;
+$("btnForever").addEventListener("pointerdown",()=>{ ac(); startGame("forever"); });
+$("btnAster").addEventListener("pointerdown",()=>{ ac(); startGame("aster"); });
+$("btnAgain").addEventListener("pointerdown",()=>{ ac(); startGame(mode||"aster"); });
+$("btnMenu").addEventListener("pointerdown",toMenu);
+$("homeBtn").addEventListener("pointerdown",toMenu);
+$("sndBtn").addEventListener("pointerdown",()=>{ soundOn=!soundOn; $("sndBtn").textContent=soundOn?"🔊":"🔇"; ac(); });
+document.addEventListener("gesturestart",e=>e.preventDefault());
+if(/michaelweintraubmd|localhost|127\.0\.0\.1|github\.io/.test(location.hostname))
+  $("arcadeLink").classList.remove("hidden");
+fitCanvas();
+requestAnimationFrame(t=>{ lastT=t; requestAnimationFrame(loop); });
+</script>
