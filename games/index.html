@@ -40,6 +40,7 @@
   .berrycard .playBtn{background:var(--berry);box-shadow:0 4px 0 var(--berry-dark)}
   .bearcard .playBtn{background:var(--wood);box-shadow:0 4px 0 var(--wood-dark)}
   footer{margin-top:18px;font-size:clamp(11px,2.8vw,14px);color:#8A6B45}
+  .bestLine{font-weight:bold;color:#54341F;min-height:1.1em;font-size:clamp(11px,2.9vw,15px)}
 </style>
 </head>
 <body>
@@ -52,15 +53,27 @@
       <div class="art">🍓🥄</div>
       <h2>Welcome to Schmackberry's</h2>
       <p>Fling chicken balls, crunchy bread, cupcakes and Chobani into the cousins' mouths. Watch out for Robe and Gaga!</p>
+      <p class="bestLine" id="bestS"></p>
       <span class="playBtn">PLAY ▶</span>
     </a>
     <a class="gameCard bearcard" href="bear-tavern.html">
       <div class="art">🐻🚀</div>
       <h2>Bear Tavern: Kidney Stone Rescue</h2>
       <p>Blast the kidney stones on the X-ray, fly the rocket, and serve every bear a Shir Ami challah.</p>
+      <p class="bestLine" id="bestB"></p>
       <span class="playBtn">PLAY ▶</span>
     </a>
   </div>
   <footer>Chefs Erica &amp; Alex · Cleanup by Allie &amp; Michael · Challah by Robe · Cheers by Gaga</footer>
+  <script>
+    function g(k){ try{ return +localStorage.getItem(k)||0; }catch(e){ return 0; } }
+    function stars(k){ const n=g(k); return n?" "+"⭐".repeat(n):""; }
+    const se=g("schmack_best_easy"), sh=g("schmack_best_rush");
+    if(se||sh) document.getElementById("bestS").textContent=
+      "Best: "+se+" Easy"+stars("schmack_stars_easy")+" · "+sh+" Hard"+stars("schmack_stars_rush");
+    const ba=g("beartavern_best_aster"), bf=g("beartavern_best_forever");
+    if(ba||bf) document.getElementById("bestB").textContent=
+      "Best: "+ba+" Asteroids · "+bf+" Blaster";
+  </script>
 </body>
 </html>

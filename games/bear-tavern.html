@@ -88,6 +88,15 @@
   #clearFlash.show{display:flex;animation:flashIn .5s cubic-bezier(.34,1.6,.6,1)}
   @keyframes flashIn{from{transform:scale(.3);opacity:0}}
 
+  /* cured bears join the bar */
+  #barShelf{flex:0 0 auto;display:flex;gap:3px;align-items:flex-end;justify-content:center;
+    min-height:clamp(20px,4.5vh,32px);padding:1px 8px;overflow:hidden;
+    background:rgba(74,46,21,.14);border-top:2px solid rgba(74,46,21,.25)}
+  #barShelf .mini{width:clamp(20px,5vw,30px);animation:patronPop .5s cubic-bezier(.34,1.6,.6,1)}
+  @keyframes patronPop{from{transform:scale(0)}}
+  #endBar{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;margin-top:6px;max-width:88vw}
+  #endBar .mini{width:clamp(22px,5.5vw,32px)}
+
   /* ===== counter ===== */
   #counter{flex:0 0 auto;position:relative;background:var(--wood);
     border-top:5px solid var(--wood-dark);padding:6px 10px 10px;z-index:10;
@@ -207,6 +216,8 @@
     <div id="clearFlash">✨ ALL CLEAR! ✨</div>
   </div>
 
+  <div id="barShelf"></div>
+
   <div id="counter">
     <div id="docs">
       <div class="row" id="docSvgs"></div>
@@ -248,6 +259,7 @@
   <div class="subTitle" id="endLine"></div>
   <div class="bigTitle" style="font-size:clamp(40px,12vw,72px)">⭐ <span id="endScore">0</span></div>
   <div class="subTitle" id="bestLine"></div>
+  <div id="endBar"></div>
   <button class="menuBtn alt" id="btnAgain">⏰ Play Again</button>
   <button class="menuBtn" id="btnMenu">🐻 Back to the Tavern</button>
 </div>
@@ -294,6 +306,22 @@ function challahSVG(){
     <path d="M88 14 Q98 30 90 46" fill="none" stroke="#A9722E" stroke-width="3" stroke-linecap="round"/>
     <circle cx="35" cy="22" r="1.6" fill="#FFF3DF"/><circle cx="58" cy="20" r="1.6" fill="#FFF3DF"/>
     <circle cx="80" cy="23" r="1.6" fill="#FFF3DF"/><circle cx="102" cy="21" r="1.6" fill="#FFF3DF"/></svg>`;
+}
+/* a tiny cured bear for the bar shelf */
+function miniBear(fur){
+  return `<span class="mini"><svg viewBox="0 0 40 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="12" cy="8" r="5" fill="${fur}"/><circle cx="28" cy="8" r="5" fill="${fur}"/>
+    <circle cx="20" cy="18" r="12" fill="${fur}"/>
+    <ellipse cx="20" cy="22" rx="6" ry="4.5" fill="#D9B084"/>
+    <circle cx="16" cy="15" r="1.6" fill="#4A2E15"/><circle cx="24" cy="15" r="1.6" fill="#4A2E15"/>
+    <path d="M16 25 Q20 28 24 25" stroke="#4A2E15" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <rect x="29" y="22" width="8" height="10" rx="2" fill="#C98A3B" stroke="#4A2E15" stroke-width="1.4"/>
+    <rect x="28.5" y="19.5" width="9" height="4" rx="2" fill="#FFF3DF" stroke="#4A2E15" stroke-width="1.4"/>
+  </svg></span>`;
+}
+function addBarPatron(fur){
+  const shelf=$("barShelf");
+  if(shelf.children.length<14) shelf.insertAdjacentHTML("beforeend",miniBear(fur));
 }
 /* a tavern regular enjoying a honey brew at their table */
 function barBear(fur,mugUp){
@@ -408,6 +436,19 @@ const $=id=>document.getElementById(id);
 let mode=null, running=false, phase="idle";
 let score=0, curedCount=0, bearIdx=0, timeLeft=60, timers=[];
 const PARTY_EVERY=5;
+/* ---------- background music ---------- */
+let musicT=null, musicStep=0;
+const MELODY=[392,494,587,494,440,523,659,587];
+function musicTick(){
+  if(!running){ musicT=null; return; }
+  tone(MELODY[musicStep%MELODY.length]/2,.16,"triangle",0,.05);
+  if(musicStep%2===0) tone(MELODY[musicStep%MELODY.length],.1,"sine",0,.028);
+  musicStep++;
+  const beat=320*((timeLeft<=10&&timeLeft>0)?0.62:1); // Dr. Erica's ER RUSH doubles the tempo
+  musicT=setTimeout(musicTick,beat);
+}
+function startMusic(){ stopMusic(); musicStep=0; musicTick(); }
+function stopMusic(){ if(musicT){ clearTimeout(musicT); musicT=null; } }
 function setScore(n){
   const grew=n>score;
   score=n; $("score").textContent=n;
@@ -457,6 +498,15 @@ function makeStone(size,x,y){
     vy:rnd(.6,1.1)*s.sink*(mode==="rush"?1.7:1),
     rot:rnd(0,Math.PI*2),vrot:rnd(-1.2,1.2),verts};
 }
+function makeStaghorn(x,y){
+  const verts=[];
+  for(let i=0;i<8;i++) verts.push(rnd(.8,1.1));
+  const a=rnd(0,Math.PI*2), spd=(mode==="aster")?rnd(22,34):14;
+  return {staghorn:true,hp:5,maxHp:5,size:3,x,y,r:38,verts,
+    vx:Math.cos(a)*spd, vy:(mode==="aster")?Math.sin(a)*spd:Math.abs(Math.sin(a))*spd+8,
+    rot:rnd(0,Math.PI*2),vrot:rnd(-0.5,0.5),
+    branches:[0.4,2.4,4.5]};
+}
 function stonesLeftTotal(){ // remaining taps: each stone yields 2^(size-1+..) pieces; show piece count
   return stones.length;
 }
@@ -472,6 +522,14 @@ function spawnWave(){
     stones.push(makeStone(3, rnd(W*.2,W*.8), rnd(H*.15,H*.5)));
   for(let i=0;i<meds;i++)
     stones.push(makeStone(2, rnd(W*.15,W*.85), rnd(H*.1,H*.6)));
+  if((curedCount+1)%3===0){ // every third bear brings the big one
+    stones.push(makeStaghorn(rnd(W*.3,W*.7), rnd(H*.12,H*.35)));
+    timers.push(setTimeout(()=>{
+      const sc=$("screenWrap").getBoundingClientRect();
+      addPop(sc.left+sc.width/2,sc.top+sc.height*0.5,"Dr. Alex: it's a STAGHORN! 😱",true);
+      tone(220,.3,"sawtooth",0,.12);
+    },1100));
+  }
   updateStoneCount();
 }
 
@@ -479,7 +537,7 @@ function spawnWave(){
 let lastT=0;
 function loop(t){
   requestAnimationFrame(loop);
-  const dt=Math.min((t-lastT)/1000,0.05); lastT=t;
+  const dt=Math.max(0,Math.min((t-lastT)/1000,0.05)); lastT=t;
   if(running&&phase==="stones"){
     sweepT+=dt; ouchCd=Math.max(0,ouchCd-dt);
     for(const s of stones){
@@ -525,8 +583,15 @@ function loop(t){
       ship.inv=Math.max(0,ship.inv-dt);
       for(const s of stones){
         if(ship.inv<=0&&Math.hypot(s.x-ship.x,s.y-ship.y)<s.r+13){
-          ship.inv=2; tone(160,.2,"square",0,.12);
           const pr=cv.getBoundingClientRect();
+          if(ship.shield){ // the honey shield takes the hit
+            ship.shield=false; ship.inv=1;
+            sfx.honey();
+            addPop(pr.left+ship.x,pr.top+ship.y,"🛡️ Shield saved you!");
+            ship.vx+=(ship.x-s.x)*4; ship.vy+=(ship.y-s.y)*4;
+            break;
+          }
+          ship.inv=2; tone(160,.2,"square",0,.12);
           addPop(pr.left+ship.x,pr.top+ship.y,"OUCH! 🐻",true);
           const bw=$("bearWrap"); bw.classList.remove("joy"); void bw.offsetWidth; bw.classList.add("joy");
           ship.vx+=(ship.x-s.x)*6; ship.vy+=(ship.y-s.y)*6;
@@ -554,9 +619,15 @@ function loop(t){
         if(Math.hypot(honeyPot.x-b.x,hy-b.y)<28){
           b.dead=true; sfx.honey();
           const pr=cv.getBoundingClientRect();
-          addPop(pr.left+honeyPot.x,pr.top+hy,"+2 🍯 Dr. Michael: easy on the sugar!");
           burst(honeyPot.x,hy,["#E8A33D","#FFD54A","#C98A3B"],10);
-          setScore(score+2); honeyPot=null;
+          if(mode==="aster"&&ship&&!ship.shield&&Math.random()<0.5){
+            ship.shield=true;
+            addPop(pr.left+honeyPot.x,pr.top+hy,"🛡️ HONEY SHIELD!");
+          }else{
+            addPop(pr.left+honeyPot.x,pr.top+hy,"+2 🍯 Dr. Michael: easy on the sugar!");
+            setScore(score+2);
+          }
+          honeyPot=null;
         }
       }
       if(b.y<-20||b.x<-20||b.x>W+20){ b.dead=true; if(streak>0){streak=0; updateCombo();} }
@@ -625,6 +696,31 @@ function draw(){
   }
   // stones
   for(const s of stones){
+    if(s.staghorn){
+      ctx.save(); ctx.translate(s.x,s.y); ctx.rotate(s.rot);
+      ctx.fillStyle="#9AA88F"; ctx.strokeStyle="#5C6B52"; ctx.lineWidth=2.5;
+      for(const ba of s.branches){ // branched staghorn lobes
+        ctx.save(); ctx.rotate(ba); ctx.translate(s.r*0.8,0);
+        ctx.beginPath(); ctx.ellipse(0,0,s.r*0.55,s.r*0.34,0,0,Math.PI*2);
+        ctx.fill(); ctx.stroke(); ctx.restore();
+      }
+      ctx.beginPath();
+      for(let i=0;i<s.verts.length;i++){
+        const a=i/s.verts.length*Math.PI*2, rr=s.r*s.verts[i];
+        i?ctx.lineTo(Math.cos(a)*rr,Math.sin(a)*rr):ctx.moveTo(Math.cos(a)*rr,Math.sin(a)*rr);
+      }
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.strokeStyle="#4A5443"; ctx.lineWidth=2;
+      for(let c=0;c<s.maxHp-s.hp;c++){ // cracks accumulate as it takes hits
+        const ca=c*1.9+0.6;
+        ctx.beginPath();
+        ctx.moveTo(Math.cos(ca)*s.r*0.15,Math.sin(ca)*s.r*0.15);
+        ctx.lineTo(Math.cos(ca+0.5)*s.r*0.6,Math.sin(ca+0.5)*s.r*0.6);
+        ctx.stroke();
+      }
+      ctx.restore();
+      continue;
+    }
     ctx.save(); ctx.translate(s.x,s.y); ctx.rotate(s.rot);
     ctx.beginPath();
     for(let i=0;i<s.verts.length;i++){
@@ -688,6 +784,12 @@ function draw(){
     ctx.fillStyle="#E0403E";
     ctx.fillRect(-2.5,-8,5,13); ctx.fillRect(-6.5,-4,13,5);
     ctx.restore(); ctx.globalAlpha=1;
+    if(ship.shield){
+      ctx.save(); ctx.strokeStyle="#FFD54A"; ctx.lineWidth=3;
+      ctx.shadowColor="#FFD54A"; ctx.shadowBlur=10; ctx.globalAlpha=.85;
+      ctx.beginPath(); ctx.arc(ship.x,ship.y,26,0,Math.PI*2); ctx.stroke();
+      ctx.restore();
+    }
   }
   ctx.restore();
 }
@@ -766,6 +868,29 @@ cv.addEventListener("pointermove",e=>{ if(mode==="aster"&&held) asterAim(e); });
 window.addEventListener("pointerup",()=>held=false);
 window.addEventListener("pointercancel",()=>held=false);
 function smash(s){
+  const pr0=cv.getBoundingClientRect();
+  if(s.staghorn){ // the boss takes 5 hits and never splits
+    s.hp--; streak++; updateCombo();
+    sfx.crack(); shakeT=0.12;
+    burst(s.x,s.y,["#9AA88F","#6E7A63","#FFD54A"],9);
+    const er=(timeLeft<=10&&timeLeft>0)?2:1;
+    const mult=(streak>=5)?2:1;
+    if(s.hp>0){
+      const pts=2*mult*er;
+      setScore(score+pts);
+      addPop(pr0.left+s.x,pr0.top+s.y,"CRUNCH! +"+pts+(mult>1?" 🔥":""));
+      return;
+    }
+    stones.splice(stones.indexOf(s),1);
+    sfx.boom(); shakeT=0.3;
+    burst(s.x,s.y,["#9AA88F","#6E7A63","#FFD54A"],22);
+    const pts=10*er;
+    setScore(score+pts);
+    addPop(pr0.left+s.x,pr0.top+s.y,"STAGHORN DOWN! +"+pts);
+    updateStoneCount();
+    if(stones.length===0) waveClear();
+    return;
+  }
   stones.splice(stones.indexOf(s),1);
   const pr=cv.getBoundingClientRect();
   burst(s.x,s.y,s.size===1?["#A8B1B8","#FFD54A"]:["#8E979F","#6C747B","#FFD54A"],s.size*5+4);
@@ -818,9 +943,11 @@ function spawnHoney(){
 /* honey pots are shot down by bolts now — see the bolt collision in the loop */
 
 /* ---------- bears ---------- */
+let curFur="#8B5E3C";
 function newBear(){
   if(!running) return;
   const b=BEARS[bearIdx%BEARS.length]; bearIdx++;
+  curFur=b.fur;
   $("bearName").textContent=b.name;
   $("bearWrap").innerHTML=bearSVG(b.fur,b.scarf);
   $("bearWrap").dataset.face="sad";
@@ -877,6 +1004,7 @@ $("challahBtn").addEventListener("pointerdown",()=>{
       }
       $("docs").classList.remove("cheer"); void $("docs").offsetWidth; $("docs").classList.add("cheer");
       setScore(score+5); setCured(curedCount+1);
+      addBarPatron(curFur);
       tripleT=7; // challah power: spread shot for the next wave's opening
       const scr=$("screenWrap").getBoundingClientRect();
       addPop(scr.left+scr.width/2,scr.top+scr.height*0.4,"DR. ALLIE'S TRIPLE LASER! ⚡");
@@ -948,6 +1076,8 @@ function startGame(m){
   $("endScreen").classList.add("hidden");
   $("party").classList.add("hidden");
   $("timerBox").classList.remove("hidden");
+  $("barShelf").innerHTML="";
+  startMusic();
   newBear();
   const honeyLoop=()=>{ if(!running)return; spawnHoney(); timers.push(setTimeout(honeyLoop,11000+Math.random()*8000)); };
   timers.push(setTimeout(honeyLoop,9000));
@@ -966,8 +1096,9 @@ function startGame(m){
   timers.push(setTimeout(tick,1000));
 }
 function endRush(){
-  running=false; phase="idle"; clearTimers(); sfx.over();
+  running=false; phase="idle"; clearTimers(); stopMusic(); sfx.over();
   $("endScore").textContent=score;
+  $("endBar").innerHTML=$("barShelf").innerHTML;
   $("endLine").textContent=
     curedCount>=8?"INCREDIBLE! "+curedCount+" bears cured — the whole tavern is dancing!":
     curedCount>=5?"Amazing! "+curedCount+" bears are pain-free and full of challah!":
@@ -982,7 +1113,7 @@ function endRush(){
   bits(innerWidth/2,innerHeight/3,["#FFD54A","#E0403E","#3E9B5C","#E86A9E"],22);
 }
 function toMenu(){
-  running=false; phase="idle"; clearTimers(); partying=false;
+  running=false; phase="idle"; clearTimers(); stopMusic(); partying=false;
   $("party").classList.add("hidden"); $("endScreen").classList.add("hidden");
   $("titleScreen").classList.remove("hidden");
 }
@@ -1003,7 +1134,12 @@ $("btnAster").addEventListener("pointerdown",()=>{ ac(); startGame("aster"); });
 $("btnAgain").addEventListener("pointerdown",()=>{ ac(); startGame(mode||"aster"); });
 $("btnMenu").addEventListener("pointerdown",toMenu);
 $("homeBtn").addEventListener("pointerdown",toMenu);
-$("sndBtn").addEventListener("pointerdown",()=>{ soundOn=!soundOn; $("sndBtn").textContent=soundOn?"🔊":"🔇"; ac(); });
+$("sndBtn").addEventListener("pointerdown",()=>{
+  soundOn=!soundOn; $("sndBtn").textContent=soundOn?"🔊":"🔇"; ac();
+  try{ localStorage.setItem("arcade_sound",soundOn?"1":"0"); }catch(e){}
+});
+try{ soundOn=(localStorage.getItem("arcade_sound")||"1")!=="0"; }catch(e){}
+$("sndBtn").textContent=soundOn?"🔊":"🔇";
 document.addEventListener("gesturestart",e=>e.preventDefault());
 if(/michaelweintraubmd|localhost|127\.0\.0\.1|github\.io/.test(location.hostname))
   $("arcadeLink").classList.remove("hidden");

@@ -171,6 +171,15 @@
   .menuBtn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--berry-dark)}
   .menuBtn small{display:block;font-size:clamp(11px,2.6vw,14px);font-family:var(--ui);
     font-weight:600;opacity:.92;margin-top:2px;letter-spacing:.2px}
+  .btnStars{display:block;font-size:clamp(13px,3.4vw,17px);margin-top:2px;letter-spacing:2px}
+  .starOff{opacity:.3;filter:grayscale(1)}
+  #starRow{font-size:clamp(34px,10vw,54px);letter-spacing:6px;margin:2px 0}
+  .bubble{display:flex;align-items:center;gap:2px}
+  .bubble .next{opacity:.45;transform:scale(.72)}
+  .cookie{position:absolute;z-index:7;width:clamp(36px,9.5vw,52px);cursor:pointer;
+    filter:drop-shadow(0 3px 2px rgba(84,52,31,.35))}
+  .cookie svg{animation:cookieBob .5s ease-in-out infinite alternate}
+  @keyframes cookieBob{to{transform:translateY(-8px) rotate(8deg)}}
   .menuBtn.alt{background:var(--teal);box-shadow:0 5px 0 #005a54}
   .menuBtn.alt:active{box-shadow:0 1px 0 #005a54}
   .tinyNote{font-size:clamp(11px,2.6vw,14px);color:var(--choc-soft);margin-top:8px;max-width:48ch}
@@ -248,9 +257,11 @@
   <div class="subTitle">The cousins are HUNGRY — fling the food into their mouths!</div>
   <div id="castRow"></div>
   <button class="menuBtn" id="btnForever">🐣 Easy Mode (60 sec)
-    <small>slow spoon · giant mouths · magic aim help</small></button>
+    <small>slow spoon · giant mouths · magic aim help</small>
+    <span class="btnStars" id="stars-easy"></span></button>
   <button class="menuBtn alt" id="btnRush">🔥 Hard Mode (60 sec)
-    <small>fast spoon · combo streaks · sink can jam</small></button>
+    <small>fast spoon · combo streaks · double orders</small>
+    <span class="btnStars" id="stars-rush"></span></button>
   <div class="tinyNote">The launcher sweeps back and forth — tap a food at just the right moment to fling it
     into the mouth of the cousin dreaming about it! Misses go SPLAT. Watch out — Robe and Gaga
     keep wandering in front of the table and will BLOCK your shots! When the mess and dishes pile up,
@@ -267,6 +278,7 @@
 <div class="overlay hidden" id="endScreen">
   <div class="bigTitle">Time's up! ⏰</div>
   <div class="subTitle" id="endLine"></div>
+  <div id="starRow"></div>
   <div class="bigTitle" style="font-size:clamp(40px,12vw,72px)">⭐ <span id="endScore">0</span></div>
   <div class="subTitle" id="bestLine"></div>
   <button class="menuBtn alt" id="btnAgain">⏰ Play Again</button>
@@ -463,6 +475,7 @@ const sfx={
   splat(){ tone(120,.12,"square",0,.1); tone(70,.18,"square",.05,.1); },
   blech(){ tone(300,.1,"sawtooth",0,.06); tone(240,.14,"sawtooth",.08,.06); },
   womp(){ tone(320,.16,"sawtooth",0,.12); tone(230,.2,"sawtooth",.14,.12); tone(150,.3,"sawtooth",.3,.12); },
+  cookie(){ tone(784,.1); tone(988,.1,"triangle",.08); tone(1319,.18,"triangle",.16); },
   dump(){ tone(150,.09,"square",0,.09); tone(95,.14,"square",.06,.09); },
   wash(){ tone(880,.1,"sine"); tone(1175,.1,"sine",.08); tone(1568,.18,"sine",.16); },
   combo(){ [659,880,1175].forEach((f,i)=>tone(f,.12,"triangle",i*.07,.16)); },
@@ -478,6 +491,29 @@ let score=0, dishes=0, feeds=0, combo=0, timeLeft=60;
 let orders={}, timers=[];
 const DISH_WOBBLE=4, DISH_MAX=6, DANCE_EVERY=15, DANCE_MS=4000, SPLAT_MAX=14;
 let lockNagT=0;
+/* ---------- background music ---------- */
+let musicT=null, musicStep=0;
+const MELODY=[523,659,784,659,587,698,880,784];
+function musicTick(){
+  if(!running){ musicT=null; return; }
+  tone(MELODY[musicStep%MELODY.length]/2,.14,"triangle",0,.05);
+  if(musicStep%2===0) tone(MELODY[musicStep%MELODY.length],.1,"sine",0,.03);
+  musicStep++;
+  const beat=(mode==="rush"?250:300)*((timeLeft<=10&&timeLeft>0)?0.66:1);
+  musicT=setTimeout(musicTick,beat);
+}
+function startMusic(){ stopMusic(); musicStep=0; musicTick(); }
+function stopMusic(){ if(musicT){ clearTimeout(musicT); musicT=null; } }
+/* ---------- star ratings ---------- */
+const STAR_THRESH={easy:[15,30,45],rush:[20,40,60]};
+function starsFor(m,s){ const t=STAR_THRESH[m]||[15,30,45]; return s>=t[2]?3:s>=t[1]?2:s>=t[0]?1:0; }
+function renderTitleStars(){
+  for(const m of ["easy","rush"]){
+    let st=0; try{ st=+localStorage.getItem("schmack_stars_"+m)||0; }catch(e){}
+    const el=$("stars-"+m);
+    if(el) el.innerHTML=st?("⭐".repeat(st)+`<span class="starOff">${"⭐".repeat(3-st)}</span>`):"";
+  }
+}
 function setScore(n){
   const grew=n>score, fell=n<score;
   score=n; $("score").textContent=n;
@@ -497,7 +533,8 @@ function fitCanvas(){
   cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
   ctx.setTransform(DPR,0,0,DPR,0,0);
 }
-window.addEventListener("resize",fitCanvas);
+window.addEventListener("resize",()=>{ fitCanvas(); MOUTHS=mouthBoxes(); });
+let MOUTHS=[];
 
 let projs=[], splats=[], parts=[], sweepT=0, recoil=0, mopT=0;
 const GRAV=1500;
@@ -507,10 +544,10 @@ function sweepS(){ // -1..1 launcher aim
 }
 function launcherPos(){ return {x:W/2, y:H-10}; }
 function launchV(){
-  const mouths=mouthBoxes();
+  const mouths=MOUTHS.length?MOUTHS:mouthBoxes();
   const avgY=mouths.length?mouths.reduce((a,m)=>a+m.y,0)/mouths.length:H*0.15;
   const lp=launcherPos();
-  const vy=-Math.sqrt(2*GRAV*Math.max(lp.y-avgY+20,120));
+  const vy=-Math.sqrt(2*GRAV*Math.max((lp.y-26)-avgY+8,120));
   const tApex=-vy/GRAV;
   const maxVx=(W*0.5-30)/tApex;
   return {vy, vx:sweepS()*maxVx};
@@ -521,7 +558,7 @@ function mouthBoxes(){
     const el=$("seat-"+k.id).querySelector(".kidSvg");
     const r=el.getBoundingClientRect();
     return {id:k.id, x:r.left-dr.left+r.width/2, y:r.top-dr.top+r.height*0.46,
-      r:(mode==="rush"?25:42)};
+      r:(mode==="rush"?28:42)};
   });
 }
 
@@ -546,10 +583,10 @@ function tapFood(foodId){
 let lastT=0;
 function loopFrame(t){
   requestAnimationFrame(loopFrame);
-  const dt=Math.min((t-lastT)/1000,0.05); lastT=t;
+  const dt=Math.max(0,Math.min((t-lastT)/1000,0.05)); lastT=t;
   if(running){ sweepT+=dt; }
   recoil=Math.max(0,recoil-dt); mopT=Math.max(0,mopT-dt);
-  const mouths=running?mouthBoxes():[];
+  const mouths=running?MOUTHS:[];
   const dr=running?$("dining").getBoundingClientRect():null;
   const tb=running?$("tableBar").getBoundingClientRect():null;
   const tableY=(running&&tb&&dr)?(tb.top-dr.top+tb.height*0.4):H*0.3;
@@ -557,23 +594,27 @@ function loopFrame(t){
     if(running) walker.x+=walker.dir*walker.speed*dt;
     walker.el.style.transform=`translate(${walker.x-walker.w/2}px,${walker.y}px)`;
     if(walker.x<-walker.w-24||walker.x>W+walker.w+24){
+      const madeIt=!walker.hitAny, tag=walker.tag;
       walker.el.remove(); walker=null;
-      if(running) scheduleWalker();
+      if(running){
+        if(madeIt) spawnCookie(tag);
+        scheduleWalker();
+      }
     }
   }
   for(const p of projs){
     p.x+=p.vx*dt; p.y+=p.vy*dt; p.vy+=GRAV*dt; p.rot+=p.vrot*dt;
     // gentle assist toward the correct mouth
-    const want=mouths.find(m=>orders[m.id]===p.food);
+    const want=mouths.find(m=>orders[m.id]&&orders[m.id][0]===p.food);
     if(want){
-      const k=(mode==="rush"?1.2:8);
+      const k=(mode==="rush"?2.5:8);
       if(Math.abs(want.x-p.x)<90&&p.y>want.y-40) p.vx+=(want.x-p.x)*k*dt;
     }
     // a grandparent in the way blocks the shot: big penalty moment!
     if(walker&&!p.done&&!p.blocked){
       const wy=walker.y+walker.w*0.55;
       if(Math.abs(p.x-walker.x)<walker.w*0.5&&Math.abs(p.y-wy)<walker.w*0.62){
-        p.blocked=true; sfx.womp(); combo=0; updateCombo();
+        p.blocked=true; walker.hitAny=true; sfx.womp(); combo=0; updateCombo();
         setScore(Math.max(0,score-2));
         p.vy=Math.abs(p.vy)*0.25+90;
         p.vx=(p.x<walker.x?-1:1)*(Math.abs(p.vx)*0.3+60);
@@ -587,8 +628,8 @@ function loopFrame(t){
     // mouth hits
     for(const m of mouths){
       if(p.done) break;
-      if(Math.hypot(m.x-p.x,m.y-p.y)<m.r){
-        if(orders[m.id]===p.food){ p.done=true; feedSuccess(m,p,dr); }
+      if(Math.hypot(m.x-p.x,(m.y-p.y)*0.65)<m.r){
+        if(orders[m.id]&&orders[m.id][0]===p.food){ p.done=true; feedSuccess(m,p,dr); }
         else if(!p.spat[m.id]){
           p.spat[m.id]=true; sfx.blech();
           p.vy=-Math.abs(p.vy)*0.5-160; p.vx=(p.x<m.x?-1:1)*(Math.abs(p.vx)*0.4+90);
@@ -671,10 +712,8 @@ function draw(tableY){
 
 /* ---------- feed outcomes ---------- */
 function feedSuccess(m,p,dr){
-  const seat=$("seat-"+m.id);
-  delete orders[m.id];
-  seat.dataset.face="";
-  $("bub-"+m.id).classList.remove("show");
+  const seat=$("seat-"+m.id), list=orders[m.id];
+  list.shift();
   seat.classList.remove("munch"); void seat.offsetWidth; seat.classList.add("munch");
   sfx.munch(); sfx.yay();
   feeds++; combo++;
@@ -685,10 +724,21 @@ function feedSuccess(m,p,dr){
   setScore(score+pts);
   burst(m.x,m.y,["#FFC93C","#E0403E","#3E9B5C"],8);
   addDish();
+  if(list.length){ // double order: one more to go!
+    renderBubble(m.id);
+  }else{
+    if(list.isDouble){
+      setScore(score+3); sfx.combo();
+      if(dr) addPop(dr.left+m.x,dr.top+m.y-64,"DOUBLE! +3","good");
+    }
+    delete orders[m.id];
+    seat.dataset.face="";
+    $("bub-"+m.id).classList.remove("show");
+    const kid=KIDS.find(k=>k.id===m.id);
+    const hunger= mode==="rush" ? 500+Math.random()*700 : Math.max(1200,(2200-level()*250))*(0.7+Math.random()*0.6);
+    timers.push(setTimeout(()=>placeOrder(kid.id),hunger));
+  }
   if(mode==="easy"&&feeds%10===0){ showBanner("DINNER RUSH! Faster! 🍽️"); sfx.level(); }
-  const kid=KIDS.find(k=>k.id===m.id);
-  const hunger= mode==="rush" ? 500+Math.random()*700 : Math.max(1200,(2200-level()*250))*(0.7+Math.random()*0.6);
-  timers.push(setTimeout(()=>placeOrder(kid.id),hunger));
 }
 function doSplat(p,dr){
   sfx.splat(); combo=0; updateCombo();
@@ -788,6 +838,31 @@ function spawnWalker(){
     speed: 95+Math.random()*50};
 }
 function clearWalker(){ if(walker){ walker.el.remove(); walker=null; } }
+/* dodge the grandparents for a whole crossing and they leave a cookie */
+function spawnCookie(tag){
+  const el=document.createElement("div"); el.className="cookie";
+  el.innerHTML=`<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="25" cy="25" r="21" fill="#C98A3B" stroke="#8A5A2B" stroke-width="2.5"/>
+    <circle cx="17" cy="19" r="3" fill="#5C3A21"/><circle cx="31" cy="15" r="3" fill="#5C3A21"/>
+    <circle cx="35" cy="29" r="3" fill="#5C3A21"/><circle cx="21" cy="33" r="3" fill="#5C3A21"/>
+    <circle cx="28" cy="24" r="2.2" fill="#5C3A21"/></svg>`;
+  const x=W*(0.2+Math.random()*0.6);
+  const tb=$("tableBar").getBoundingClientRect(), dr=$("dining").getBoundingClientRect();
+  const y=(tb.top-dr.top)+tb.height+14;
+  el.style.left=(x-24)+"px"; el.style.top=y+"px";
+  $("dining").appendChild(el);
+  addPop(dr.left+x,dr.top+y,"🍪 from "+tag.slice(0,-1)+"!","good");
+  el.addEventListener("pointerdown",()=>{
+    ac(); sfx.cookie();
+    const r=el.getBoundingClientRect();
+    addPop(r.left+r.width/2,r.top,"+3 🍪","good");
+    setScore(score+3);
+    confetti(r.left+r.width/2,r.top,8);
+    el.remove();
+  });
+  timers.push(setTimeout(()=>el.remove(),5000));
+}
+function clearCookies(){ document.querySelectorAll(".cookie").forEach(c=>c.remove()); }
 
 /* ---------- build scene ---------- */
 function buildScene(){
@@ -827,12 +902,16 @@ function buildScene(){
 function randFood(){ return FOODS[Math.floor(Math.random()*FOODS.length)].id; }
 function placeOrder(kidId){
   if(!running || orders[kidId]) return;
-  const f=randFood();
-  orders[kidId]=f;
-  const b=$("bub-"+kidId);
-  b.innerHTML=FOOD_SVGS[f];
-  b.classList.add("show");
+  const list=[randFood()];
+  if(mode==="rush"&&Math.random()<0.35){ list.push(randFood()); list.isDouble=true; }
+  orders[kidId]=list;
+  renderBubble(kidId);
   $("seat-"+kidId).dataset.face="open";
+}
+function renderBubble(kidId){
+  const list=orders[kidId], b=$("bub-"+kidId);
+  b.innerHTML=list.map((f,i)=>`<span class="ord${i>0?" next":""}">${FOOD_SVGS[f]}</span>`).join("");
+  b.classList.add("show");
 }
 function addPop(x,y,txt,cls){
   const p=document.createElement("div"); p.className="pop"+(cls?" "+cls:""); p.textContent=txt;
@@ -967,7 +1046,9 @@ function startGame(m){
   $("endScreen").classList.add("hidden");
   $("timerBox").classList.remove("hidden");
   fitCanvas();
-  clearWalker();
+  MOUTHS=mouthBoxes();
+  clearWalker(); clearCookies();
+  startMusic();
   showBanner(m==="rush"?"HARD MODE! 🔥":"EASY MODE! 🐣");
   KIDS.forEach((k,i)=>timers.push(setTimeout(()=>placeOrder(k.id),300+i*500)));
   scheduleWalker();
@@ -981,7 +1062,12 @@ function startGame(m){
   timers.push(setTimeout(tick,1000));
 }
 function endRush(){
-  running=false; clearTimers(); clearWalker(); sfx.over();
+  running=false; clearTimers(); clearWalker(); clearCookies(); stopMusic(); sfx.over();
+  const st=starsFor(mode,score);
+  $("starRow").innerHTML="⭐".repeat(st)+`<span class="starOff">${"⭐".repeat(3-st)}</span>`;
+  let bestStars=0; try{ bestStars=+localStorage.getItem("schmack_stars_"+mode)||0; }catch(e){}
+  if(st>bestStars){ try{ localStorage.setItem("schmack_stars_"+mode,st); }catch(e){} }
+  renderTitleStars();
   KIDS.forEach(k=>{ $("bub-"+k.id).classList.remove("show"); $("seat-"+k.id).dataset.face=""; });
   orders={};
   $("endScore").textContent=score;
@@ -999,7 +1085,8 @@ function endRush(){
   confetti(innerWidth/2,innerHeight/3,24);
 }
 function toMenu(){
-  running=false; clearTimers(); clearWalker(); dancing=false; washing=false;
+  running=false; clearTimers(); clearWalker(); clearCookies(); stopMusic();
+  dancing=false; washing=false;
   projs=[]; splats=[];
   $("dance").classList.add("hidden"); $("endScreen").classList.add("hidden");
   KIDS.forEach(k=>{ $("bub-"+k.id).classList.remove("show"); $("seat-"+k.id).dataset.face=""; });
@@ -1015,7 +1102,13 @@ $("btnRush").addEventListener("pointerdown",()=>{ ac(); startGame("rush"); });
 $("btnAgain").addEventListener("pointerdown",()=>{ ac(); startGame(mode||"easy"); });
 $("btnMenu").addEventListener("pointerdown",toMenu);
 $("homeBtn").addEventListener("pointerdown",toMenu);
-$("sndBtn").addEventListener("pointerdown",()=>{ soundOn=!soundOn; $("sndBtn").textContent=soundOn?"🔊":"🔇"; ac(); });
+$("sndBtn").addEventListener("pointerdown",()=>{
+  soundOn=!soundOn; $("sndBtn").textContent=soundOn?"🔊":"🔇"; ac();
+  try{ localStorage.setItem("arcade_sound",soundOn?"1":"0"); }catch(e){}
+});
+try{ soundOn=(localStorage.getItem("arcade_sound")||"1")!=="0"; }catch(e){}
+$("sndBtn").textContent=soundOn?"🔊":"🔇";
+renderTitleStars();
 document.addEventListener("gesturestart",e=>e.preventDefault());
 if(/michaelweintraubmd|localhost|127\.0\.0\.1|github\.io/.test(location.hostname))
   $("arcadeLink").classList.remove("hidden");
