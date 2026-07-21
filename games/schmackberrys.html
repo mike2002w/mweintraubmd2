@@ -174,8 +174,10 @@
   .menuBtn.alt{background:var(--teal);box-shadow:0 5px 0 #005a54}
   .menuBtn.alt:active{box-shadow:0 1px 0 #005a54}
   .tinyNote{font-size:clamp(11px,2.6vw,14px);color:var(--choc-soft);margin-top:8px;max-width:48ch}
-  .arcadeLink{display:block;text-align:center;margin-top:10px;color:var(--berry);
-    font-size:clamp(13px,3.2vw,17px);text-decoration:none;font-weight:bold;font-family:var(--display)}
+  .arcadeLink{display:block;width:min(320px,84vw);margin:10px auto 0;background:var(--choc);color:#fff;
+    border-radius:18px;padding:10px;font-size:clamp(15px,4vw,20px);font-family:var(--display);
+    box-shadow:0 5px 0 #3A2415;text-decoration:none;text-align:center;transition:transform .08s}
+  .arcadeLink:active{transform:translateY(4px);box-shadow:0 1px 0 #3A2415}
   .arcadeLink.hidden{display:none}
 
   /* dance party */
