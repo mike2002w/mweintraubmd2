@@ -173,6 +173,14 @@
     box-shadow:0 5px 0 #8A5A2B;text-decoration:none;text-align:center;transition:transform .08s}
   .arcadeLink:active{transform:translateY(4px);box-shadow:0 1px 0 #8A5A2B}
   .arcadeLink.hidden{display:none}
+  #lbBox{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;margin:4px 0;width:min(340px,90vw)}
+  #lbName{font-family:var(--display);font-size:clamp(14px,3.6vw,18px);padding:8px 10px;
+    border:3px solid var(--wood-dark);border-radius:12px;width:min(150px,40vw);background:#fff;
+    color:var(--wood-dark);text-align:center}
+  #lbPost{font-family:var(--display);font-size:clamp(14px,3.6vw,18px);background:var(--zap);
+    border:3px solid var(--wood-dark);border-radius:12px;padding:8px 14px;box-shadow:0 3px 0 rgba(74,46,21,.3)}
+  #lbPost:disabled{opacity:.55}
+  #lbMsg{width:100%;font-size:clamp(12px,3vw,15px);color:#8A6B45;min-height:1.2em}
 
   #party{background:linear-gradient(180deg,#2A1A3E,#59284B)}
   #party .bigTitle{color:var(--zap);text-shadow:0 3px 0 #2A1A3E}
@@ -270,6 +278,11 @@
   <div class="bigTitle" style="font-size:clamp(40px,12vw,72px)">⭐ <span id="endScore">0</span></div>
   <div class="subTitle" id="bestLine"></div>
   <div id="endBar"></div>
+  <div id="lbBox">
+    <input id="lbName" maxlength="12" placeholder="Your name">
+    <button id="lbPost">🏆 Post score</button>
+    <div id="lbMsg"></div>
+  </div>
   <button class="menuBtn alt" id="btnAgain">⏰ Play Again</button>
   <button class="menuBtn" id="btnMenu">🐻 Back to the Tavern</button>
 </div>
@@ -1132,6 +1145,8 @@ function endRush(){
   if(score>best){ best=score; try{localStorage.setItem(bestKey,best)}catch(e){}
     $("bestLine").textContent="🏆 NEW RECORD!"; }
   else $("bestLine").textContent="Best so far: ⭐ "+best;
+  $("lbPost").disabled=false; $("lbMsg").textContent="";
+  try{ $("lbName").value=localStorage.getItem("arcade_name")||""; }catch(e){}
   $("endScreen").classList.remove("hidden");
   bits(innerWidth/2,innerHeight/3,["#FFD54A","#E0403E","#3E9B5C","#E86A9E"],22);
 }
@@ -1141,8 +1156,36 @@ function toMenu(){
   $("titleScreen").classList.remove("hidden");
 }
 
+/* ---------- family leaderboard ---------- */
+const LB_URL="https://jsonblob.com/api/jsonBlob/019f870b-d765-7dbb-9c45-b8ee256e007f";
+const LB_GAME="bear";
+async function postScore(){
+  const btn=$("lbPost"), msg=$("lbMsg");
+  const name=($("lbName").value||"").replace(/[<>&"]/g,"").trim().slice(0,12);
+  if(!name){ msg.textContent="Type your name first!"; return; }
+  if(score<=0){ msg.textContent="Score some points first!"; return; }
+  btn.disabled=true; msg.textContent="Posting…";
+  try{ localStorage.setItem("arcade_name",name); }catch(e){}
+  try{
+    const r=await fetch(LB_URL,{cache:"no-store"});
+    const data=await r.json();
+    const list=(data&&Array.isArray(data.scores))?data.scores:[];
+    list.push({n:name,g:LB_GAME,m:mode,s:score,t:Date.now()});
+    const byG={};
+    for(const e of list){ (byG[e.g]=byG[e.g]||[]).push(e); }
+    const trimmed=[].concat(...Object.values(byG).map(a=>a.sort((x,y)=>(y.s||0)-(x.s||0)).slice(0,50)));
+    await fetch(LB_URL,{method:"PUT",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({scores:trimmed})});
+    msg.textContent="Posted! Check the Arcade page 🏆";
+  }catch(e){
+    msg.textContent="Couldn't reach the leaderboard. Try again on the family website!";
+    btn.disabled=false;
+  }
+}
 /* ---------- wire ---------- */
 $("challahArt").innerHTML=challahSVG();
+$("lbPost").addEventListener("pointerdown",postScore);
+try{ $("lbName").value=localStorage.getItem("arcade_name")||""; }catch(e){}
 $("barL").innerHTML=barBear("#A9784C",false);
 $("barR").innerHTML=barBear("#6E4526",true);
 $("docSvgs").innerHTML=DOCS.map(doc).join("");

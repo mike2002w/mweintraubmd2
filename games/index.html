@@ -52,6 +52,19 @@
   .bearcard .playBtn{background:var(--wood);box-shadow:0 4px 0 var(--wood-dark)}
   footer{margin-top:18px;font-size:clamp(11px,2.8vw,14px);color:#8A6B45}
   .bestLine{font-weight:bold;color:#54341F;min-height:1.1em;font-size:clamp(11px,2.9vw,15px)}
+  #lbWrap{margin-top:20px;width:100%;max-width:980px}
+  #lbWrap.hiddenLB{display:none}
+  #lbWrap h3{font-size:clamp(20px,5vw,30px);color:#54341F;margin-bottom:8px}
+  #lbBoards{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+  .lbBoard{flex:1 1 220px;max-width:300px;background:var(--cream);border:4px solid var(--choc);
+    border-radius:18px;padding:10px 12px;box-shadow:0 5px 0 rgba(84,52,31,.3)}
+  .lbBoard h4{font-size:clamp(14px,3.4vw,18px);margin-bottom:6px}
+  .lbBoard ol{list-style:none;text-align:left}
+  .lbBoard li{display:flex;justify-content:space-between;gap:6px;
+    font-family:-apple-system,"SF Pro Rounded",Segoe UI,Roboto,sans-serif;font-weight:700;
+    font-size:clamp(12px,3vw,15px);padding:2px 0;border-bottom:1px dashed #D9C9B5}
+  .lbBoard li:last-child{border-bottom:none}
+  .lbBoard .mode{color:#8A6B45;font-weight:600;font-size:.85em}
 </style>
 </head>
 <body>
@@ -82,6 +95,10 @@
       <span class="playBtn">PLAY ▶</span>
     </a>
   </div>
+  <div id="lbWrap" class="hiddenLB">
+    <h3>🏆 Family Leaderboard</h3>
+    <div id="lbBoards"></div>
+  </div>
   <footer>Chefs Erica &amp; Alex · Cleanup by Allie &amp; Michael · Challah by Robe · Cheers by Gaga</footer>
   <script>
     function g(k){ try{ return +localStorage.getItem(k)||0; }catch(e){ return 0; } }
@@ -95,6 +112,30 @@
     const de=g("dance_best_easy"), dh=g("dance_best_hard");
     if(de||dh) document.getElementById("bestD").textContent=
       "Best: "+de+" Easy"+stars("dance_stars_easy")+" · "+dh+" Hard"+stars("dance_stars_hard");
+    // family leaderboard
+    const LB_URL="https://jsonblob.com/api/jsonBlob/019f870b-d765-7dbb-9c45-b8ee256e007f";
+    const LB_META={
+      schmack:{title:"🍓 Schmackberry's",modes:{easy:"Easy",rush:"Hard"}},
+      bear:{title:"🐻 Bear Tavern",modes:{forever:"Blaster",aster:"Asteroids"}},
+      dance:{title:"💃 Dance Studio",modes:{easy:"Easy",hard:"Hard"}}
+    };
+    fetch(LB_URL,{cache:"no-store"}).then(r=>r.json()).then(d=>{
+      const list=(d&&Array.isArray(d.scores))?d.scores:[];
+      if(!list.length) return;
+      const boards=document.getElementById("lbBoards");
+      let any=false;
+      for(const gm of ["schmack","bear","dance"]){
+        const rows=list.filter(e=>e.g===gm).sort((a,b)=>(b.s||0)-(a.s||0)).slice(0,5);
+        if(!rows.length) continue;
+        any=true;
+        boards.insertAdjacentHTML("beforeend",
+          `<div class="lbBoard"><h4>${LB_META[gm].title}</h4><ol>`+
+          rows.map((e,i)=>`<li><span>${i+1}. ${String(e.n||"?").replace(/[<>&]/g,"").slice(0,12)}</span>`+
+            `<span><b>${+e.s||0}</b> <span class="mode">${LB_META[gm].modes[e.m]||""}</span></span></li>`).join("")+
+          `</ol></div>`);
+      }
+      if(any) document.getElementById("lbWrap").classList.remove("hiddenLB");
+    }).catch(()=>{});
   </script>
 </body>
 </html>
