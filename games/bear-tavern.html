@@ -181,6 +181,14 @@
     border:3px solid var(--wood-dark);border-radius:12px;padding:8px 14px;box-shadow:0 3px 0 rgba(74,46,21,.3)}
   #lbPost:disabled{opacity:.55}
   #lbMsg{width:100%;font-size:clamp(12px,3vw,15px);color:#8A6B45;min-height:1.2em}
+  #titleLb{background:var(--parch);border:3px solid var(--wood-dark);border-radius:14px;
+    padding:6px 14px;margin-top:10px;width:min(300px,84vw)}
+  #titleLb.hiddenLB{display:none}
+  #titleLb b{font-size:clamp(13px,3.2vw,16px)}
+  #titleLb ol{list-style:none;text-align:left;margin-top:2px}
+  #titleLb li{display:flex;justify-content:space-between;gap:6px;font-family:var(--ui);
+    font-weight:700;font-size:clamp(12px,3vw,15px)}
+  #titleLb .mode{color:#8A6B45;font-weight:600;font-size:.85em}
 
   #party{background:linear-gradient(180deg,#2A1A3E,#59284B)}
   #party .bigTitle{color:var(--zap);text-shadow:0 3px 0 #2A1A3E}
@@ -263,6 +271,7 @@
     The last 10 seconds are Dr. Erica's ER RUSH: all points ×2! In Real Asteroids, hold to fly the
     rocket (or arrows + space); in Fixed Blaster, tap or press space to fire the sweeping cannon.
     Clear the screen, then serve the Shir Ami challah!</div>
+  <div id="titleLb" class="hiddenLB"><b>🏆 Top 5</b><ol id="titleLbList"></ol></div>
   <a class="arcadeLink hidden" id="arcadeLink" href="index.html">🕹️ Back to the Arcade</a>
 </div>
 
@@ -1154,6 +1163,7 @@ function toMenu(){
   running=false; phase="idle"; clearTimers(); stopMusic(); partying=false;
   $("party").classList.add("hidden"); $("endScreen").classList.add("hidden");
   $("titleScreen").classList.remove("hidden");
+  loadTitleLb();
 }
 
 /* ---------- family leaderboard ---------- */
@@ -1186,6 +1196,21 @@ async function postScore(){
 $("challahArt").innerHTML=challahSVG();
 $("lbPost").addEventListener("pointerdown",postScore);
 try{ $("lbName").value=localStorage.getItem("arcade_name")||""; }catch(e){}
+const LB_MODES={forever:"Blaster",aster:"Asteroids"};
+async function loadTitleLb(){
+  try{
+    const r=await fetch(LB_URL,{cache:"no-store"});
+    const d=await r.json();
+    const rows=((d&&d.scores)||[]).filter(e=>e.g===LB_GAME)
+      .sort((a,b)=>(b.s||0)-(a.s||0)).slice(0,5);
+    if(!rows.length) return;
+    $("titleLbList").innerHTML=rows.map((e,i)=>
+      `<li><span>${i+1}. ${String(e.n||"?").replace(/[<>&]/g,"").slice(0,12)}</span>`+
+      `<span><b>${+e.s||0}</b> <span class="mode">${LB_MODES[e.m]||""}</span></span></li>`).join("");
+    $("titleLb").classList.remove("hiddenLB");
+  }catch(e){}
+}
+loadTitleLb();
 $("barL").innerHTML=barBear("#A9784C",false);
 $("barR").innerHTML=barBear("#6E4526",true);
 $("docSvgs").innerHTML=DOCS.map(doc).join("");

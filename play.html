@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Weintraub Game Room</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="The Weintraub Game Room 🎮">
+<meta property="og:description" content="Two worlds of games made with love: Sienna &amp; Phoebe's Rhode Island Adventure and the Cousins' Arcade.">
+<meta property="og:image" content="https://michaelweintraubmd.com/games/arcade-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://michaelweintraubmd.com/play.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root{
+    --berry:#E0403E; --berry-dark:#B02B2E; --cream:#FFF8F0; --choc:#54341F;
+    --sky:#BEE8F5; --pink:#FFE9EC; --navy:#1F3A5F;
+    --display:"Chalkboard SE","Comic Sans MS","Marker Felt",ui-rounded,-apple-system,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{min-height:100%}
+  body{font-family:var(--display);color:var(--choc);text-align:center;
+    background:linear-gradient(105deg,var(--sky) 0 50%,var(--pink) 50% 100%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:22px 12px;gap:6px}
+  .marquee{display:inline-block;background:var(--cream);border:5px solid var(--choc);
+    border-radius:22px;padding:8px 26px 12px;box-shadow:0 6px 0 rgba(84,52,31,.35)}
+  h1{font-size:clamp(26px,7vw,46px);line-height:1.1;color:var(--berry);text-shadow:0 2px 0 #fff}
+  .marquee small{display:block;font-size:clamp(13px,3.2vw,17px);color:#8A6B45}
+  #cards{display:flex;flex-wrap:wrap;gap:clamp(12px,3vw,28px);justify-content:center;
+    align-items:stretch;margin-top:18px;width:100%;max-width:900px}
+  .worldCard{flex:1 1 300px;max-width:420px;display:flex;flex-direction:column;gap:8px;
+    border-radius:22px;padding:14px 14px 16px;text-decoration:none;color:inherit;
+    border:4px solid var(--choc);transition:transform .12s;background:var(--cream)}
+  .worldCard:hover,.worldCard:focus-visible{transform:translateY(-4px) scale(1.02)}
+  .worldCard:active{transform:translateY(2px)}
+  .worldCard.ri{box-shadow:0 6px 0 var(--navy)}
+  .worldCard.arcade{box-shadow:0 6px 0 var(--berry-dark)}
+  .worldCard img{width:100%;border-radius:14px;border:3px solid var(--choc);display:block;
+    aspect-ratio:1200/630;object-fit:cover;background:#fff}
+  .worldCard h2{font-size:clamp(18px,4.6vw,26px);line-height:1.15;text-wrap:balance}
+  .ri h2{color:var(--navy)}
+  .arcade h2{color:var(--berry)}
+  .worldCard p{font-size:clamp(12px,3vw,15px);color:#7A5233;line-height:1.35}
+  .playBtn{margin-top:auto;align-self:center;font-size:clamp(15px,4vw,21px);color:#fff;
+    border-radius:14px;padding:9px 30px}
+  .ri .playBtn{background:var(--navy);box-shadow:0 4px 0 #12233A}
+  .arcade .playBtn{background:var(--berry);box-shadow:0 4px 0 var(--berry-dark)}
+  footer{margin-top:18px;font-size:clamp(11px,2.8vw,14px);color:#8A6B45}
+</style>
+</head>
+<body>
+  <div class="marquee">
+    <h1>🎮 The Weintraub Game Room</h1>
+    <small>Games made with love, for the little people we love 💕</small>
+  </div>
+  <div id="cards">
+    <a class="worldCard ri" href="rhode-island-game.html">
+      <img src="rhode-island-game-preview.jpg" alt="Rhode Island Adventure preview">
+      <h2>🎆 Sienna &amp; Phoebe's Rhode Island Adventure</h2>
+      <p>Bubbles, fireworks, and the little red wagon. Three chapters of seaside summer fun,
+        including the legendary Grand Theft Wagon snack heist.</p>
+      <span class="playBtn">PLAY ▶</span>
+    </a>
+    <a class="worldCard arcade" href="games/index.html">
+      <img src="games/arcade-preview.png" alt="The Cousins' Arcade preview">
+      <h2>🕹️ The Cousins' Arcade</h2>
+      <p>Three games for Emma, Ava and Sienna: fling food at Schmackberry's, blast kidney
+        stones at Bear Tavern, and copy the dance at Dance Studio. Family leaderboard inside!</p>
+      <span class="playBtn">PLAY ▶</span>
+    </a>
+  </div>
+  <footer>Sienna &amp; Phoebe's Adventure · Emma, Ava &amp; Sienna's Arcade</footer>
+</body>
+</html>
