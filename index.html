@@ -797,6 +797,9 @@
             line-height: 1.8;
             color: #4a5568;
             margin-bottom: 20px;
+            /* Cap the reading measure at roughly 75 characters. At the full
+               1000px container this ran to ~111 characters per line. */
+            max-width: 680px;
         }
         
         /* Education Section - Grouped Cards */
@@ -1627,6 +1630,51 @@
         .post-date {
             font-size: 13px;
             color: #94a3b8;
+        }
+
+        /* Commentary card media. Photos and graphics vary wildly in native
+           aspect ratio, which made cards in the same row misalign and left
+           large voids in the shorter card. A fixed ratio box normalises them. */
+        .post-media {
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 4 / 3;
+            border: 1px solid #e6eaed;
+        }
+        .post-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            display: block;
+        }
+        /* Stat panel: used where a post is numbers-led and a screenshot would
+           be unreadable at card width. */
+        .post-stats {
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #042F33;
+            padding: 24px 22px;
+        }
+        .post-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px 16px;
+            width: 100%;
+        }
+        .post-stat-value {
+            font-size: 27px;
+            font-weight: 800;
+            color: #2DD4BF;
+            line-height: 1;
+        }
+        .post-stat-label {
+            font-size: 12px;
+            color: #cfe8e3;
+            margin-top: 4px;
+            line-height: 1.35;
         }
         
         .post-title {
@@ -2611,6 +2659,17 @@
         [data-theme="dark"] .post-engagement {
             color: #8a9898;
         }
+        /* Platform label + icon were #042F33 with fill:currentColor, so the
+           X/Twitter card rendered dark-on-dark and all but vanished. */
+        [data-theme="dark"] .post-platform {
+            color: #e2f0f1;
+        }
+        [data-theme="dark"] .post-media {
+            border-color: #2a3d43;
+        }
+        [data-theme="dark"] .post-stats {
+            background: #0b1c1f;
+        }
         /* Logo slots get a slightly lighter background in dark mode */
         [data-theme="dark"] .card-heading-row .logo-inline {
             background: #1a2b30;
@@ -3381,12 +3440,12 @@
                     <p class="post-excerpt">
                         A JAMA secret-shopper investigation of direct-to-consumer GLP-1 sellers, and the findings are as concerning as they are unsurprising. Most sellers dispense compounded medications with no regulation or guaranteed safety, many bundle in unproven supplements, and only a minority require any contact with a clinician.
                     </p>
-                    <div class="post-image" style="margin: 15px 0; border-radius: 8px; overflow: hidden; background: #042F33; padding: 20px 22px;">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                            <div><div style="font-size: 27px; font-weight: 800; color: #2DD4BF; line-height: 1;">90%</div><div style="font-size: 12px; color: #cfe8e3; margin-top: 4px;">compounded meds (unregulated)</div></div>
-                            <div><div style="font-size: 27px; font-weight: 800; color: #2DD4BF; line-height: 1;">60%</div><div style="font-size: 12px; color: #cfe8e3; margin-top: 4px;">added supplements, no evidence</div></div>
-                            <div><div style="font-size: 27px; font-weight: 800; color: #2DD4BF; line-height: 1;">27%</div><div style="font-size: 12px; color: #cfe8e3; margin-top: 4px;">required a clinician video visit</div></div>
-                            <div><div style="font-size: 27px; font-weight: 800; color: #2DD4BF; line-height: 1;">11%</div><div style="font-size: 12px; color: #cfe8e3; margin-top: 4px;">sublingual, zero evidence</div></div>
+                    <div class="post-stats">
+                        <div class="post-stats-grid">
+                            <div><div class="post-stat-value">90%</div><div class="post-stat-label">compounded meds (unregulated)</div></div>
+                            <div><div class="post-stat-value">60%</div><div class="post-stat-label">added supplements, no evidence</div></div>
+                            <div><div class="post-stat-value">27%</div><div class="post-stat-label">required a clinician video visit</div></div>
+                            <div><div class="post-stat-value">11%</div><div class="post-stat-label">sublingual, zero evidence</div></div>
                         </div>
                     </div>
                     <div class="post-meta">
@@ -3415,8 +3474,13 @@
                     <p class="post-excerpt">
                         A meta-analysis of 13 randomized trials (97,428 participants) finds GLP-1 receptor agonists cut major cardiovascular events by 16%, the composite kidney endpoint by 21%, and kidney-failure risk by 28% in type 2 diabetes with chronic kidney disease. Benefits held regardless of background SGLT2-inhibitor use, and semaglutide ranked highest.
                     </p>
-                    <div class="post-image" style="margin: 15px 0; border-radius: 8px; overflow: hidden; border: 1px solid #e6eaed;">
-                        <img src="images/post-sema-ckd.jpg" alt="Journal article: efficacy and safety of GLP-1 receptor agonists on combined cardiovascular and renal outcomes in chronic kidney disease" style="width: 100%; height: auto; display: block;" loading="lazy">
+                    <div class="post-stats">
+                        <div class="post-stats-grid">
+                            <div><div class="post-stat-value">&#x2193;16%</div><div class="post-stat-label">major cardiovascular events</div></div>
+                            <div><div class="post-stat-value">&#x2193;21%</div><div class="post-stat-label">composite kidney endpoint</div></div>
+                            <div><div class="post-stat-value">&#x2193;28%</div><div class="post-stat-label">kidney failure risk</div></div>
+                            <div><div class="post-stat-value">&#x2193;26%</div><div class="post-stat-label">urine albumin-to-creatinine</div></div>
+                        </div>
                     </div>
                     <div class="post-meta">
                         <span class="post-engagement">Cardiorenal meta-analysis</span>
@@ -3444,8 +3508,8 @@
                     <p class="post-excerpt">
                         A BMJ network meta-analysis of 262 randomized trials and 99,791 participants ranks 19 obesity drugs by mean weight change vs. lifestyle at one year: tirzepatide −14.9%, CagriSema −14.8%, oral semaglutide −10.9%, orforglipron −9.9%, subcutaneous semaglutide −9.8%. Greater weight loss tracked with more GI adverse events, and no meaningful quality-of-life benefit emerged.
                     </p>
-                    <div class="post-image" style="margin: 15px 0; border-radius: 8px; overflow: hidden;">
-                        <img src="images/post-bmj-headtohead.jpg" alt="The BMJ visual abstract comparing weight-loss effects of 19 obesity drugs across 262 randomized trials" style="width: 100%; height: auto; display: block;" loading="lazy">
+                    <div class="post-media">
+                        <img src="images/post-bmj-headtohead.jpg" alt="The BMJ visual abstract comparing weight-loss effects of 19 obesity drugs across 262 randomized trials" loading="lazy">
                     </div>
                     <div class="post-meta">
                         <span class="post-engagement">19K+ views · The BMJ</span>
@@ -3473,8 +3537,8 @@
                     <p class="post-excerpt">
                         As GLP-1 and dual/triple agonists begin to reverse fatty liver disease, obesity specialists need a new lexicon: MASLD, noninvasive tests (NIT), enhanced liver fibrosis (ELF), FibroScan (VCTE), MR elastography, cT1, and the NAFLD activity score. The specialties are converging, and the vocabulary is coming with them.
                     </p>
-                    <div class="post-image" style="margin: 15px 0; border-radius: 8px; overflow: hidden;">
-                        <img src="images/post-hepatology-terms.jpg" alt="Glossary graphic of hepatology terms obesity clinicians should know: MASLD, NIT, ELF, VCTE, MRE, cT1, NAS" style="width: 100%; height: auto; display: block;" loading="lazy">
+                    <div class="post-media">
+                        <img src="images/post-hepatology-terms.jpg" alt="Glossary graphic of hepatology terms obesity clinicians should know: MASLD, NIT, ELF, VCTE, MRE, cT1, NAS" loading="lazy">
                     </div>
                     <div class="post-meta">
                         <span class="post-engagement">Clinical commentary</span>
