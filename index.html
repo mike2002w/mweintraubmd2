@@ -1005,6 +1005,46 @@
             margin-top: 30px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
         }
+
+        /* Timeline and certifications sit side by side on desktop so the
+           section uses its full width instead of stopping halfway across.
+           Collapses to the original single-column stack below 900px. */
+        .education-layout {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 44px;
+            align-items: start;
+        }
+        .education-layout .education-timeline {
+            max-width: none;
+            margin-top: 30px;
+        }
+        .education-layout .certification-section-modern {
+            margin-top: 30px;
+        }
+        /* Certifications stack in the narrower right column; 3-across is
+           cramped at that width. */
+        .education-layout .certification-grid {
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+        .education-layout .certification-card {
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 18px;
+        }
+        .education-layout .certification-card .certification-dot {
+            margin: 0;
+            flex-shrink: 0;
+        }
+        @media (max-width: 900px) {
+            .education-layout {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
         
         .certification-title-modern {
             font-size: 18px;
@@ -3199,6 +3239,7 @@
         <div class="container">
             <h2 class="fade-in-element">Education and Training</h2>
             
+            <div class="education-layout">
             <ol class="education-timeline fade-in-element delay-1">
                 <li class="education-timeline-item">
                     <span class="education-timeline-marker" aria-hidden="true"></span>
@@ -3241,6 +3282,8 @@
                     </div>
                 </div>
             </div>
+            </div>
+
         </div>
     </section>
     
