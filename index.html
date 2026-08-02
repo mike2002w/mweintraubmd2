@@ -1784,6 +1784,19 @@
             opacity: 0.85;
             transition: all 0.3s ease;
         }
+
+        /* Uniform logo sizing across the wall. Previously each logo carried
+           its own inline max-width/max-height, so they rendered at wildly
+           different visual weights. */
+        .press-logo img {
+            max-height: 38px;
+            max-width: 116px;
+            width: auto;
+            height: auto;
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
         
         .press-logo:hover {
             border-color: #0E8377;
@@ -3299,21 +3312,30 @@
               To add or swap an outlet, drop its SVG into images/logos/ and update the src below.
               See images/logos/README.md for details.
             -->
-            <div class="press-headlines fade-in-element delay-1">
-                <a href="https://www.cnbc.com/2025/09/17/eli-lilly-obesity-pill-beats-novo-nordisk-drug-in-diabetes-trial-.html" target="_blank" rel="noopener" class="press-headline">
-                    <img src="images/logos/cnbc.svg" alt="CNBC" loading="lazy" class="press-headline-logo">
-                    <span class="press-headline-title">Eli Lilly pill outperforms Novo Nordisk&#x2019;s oral drug in head-to-head diabetes trial</span>
-                    <span class="press-headline-date">September 2025</span>
+            <div class="press-grid fade-in-element delay-1">
+                <a href="press.html" class="press-logo" aria-label="Featured on NBC News, see all press">
+                    <img src="images/logos/nbc.svg" alt="NBC News" loading="lazy">
                 </a>
-                <a href="https://www.nbcnews.com/health/health-news/fda-warns-unapproved-thyroid-pills-says-ll-ensure-access-rcna224972" target="_blank" rel="noopener" class="press-headline">
-                    <img src="images/logos/nbc.svg" alt="NBC News" loading="lazy" class="press-headline-logo">
-                    <span class="press-headline-title">FDA warns about unapproved thyroid pills, says it&#x2019;ll ensure access</span>
-                    <span class="press-headline-date">August 2025</span>
+                <a href="press.html" class="press-logo" aria-label="Featured in TIME, see all press">
+                    <img src="images/logos/time.svg" alt="TIME" loading="lazy">
                 </a>
-                <a href="https://time.com/7017001/tirzepatide-zepbound-weight-loss-drug-diabetes/" target="_blank" rel="noopener" class="press-headline">
-                    <img src="images/logos/time.svg" alt="TIME" loading="lazy" class="press-headline-logo">
-                    <span class="press-headline-title">The weight loss drug that can prevent diabetes</span>
-                    <span class="press-headline-date">September 2024</span>
+                <a href="press.html" class="press-logo" aria-label="Featured on Reuters, see all press">
+                    <img src="images/logos/reuters.svg" alt="Reuters" loading="lazy">
+                </a>
+                <a href="press.html" class="press-logo" aria-label="Featured on CNBC, see all press">
+                    <img src="images/logos/cnbc.svg" alt="CNBC" loading="lazy">
+                </a>
+                <a href="press.html" class="press-logo" aria-label="Featured on CBS News, see all press">
+                    <img src="images/logos/cbs.svg" alt="CBS News" loading="lazy">
+                </a>
+                <a href="press.html" class="press-logo" aria-label="Featured in STAT News, see all press">
+                    <img src="images/logos/stat.svg" alt="STAT News" loading="lazy">
+                </a>
+                <a href="press.html" class="press-logo" aria-label="Featured in Forbes, see all press">
+                    <img src="images/logos/forbes.svg" alt="Forbes" loading="lazy">
+                </a>
+                <a href="press.html" class="press-logo" aria-label="Featured on Medscape, see all press">
+                    <img src="images/logos/medscape.svg" alt="Medscape" loading="lazy">
                 </a>
             </div>
             
