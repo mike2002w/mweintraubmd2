@@ -222,7 +222,7 @@
         /* Sticky Navigation */
         .nav-container {
             position: fixed;
-            top: -100px;
+            top: 0;
             left: 0;
             right: 0;
             background: rgba(255, 255, 255, 0.98);
@@ -442,7 +442,7 @@
         
         .social-icons-top {
             position: fixed;
-            top: 20px;
+            top: 80px;
             right: 20px;
             display: flex;
             gap: 12px;
@@ -492,7 +492,7 @@
         }
         
         .section {
-            padding: 96px 20px;
+            padding: 72px 20px;
             transition: background-color 0.3s ease;
             animation: fadeInUp 0.8s ease-out;
             position: relative;
@@ -596,7 +596,58 @@
             color: #4a5568;
             line-height: 1.8;
         }
-        
+
+        /* Hero calls-to-action: gives the landing view somewhere to go */
+        .hero-cta-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 32px;
+        }
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        .hero-cta--primary {
+            background: #042F33;
+            color: #ffffff;
+            border-color: #042F33;
+        }
+        .hero-cta--primary:hover,
+        .hero-cta--primary:focus-visible {
+            background: #0E8377;
+            border-color: #0E8377;
+            transform: translateY(-2px);
+        }
+        .hero-cta--secondary {
+            background: transparent;
+            color: #042F33;
+            border-color: #c3d3cf;
+        }
+        .hero-cta--secondary:hover,
+        .hero-cta--secondary:focus-visible {
+            border-color: #0E8377;
+            color: #0E8377;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 600px) {
+            .hero-cta-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .hero-cta {
+                justify-content: center;
+            }
+        }
+
         .hero-image-container {
             position: relative;
         }
@@ -1745,19 +1796,23 @@
             justify-content: center;
         }
         .trust-logo {
-            font-size: 16px;
-            font-weight: 700;
-            color: #4a5568;
+            display: inline-flex;
+            align-items: center;
             text-decoration: none;
-            transition: color 0.2s ease, opacity 0.2s ease;
-            letter-spacing: 0.04em;
-            opacity: 0.65;
-            font-family: 'Inter', sans-serif;
+            transition: opacity 0.2s ease, filter 0.2s ease;
+            opacity: 0.72;
+            filter: grayscale(100%);
+        }
+        .trust-logo img {
+            height: 28px;
+            width: auto;
+            max-width: 120px;
+            display: block;
         }
         .trust-logo:hover,
         .trust-logo:focus-visible {
-            color: #042F33;
             opacity: 1;
+            filter: grayscale(0%);
         }
         @media (max-width: 768px) {
             .trust-strip {
@@ -1769,11 +1824,64 @@
             .trust-strip-logos {
                 gap: 20px;
             }
-            .trust-logo {
-                font-size: 13px;
+            .trust-logo img {
+                height: 20px;
+                max-width: 88px;
             }
         }
         
+        /* In the News: actual coverage, not a second logo wall */
+        .press-headlines {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 32px;
+        }
+        .press-headline {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #ffffff;
+            border: 1px solid #e6eaed;
+            border-radius: 12px;
+            padding: 22px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .press-headline:hover,
+        .press-headline:focus-visible {
+            border-color: #14B8A6;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        .press-headline-logo {
+            height: 26px;
+            width: auto;
+            max-width: 110px;
+            filter: grayscale(100%);
+            opacity: 0.85;
+        }
+        .press-headline-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #042F33;
+            line-height: 1.4;
+        }
+        .press-headline-date {
+            font-size: 12.5px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #0E8377;
+            margin-top: auto;
+        }
+        @media (max-width: 900px) {
+            .press-headlines {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+        }
+
         .press-cta {
             text-align: center;
             margin-top: 40px;
@@ -2508,6 +2616,54 @@
             background: #1a2b30;
             border-color: #2a3d43;
         }
+        /* Hero CTAs */
+        [data-theme="dark"] .hero-cta--primary {
+            background: #14B8A6;
+            border-color: #14B8A6;
+            color: #042F33;
+        }
+        [data-theme="dark"] .hero-cta--primary:hover,
+        [data-theme="dark"] .hero-cta--primary:focus-visible {
+            background: #2DD4BF;
+            border-color: #2DD4BF;
+        }
+        [data-theme="dark"] .hero-cta--secondary {
+            color: #e2f0f1;
+            border-color: #2a3d43;
+        }
+        [data-theme="dark"] .hero-cta--secondary:hover,
+        [data-theme="dark"] .hero-cta--secondary:focus-visible {
+            color: #2DD4BF;
+            border-color: #2DD4BF;
+        }
+        /* Trust strip logos need lightening on dark */
+        [data-theme="dark"] .trust-logo {
+            filter: grayscale(100%) brightness(0) invert(1);
+            opacity: 0.5;
+        }
+        [data-theme="dark"] .trust-logo:hover,
+        [data-theme="dark"] .trust-logo:focus-visible {
+            filter: grayscale(100%) brightness(0) invert(1);
+            opacity: 1;
+        }
+        /* In the News headline cards */
+        [data-theme="dark"] .press-headline {
+            background: #132228;
+            border-color: #2a3d43;
+        }
+        [data-theme="dark"] .press-headline:hover {
+            border-color: #14B8A6;
+        }
+        [data-theme="dark"] .press-headline-title {
+            color: #e2f0f1;
+        }
+        [data-theme="dark"] .press-headline-date {
+            color: #2DD4BF;
+        }
+        [data-theme="dark"] .press-headline-logo {
+            filter: grayscale(100%) brightness(0) invert(1);
+            opacity: 0.6;
+        }
         /* In the News press logos */
         [data-theme="dark"] .press-logo {
             background: #0f1e21;
@@ -2801,6 +2957,16 @@
                 <div class="hero-lead" style="margin-top: 40px; color: #4a5568; font-size: 17px; line-height: 1.8;">
                     Triple board-certified physician advancing the field of obesity medicine through clinical research, evidence-based guideline development, and medical education.
                 </div>
+
+                <div class="hero-cta-row">
+                    <a href="publications.html" class="hero-cta hero-cta--primary">
+                        View publications
+                        <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                        </svg>
+                    </a>
+                    <a href="press.html" class="hero-cta hero-cta--secondary">Media &amp; press</a>
+                </div>
             </div>
             
             <div class="hero-image-container animate-slide-in-right">
@@ -2820,12 +2986,13 @@
         <div class="trust-strip-container">
             <span class="trust-strip-label">As featured in</span>
             <div class="trust-strip-logos">
-                <a href="press.html" class="trust-logo">NBC News</a>
-                <a href="press.html" class="trust-logo">TIME</a>
-                <a href="press.html" class="trust-logo">CBS News</a>
-                <a href="press.html" class="trust-logo">CNBC</a>
-                <a href="press.html" class="trust-logo">Medscape</a>
-                <a href="press.html" class="trust-logo">Reuters</a>
+                <a href="press.html" class="trust-logo" aria-label="Featured on NBC News"><img src="images/logos/nbc.svg" alt="NBC News" loading="lazy"></a>
+                <a href="press.html" class="trust-logo" aria-label="Featured in TIME"><img src="images/logos/time.svg" alt="TIME" loading="lazy"></a>
+                <a href="press.html" class="trust-logo" aria-label="Featured on Reuters"><img src="images/logos/reuters.svg" alt="Reuters" loading="lazy"></a>
+                <a href="press.html" class="trust-logo" aria-label="Featured on CNBC"><img src="images/logos/cnbc.svg" alt="CNBC" loading="lazy"></a>
+                <a href="press.html" class="trust-logo" aria-label="Featured on CBS News"><img src="images/logos/cbs.svg" alt="CBS News" loading="lazy"></a>
+                <a href="press.html" class="trust-logo" aria-label="Featured in STAT News"><img src="images/logos/stat.svg" alt="STAT News" loading="lazy"></a>
+                <a href="press.html" class="trust-logo" aria-label="Featured on Medscape"><img src="images/logos/medscape.svg" alt="Medscape" loading="lazy"></a>
             </div>
         </div>
     </section>
@@ -3073,18 +3240,21 @@
               To add or swap an outlet, drop its SVG into images/logos/ and update the src below.
               See images/logos/README.md for details.
             -->
-            <div class="press-grid fade-in-element delay-1">
-                <a href="press.html" class="press-logo" aria-label="Featured on NBC News — see all press">
-                    <img src="images/logos/nbc.svg" alt="NBC News" loading="lazy" style="max-height: 72px; width: auto;">
+            <div class="press-headlines fade-in-element delay-1">
+                <a href="https://www.cnbc.com/2025/09/17/eli-lilly-obesity-pill-beats-novo-nordisk-drug-in-diabetes-trial-.html" target="_blank" rel="noopener" class="press-headline">
+                    <img src="images/logos/cnbc.svg" alt="CNBC" loading="lazy" class="press-headline-logo">
+                    <span class="press-headline-title">Eli Lilly pill outperforms Novo Nordisk&#x2019;s oral drug in head-to-head diabetes trial</span>
+                    <span class="press-headline-date">September 2025</span>
                 </a>
-                <a href="press.html" class="press-logo" aria-label="Featured in TIME Magazine — see all press">
-                    <img src="images/logos/time.svg" alt="TIME" loading="lazy" style="max-width: 140px; height: auto;">
+                <a href="https://www.nbcnews.com/health/health-news/fda-warns-unapproved-thyroid-pills-says-ll-ensure-access-rcna224972" target="_blank" rel="noopener" class="press-headline">
+                    <img src="images/logos/nbc.svg" alt="NBC News" loading="lazy" class="press-headline-logo">
+                    <span class="press-headline-title">FDA warns about unapproved thyroid pills, says it&#x2019;ll ensure access</span>
+                    <span class="press-headline-date">August 2025</span>
                 </a>
-                <a href="press.html" class="press-logo" aria-label="Featured on Medscape — see all press">
-                    <img src="images/logos/medscape.svg" alt="Medscape" loading="lazy" style="max-width: 140px; height: auto;">
-                </a>
-                <a href="press.html" class="press-logo" aria-label="Featured in WIRED — see all press">
-                    <img src="images/logos/wired.svg" alt="WIRED" loading="lazy" style="max-width: 140px; height: auto;">
+                <a href="https://time.com/7017001/tirzepatide-zepbound-weight-loss-drug-diabetes/" target="_blank" rel="noopener" class="press-headline">
+                    <img src="images/logos/time.svg" alt="TIME" loading="lazy" class="press-headline-logo">
+                    <span class="press-headline-title">The weight loss drug that can prevent diabetes</span>
+                    <span class="press-headline-date">September 2024</span>
                 </a>
             </div>
             
