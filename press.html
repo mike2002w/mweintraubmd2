@@ -868,13 +868,21 @@
   ]
 }</script>
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-168B265DQC"></script>
+    <!-- Google tag (gtag.js). Loads only on the production hostname, so
+         localhost previews and QA copies never pollute Analytics. gtag()
+         stays defined everywhere: event calls elsewhere on the page just
+         accumulate in a dataLayer that is never sent. -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-168B265DQC');
+      if (['michaelweintraubmd.com','www.michaelweintraubmd.com'].includes(location.hostname)) {
+        var gaScript = document.createElement('script');
+        gaScript.async = true;
+        gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-168B265DQC';
+        document.head.appendChild(gaScript);
+        gtag('js', new Date());
+        gtag('config', 'G-168B265DQC');
+      }
     </script>
 
     <!-- Google Fonts -->
