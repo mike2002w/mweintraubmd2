@@ -55,7 +55,7 @@
           "givenName": "Michael",
           "familyName": "Weintraub",
           "honorificSuffix": "MD",
-          "jobTitle": "Endocrinologist & Obesity Medicine Specialist",
+          "jobTitle": ["Endocrinologist & Obesity Medicine Specialist", "Assistant Clinical Professor of Medicine, NYU Grossman School of Medicine"],
           "description": "Triple board-certified physician (endocrinology, internal medicine, obesity medicine). Co-Chair of the Endocrine Society guideline on pharmacologic management of obesity, NEJM Faculty, and clinical researcher focused on GLP-1 therapies and metabolic disease.",
           "url": "https://michaelweintraubmd.com/",
           "image": "https://michaelweintraubmd.com/images/weintraub-headshot-800.jpg",
@@ -391,13 +391,7 @@
             }
         }
         
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease-out;
-        }
 
-        .animate-fade-in-up {
-            animation: fadeInUp 0.4s ease-out;
-        }
 
         .animate-slide-in-left {
             animation: slideInLeft 0.4s ease-out;
@@ -443,8 +437,7 @@
 
         /* Respect prefers-reduced-motion — skip all decorative animations */
         @media (prefers-reduced-motion: reduce) {
-            .animate-fade-in, .animate-fade-in-up,
-            .animate-slide-in-left, .animate-slide-in-right {
+                        .animate-slide-in-left, .animate-slide-in-right {
                 animation: none;
             }
             .fade-in-section, .fade-in-element {
@@ -488,22 +481,7 @@
             transform: translateY(-1px);
         }
         
-        .contact-button-top {
-            padding: 8px 16px;
-            background: rgba(20, 184, 166, 0.1);
-            color: #042F33;
-            text-decoration: none;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-            border: 1px solid rgba(20, 184, 166, 0.25);
-        }
         
-        .contact-button-top:hover {
-            background: rgba(20, 184, 166, 0.18);
-            transform: translateY(-1px);
-        }
         
         .section {
             padding: 72px 20px;
@@ -767,13 +745,6 @@
             font-weight: 700;
         }
         
-        .credentials {
-            font-size: 20px;
-            margin-bottom: 8px;
-            opacity: 0.95;
-            font-weight: 500;
-            color: #4a5568;
-        }
         
         .specialties {
             font-size: 18px;
@@ -781,13 +752,6 @@
             color: #4a5568;
         }
         
-        .bio {
-            color: #4a5568;
-            font-size: 18px;
-            line-height: 1.7;
-            margin-top: 30px;
-            max-width: 800px;
-        }
         
         h2 {
             font-size: 32px;
@@ -818,19 +782,7 @@
         }
         
         /* Education Section - Grouped Cards */
-        .education-category {
-            background: white;
-            border-radius: 16px;
-            padding: 35px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-        }
         
-        .education-category:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-        }
         
         .education-category-title {
             font-size: 20px;
@@ -849,12 +801,6 @@
             margin-bottom: 0;
         }
         
-        .education-degree {
-            font-size: 17px;
-            font-weight: 600;
-            color: #042F33;
-            margin-bottom: 8px;
-        }
         
         .education-institution {
             font-size: 16px;
@@ -877,27 +823,8 @@
             margin-right: 8px;
         }
         
-        .certification-badges {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
         
-        .certification-badge {
-            background: #0E8377;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 999px;
-            font-size: 14px;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: all 0.2s;
-        }
         
-        .certification-badge:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
         
         /* Old education table styles - keep for now in case needed */
         /* Education timeline (replaces old table) */
@@ -1086,28 +1013,8 @@
             margin-top: 5px;
         }
         
-        .certification-list-modern {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
         
-        .certification-list-modern li {
-            padding: 12px 0 12px 25px;
-            font-size: 16px;
-            color: #4a5568;
-            position: relative;
-            line-height: 1.6;
-        }
         
-        .certification-list-modern li::before {
-            content: '•';
-            position: absolute;
-            left: 0;
-            color: #0E8377;
-            font-size: 24px;
-            font-weight: bold;
-        }
         
         @media (max-width: 768px) {
             .education-table {
@@ -1373,7 +1280,7 @@
             box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
         }
         
-        .educator-card h4 {
+        .educator-card h3 {
             color: #042F33;
             font-size: 20px;
             margin-bottom: 12px;
@@ -1670,7 +1577,7 @@
         
         .post-date {
             font-size: 13px;
-            color: #94a3b8;
+            color: #64748b;
         }
 
         /* Commentary card media. Photos and graphics vary wildly in native
@@ -2095,7 +2002,7 @@
             font-family: Impact, fantasy;
         }
         
-        .myspace-header h1 {
+        .myspace-header h2 {
             color: #ffff00;
             text-shadow: 3px 3px #ff00ff;
             font-size: 48px;
@@ -2291,7 +2198,7 @@
                 padding: 10px;
             }
             
-            .myspace-header h1 {
+            .myspace-header h2 {
                 font-size: 32px;
             }
             
@@ -2522,10 +2429,6 @@
                 gap: 8px;
             }
             
-            .contact-button-top {
-                font-size: 12px;
-                padding: 6px 12px;
-            }
             
             .social-icon-top {
                 width: 36px;
@@ -2646,7 +2549,7 @@
             background: #243840 !important;
             box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
         }
-        [data-theme="dark"] .educator-card h4,
+        [data-theme="dark"] .educator-card h3,
         [data-theme="dark"] .post-title,
         [data-theme="dark"] .pub-title {
             color: #e2f0f1;
@@ -2880,7 +2783,7 @@
             }
             h1, h2, h3, h4, h5,
             .hero-name-first, .hero-name-last, .pub-title a,
-            .press-outlet, .educator-card h4, .post-title {
+            .press-outlet, .educator-card h3, .post-title {
                 color: #000 !important;
             }
             /* Show link URLs next to text for print */
@@ -3083,7 +2986,7 @@
                     <div class="educator-card">
                         <div class="card-heading-row">
                             <div class="logo-inline"><img src="images/logos/nejm-square.jpg" alt="NEJM" loading="lazy"></div>
-                            <h4>NEJM Course Faculty Director</h4>
+                            <h3>NEJM Course Faculty Director</h3>
                         </div>
                         <p>Faculty Director for the New England Journal of Medicine Group's "Advancing Obesity Care" course, collaborating with leading experts to deliver evidence-based approaches for obesity management and GLP-1 therapies.</p>
                         <a href="https://www.linkedin.com/posts/michaelameerweintraub_honored-to-be-faculty-director-of-nejm-activity-7398376843273314305-3cAK" class="educator-link" target="_blank">
@@ -3097,7 +3000,7 @@
                     <div class="educator-card">
                         <div class="card-heading-row">
                             <div class="logo-inline"><img src="images/logos/endocrine-society-square.jpg" alt="Endocrine Society" loading="lazy"></div>
-                            <h4>Endocrine Society Guidelines Co-Chair</h4>
+                            <h3>Endocrine Society Guidelines Co-Chair</h3>
                         </div>
                         <p>Co-Chair of the pharmacologic management of obesity guideline update through the Endocrine Society, leading the development of evidence-based recommendations for obesity pharmacotherapy.</p>
                         <a href="https://www.endocrine.org/" class="educator-link" target="_blank">
@@ -3111,7 +3014,7 @@
                     <div class="educator-card">
                         <div class="card-heading-row">
                             <div class="logo-inline"><img src="images/logos/aace.png" alt="American Association of Clinical Endocrinology" loading="lazy"></div>
-                            <h4>AACE Obesity National Meeting Leader</h4>
+                            <h3>AACE Obesity National Meeting Leader</h3>
                         </div>
                         <p>Develops the clinical congress portion of the American Association of Clinical Endocrinology Annual Meeting, including selecting speakers and determining topics for general sessions, workshops, and satellite symposia.</p>
                         <a href="https://pro.aace.com/" class="educator-link" target="_blank">
@@ -3131,7 +3034,7 @@
                     <div class="educator-card">
                         <div class="card-heading-row">
                             <div class="logo-inline"><img src="images/logos/endocrine-society-square.jpg" alt="Endocrine Society" loading="lazy"></div>
-                            <h4>Endocrine News Podcast</h4>
+                            <h3>Endocrine News Podcast</h3>
                         </div>
                         <p>Featured expert discussing compounded obesity medications, addressing regulatory considerations, safety, efficacy, and patient access concerns in the evolving landscape of obesity pharmacotherapy.</p>
                         <a href="https://www.endocrine.org/podcast/enp107" class="educator-link" target="_blank">
@@ -3145,7 +3048,7 @@
                     <div class="educator-card">
                         <div class="card-heading-row">
                             <div class="logo-inline"><img src="images/logos/docwire.jpg" alt="DocWire News" loading="lazy"></div>
-                            <h4>DocWire News: EASO Framework Discussion</h4>
+                            <h3>DocWire News: EASO Framework Discussion</h3>
                         </div>
                         <p>Expert commentary on how the European Association for the Study of Obesity framework reshapes clinical practice by moving beyond BMI to focus on individualized, health-centered approaches.</p>
                         <a href="https://www.docwirenews.com/post/new-easo-framework-for-treating-obesity-shifts-focus-from-weight-to-health" class="educator-link" target="_blank">
@@ -3159,7 +3062,7 @@
                     <div class="educator-card">
                         <div class="card-heading-row">
                             <div class="logo-inline"><img src="images/logos/medscape.svg" alt="Medscape" loading="lazy"></div>
-                            <h4>Medscape: GLP-1 Discontinuation Research</h4>
+                            <h3>Medscape: GLP-1 Discontinuation Research</h3>
                         </div>
                         <p>Discussing real-world data presented at ObesityWeek on weight regain patterns after GLP-1 discontinuation and implications for long-term obesity management strategies.</p>
                         <a href="https://www.medscape.com/viewarticle/over-half-regain-weight-after-stopping-glp-1s-2025a1000vmt?form=fpf" class="educator-link" target="_blank">
@@ -3178,7 +3081,7 @@
                     <div class="educator-card">
                         <div class="card-heading-row">
                             <div class="logo-inline"><img src="images/logos/obesity-society-square.jpg" alt="The Obesity Society" loading="lazy"></div>
-                            <h4>ObesityWeek 2025</h4>
+                            <h3>ObesityWeek 2025</h3>
                         </div>
                         <p>Presented real-world evidence on weight regain after GLP-1 discontinuation, highlighting the chronic nature of obesity and the importance of continuous treatment strategies.</p>
                         <a href="https://www.linkedin.com/posts/michaelameerweintraub_honored-for-the-opportunity-to-present-weight-activity-7391955105626947584-Gond" class="educator-link" target="_blank">
@@ -3192,7 +3095,7 @@
                     <div class="educator-card">
                         <div class="card-heading-row">
                             <div class="logo-inline"><img src="images/logos/columbia.jpg" alt="Columbia University · Cornell" loading="lazy"></div>
-                            <h4>2026 Columbia Cornell Obesity Medicine Course</h4>
+                            <h3>2026 Columbia Cornell Obesity Medicine Course</h3>
                         </div>
                         <p>Lecturer for the Columbia Cornell intensive CME program covering evidence-based approaches to obesity etiology, prevention, and treatment. Course emphasizes practical pharmacologic, nutritional, behavioral, and procedural interventions for patient-centered care.</p>
                         <a href="https://www.ihn.cuimc.columbia.edu/news/registration-now-open-2026-columbia-cornell-obesity-etiology-prevention-and-treatment" class="educator-link" target="_blank">
@@ -3206,7 +3109,7 @@
                     <div class="educator-card">
                         <div class="card-heading-row">
                             <div class="logo-inline"><img src="images/logos/endocrine-society-square.jpg" alt="Endocrine Society" loading="lazy"></div>
-                            <h4>Endocrine Society Obesity Fellows Program Keynote</h4>
+                            <h3>Endocrine Society Obesity Fellows Program Keynote</h3>
                         </div>
                         <p>Recurring keynote speaker (2023, 2024, 2025) for the Endocrine Society&#x2019;s Obesity Fellows Program, delivering the annual lecture on the state of obesity medicine to fellows training in the field nationwide.</p>
                         <a href="https://www.endocrine.org/" class="educator-link" target="_blank">
@@ -3444,24 +3347,24 @@
                             </svg>
                             <span>Twitter/X</span>
                         </div>
-                        <div class="post-date">July 2026</div>
+                        <div class="post-date">August 2026</div>
                     </div>
-                    <h3 class="post-title">What Online GLP-1 Sellers Actually Deliver</h3>
+                    <h3 class="post-title">Tirzepatide Adds a Cardiovascular Indication</h3>
                     <p class="post-excerpt">
-                        A JAMA secret-shopper investigation of direct-to-consumer GLP-1 sellers, and the findings are as concerning as they are unsurprising. Most sellers dispense compounded medications with no regulation or guaranteed safety, many bundle in unproven supplements, and only a minority require any contact with a clinician.
+                        The FDA approved Mounjaro (tirzepatide) to lower the risk of major adverse cardiovascular events in adults with type 2 diabetes at high cardiovascular risk. The approval rests on SURPASS-CVOT, which showed noninferiority to dulaglutide. It does not expand the treated population: tirzepatide was already approved for glycemic control in type 2 diabetes.
                     </p>
                     <div class="post-stats">
                         <div class="post-stats-grid">
-                            <div><div class="post-stat-value">90%</div><div class="post-stat-label">compounded meds (unregulated)</div></div>
-                            <div><div class="post-stat-value">60%</div><div class="post-stat-label">added supplements, no evidence</div></div>
-                            <div><div class="post-stat-value">27%</div><div class="post-stat-label">required a clinician video visit</div></div>
-                            <div><div class="post-stat-value">11%</div><div class="post-stat-label">sublingual, zero evidence</div></div>
+                            <div><div class="post-stat-value">MACE</div><div class="post-stat-label">CV death, MI, or stroke</div></div>
+                            <div><div class="post-stat-value">T2D</div><div class="post-stat-label">adults at high cardiovascular risk</div></div>
+                            <div><div class="post-stat-value">CVOT</div><div class="post-stat-label">SURPASS-CVOT, noninferior to dulaglutide</div></div>
+                            <div><div class="post-stat-value">FDA</div><div class="post-stat-label">label indication added Aug 2026</div></div>
                         </div>
                     </div>
                     <div class="post-meta">
-                        <span class="post-engagement">20K+ views · JAMA</span>
+                        <span class="post-engagement">31K+ views · FDA label update</span>
                     </div>
-                    <a href="https://x.com/MWeintraubMD/status/2074305663870566411" class="post-link" target="_blank">
+                    <a href="https://x.com/MWeintraubMD/status/2093320573334008219" class="post-link" target="_blank">
                         View Thread
                         <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
@@ -3478,24 +3381,24 @@
                             </svg>
                             <span>LinkedIn</span>
                         </div>
-                        <div class="post-date">July 2026</div>
+                        <div class="post-date">August 2026</div>
                     </div>
-                    <h3 class="post-title">Semaglutide: Preferred GLP-1 in Diabetic Kidney Disease</h3>
+                    <h3 class="post-title">Ranking the GLP-1s Across 58 Trials</h3>
                     <p class="post-excerpt">
-                        A meta-analysis of 13 randomized trials (97,428 participants) finds GLP-1 receptor agonists cut major cardiovascular events by 16%, the composite kidney endpoint by 21%, and kidney-failure risk by 28% in type 2 diabetes with chronic kidney disease. Benefits held regardless of background SGLT2-inhibitor use, and semaglutide ranked highest.
+                        A BMJ Medicine network meta-analysis pooled 58 randomized trials and 24,214 adults with overweight or obesity, without diabetes, to compare GLP-1 based drugs. Retatrutide led on placebo-adjusted weight loss, but the comparison is indirect: no head-to-head trials exist among these agents, and retatrutide&#39;s estimate rests on a much thinner trial base.
                     </p>
                     <div class="post-stats">
                         <div class="post-stats-grid">
-                            <div><div class="post-stat-value">&#x2193;16%</div><div class="post-stat-label">major cardiovascular events</div></div>
-                            <div><div class="post-stat-value">&#x2193;21%</div><div class="post-stat-label">composite kidney endpoint</div></div>
-                            <div><div class="post-stat-value">&#x2193;28%</div><div class="post-stat-label">kidney failure risk</div></div>
-                            <div><div class="post-stat-value">&#x2193;26%</div><div class="post-stat-label">urine albumin-to-creatinine</div></div>
+                            <div><div class="post-stat-value">58</div><div class="post-stat-label">randomized trials pooled</div></div>
+                            <div><div class="post-stat-value">24,214</div><div class="post-stat-label">adults without diabetes</div></div>
+                            <div><div class="post-stat-value">22.1%</div><div class="post-stat-label">retatrutide, placebo-adjusted loss</div></div>
+                            <div><div class="post-stat-value">19.3%</div><div class="post-stat-label">tirzepatide, placebo-adjusted loss</div></div>
                         </div>
                     </div>
                     <div class="post-meta">
-                        <span class="post-engagement">Cardiorenal meta-analysis</span>
+                        <span class="post-engagement">15K impressions · BMJ Medicine</span>
                     </div>
-                    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7477179721236217856/" class="post-link" target="_blank">
+                    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7498842371925823490/" class="post-link" target="_blank">
                         Read Full Post
                         <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
@@ -3512,19 +3415,24 @@
                             </svg>
                             <span>Twitter/X</span>
                         </div>
-                        <div class="post-date">July 2026</div>
+                        <div class="post-date">August 2026</div>
                     </div>
-                    <h3 class="post-title">The Most Comprehensive Obesity-Drug Comparison Yet</h3>
+                    <h3 class="post-title">Inside the New VA/DoD Obesity Guideline</h3>
                     <p class="post-excerpt">
-                        A BMJ network meta-analysis of 262 randomized trials and 99,791 participants ranks 19 obesity drugs by mean weight change vs. lifestyle at one year: tirzepatide −14.9%, CagriSema −14.8%, oral semaglutide −10.9%, orforglipron −9.9%, subcutaneous semaglutide −9.8%. Greater weight loss tracked with more GI adverse events, and no meaningful quality-of-life benefit emerged.
+                        The 2025 VA/DoD guideline on adult overweight and obesity, published in Annals of Internal Medicine, is the first major update since 2020. Semaglutide and tirzepatide earn strong-for recommendations, lifestyle intervention is foundational but no longer a gatekeeper for starting medication, and the guideline recommends against routine discontinuation of obesity drugs.
                     </p>
-                    <div class="post-media">
-                        <img src="images/post-bmj-headtohead.jpg" alt="The BMJ visual abstract comparing weight-loss effects of 19 obesity drugs across 262 randomized trials" loading="lazy">
+                    <div class="post-stats">
+                        <div class="post-stats-grid">
+                            <div><div class="post-stat-value">23</div><div class="post-stat-label">clinical recommendations</div></div>
+                            <div><div class="post-stat-value">8</div><div class="post-stat-label">new recommendations</div></div>
+                            <div><div class="post-stat-value">Strong</div><div class="post-stat-label">for semaglutide and tirzepatide</div></div>
+                            <div><div class="post-stat-value">BMI &ge;30</div><div class="post-stat-label">ESG newly recommended</div></div>
+                        </div>
                     </div>
                     <div class="post-meta">
-                        <span class="post-engagement">19K+ views · The BMJ</span>
+                        <span class="post-engagement">2.5K+ views · Annals of Internal Medicine</span>
                     </div>
-                    <a href="https://x.com/MWeintraubMD/status/2075524205748052000" class="post-link" target="_blank">
+                    <a href="https://x.com/MWeintraubMD/status/2092368134548193742" class="post-link" target="_blank">
                         View Thread
                         <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
@@ -3541,26 +3449,32 @@
                             </svg>
                             <span>LinkedIn</span>
                         </div>
-                        <div class="post-date">July 2026</div>
+                        <div class="post-date">August 2026</div>
                     </div>
-                    <h3 class="post-title">Obesity Medicine Is Absorbing Hepatology's Vocabulary</h3>
+                    <h3 class="post-title">Mazdutide&#39;s First US Trial</h3>
                     <p class="post-excerpt">
-                        As GLP-1 and dual/triple agonists begin to reverse fatty liver disease, obesity specialists need a new lexicon: MASLD, noninvasive tests (NIT), enhanced liver fibrosis (ELF), FibroScan (VCTE), MR elastography, cT1, and the NAFLD activity score. The specialties are converging, and the vocabulary is coming with them.
+                        Phase 2 data for mazdutide, a once-weekly GLP-1/glucagon receptor dual agonist, in adults with obesity or overweight and without diabetes. Glucagon agonism drives preferential fat loss, with visceral fat reductions of up to 32% on MRI, though GI side effects and discontinuation remain the tolerability story in an increasingly crowded dual-agonist space.
                     </p>
-                    <div class="post-media">
-                        <img src="images/post-hepatology-terms.jpg" alt="Glossary graphic of hepatology terms obesity clinicians should know: MASLD, NIT, ELF, VCTE, MRE, cT1, NAS" loading="lazy">
+                    <div class="post-stats">
+                        <div class="post-stats-grid">
+                            <div><div class="post-stat-value">22.3%</div><div class="post-stat-label">weight loss at 48 weeks, highest dose</div></div>
+                            <div><div class="post-stat-value">16.3%</div><div class="post-stat-label">intention-to-treat weight reduction</div></div>
+                            <div><div class="post-stat-value">32.4%</div><div class="post-stat-label">visceral fat reduction on MRI</div></div>
+                            <div><div class="post-stat-value">20%</div><div class="post-stat-label">stopped highest dose, GI effects</div></div>
+                        </div>
                     </div>
                     <div class="post-meta">
-                        <span class="post-engagement">Clinical commentary</span>
+                        <span class="post-engagement">3K+ impressions · Lancet Diabetes &amp; Endocrinology</span>
                     </div>
-                    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7476997956907286528/" class="post-link" target="_blank">
+                    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7498333605014786048/" class="post-link" target="_blank">
                         Read Full Post
                         <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
                         </svg>
                     </a>
                 </div>
-            </div>
+
+                </div>
 
             <!-- Follow CTA -->
             <div class="follow-cta fade-in-element delay-6" style="margin-top: 50px; text-align: center; padding: 40px; background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
@@ -3618,7 +3532,7 @@
         <button class="close-myspace" onclick="toggleMySpaceMode()">✖ Close</button>
         <div class="myspace-profile">
             <div class="myspace-header">
-                <h1>✨ Dr. Michael's MySpace ✨</h1>
+                <h2>✨ Dr. Michael's MySpace ✨</h2>
                 <p style="color: #00ffff; font-size: 14px;">www.myspace.com/dr_weintraub_md</p>
                 <div class="visitor-counter" id="myspaceVisitorCounter">👁️ Visitors: 420,069</div>
                 <p style="color: #ffff00; font-size: 12px; margin-top: 8px;">🟢 Online now · Last login: 2.5 min ago · 📍 The Hospital</p>
