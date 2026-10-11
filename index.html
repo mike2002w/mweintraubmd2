@@ -44,112 +44,255 @@
     <meta name="twitter:image:alt" content="Dr. Michael A. Weintraub, MD — Endocrinology and Obesity Medicine">
 
     <!-- Structured data: Physician + practice clinic -->
-    <script type="application/ld+json">
+    <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@context": "https://schema.org",
-      "@graph": [
+      "@type": "Physician",
+      "@id": "https://michaelweintraubmd.com/#michaelweintraub",
+      "name": "Michael A. Weintraub, MD",
+      "givenName": "Michael",
+      "familyName": "Weintraub",
+      "honorificSuffix": "MD",
+      "jobTitle": [
+        "Endocrinologist & Obesity Medicine Specialist",
+        "Assistant Clinical Professor of Medicine, NYU Grossman School of Medicine"
+      ],
+      "description": "Triple board-certified physician (endocrinology, internal medicine, obesity medicine). Co-Chair of the Endocrine Society guideline on pharmacologic management of obesity, NEJM Faculty, and clinical researcher focused on GLP-1 therapies and metabolic disease.",
+      "url": "https://michaelweintraubmd.com/",
+      "image": "https://michaelweintraubmd.com/images/weintraub-headshot-800.jpg",
+      "email": "contact@michaelweintraubmd.com",
+      "medicalSpecialty": [
+        "Endocrine",
+        "InternalMedicine"
+      ],
+      "knowsAbout": [
         {
-          "@type": "Physician",
-          "@id": "https://michaelweintraubmd.com/#michaelweintraub",
-          "name": "Michael A. Weintraub, MD",
-          "givenName": "Michael",
-          "familyName": "Weintraub",
-          "honorificSuffix": "MD",
-          "jobTitle": ["Endocrinologist & Obesity Medicine Specialist", "Assistant Clinical Professor of Medicine, NYU Grossman School of Medicine"],
-          "description": "Triple board-certified physician (endocrinology, internal medicine, obesity medicine). Co-Chair of the Endocrine Society guideline on pharmacologic management of obesity, NEJM Faculty, and clinical researcher focused on GLP-1 therapies and metabolic disease.",
-          "url": "https://michaelweintraubmd.com/",
-          "image": "https://michaelweintraubmd.com/images/weintraub-headshot-800.jpg",
-          "email": "contact@michaelweintraubmd.com",
-          "medicalSpecialty": ["Endocrine", "InternalMedicine"],
-          "knowsAbout": [
-            "Obesity Medicine",
-            "Obesity Pharmacotherapy",
-            "GLP-1 Receptor Agonists",
-            "Type 2 Diabetes",
-            "Metabolic Health",
-            "Weight Management",
-            "Endocrinology",
-            "Thyroid Disorders",
-            "Adrenal Disorders",
-            "Pituitary Disorders"
-          ],
-          "alumniOf": [
-            {"@type": "CollegeOrUniversity", "name": "University of Pennsylvania", "sameAs": "https://www.upenn.edu/"},
-            {"@type": "CollegeOrUniversity", "name": "The Wharton School", "sameAs": "https://www.wharton.upenn.edu/"},
-            {"@type": "CollegeOrUniversity", "name": "Rutgers Robert Wood Johnson Medical School", "sameAs": "https://rwjms.rutgers.edu/"},
-            {"@type": "Hospital", "name": "Thomas Jefferson University Hospital"},
-            {"@type": "Hospital", "name": "NewYork-Presbyterian / Weill Cornell Medical Center"},
-            {"@type": "MedicalOrganization", "name": "Memorial Sloan Kettering Cancer Center"}
-          ],
-          "hasCredential": [
-            {
-              "@type": "EducationalOccupationalCredential",
-              "credentialCategory": "Board Certification",
-              "name": "Endocrinology, Diabetes & Metabolism",
-              "recognizedBy": {"@type": "Organization", "name": "American Board of Internal Medicine"}
-            },
-            {
-              "@type": "EducationalOccupationalCredential",
-              "credentialCategory": "Board Certification",
-              "name": "Obesity Medicine",
-              "recognizedBy": {"@type": "Organization", "name": "American Board of Obesity Medicine"}
-            },
-            {
-              "@type": "EducationalOccupationalCredential",
-              "credentialCategory": "Board Certification",
-              "name": "Internal Medicine",
-              "recognizedBy": {"@type": "Organization", "name": "American Board of Internal Medicine"}
-            }
-          ],
-          "memberOf": [
-            {"@type": "Organization", "name": "Endocrine Society"},
-            {"@type": "Organization", "name": "American Association of Clinical Endocrinology"},
-            {"@type": "Organization", "name": "The Obesity Society"},
-            {"@type": "Organization", "name": "The Pituitary Society"}
-          ],
-          "worksFor": {"@id": "https://michaelweintraubmd.com/#clinic"},
-          "workLocation": {"@id": "https://michaelweintraubmd.com/#clinic"},
-          "identifier": [
-            {"@type": "PropertyValue", "propertyID": "ORCID", "value": "0000-0001-9599-9184"}
-          ],
+          "@type": "Thing",
+          "name": "Obesity Medicine",
+          "sameAs": "https://www.wikidata.org/wiki/Q22907426"
+        },
+        "Obesity Pharmacotherapy",
+        {
+          "@type": "Thing",
+          "name": "GLP-1 Receptor Agonists",
+          "sameAs": "https://www.wikidata.org/wiki/Q5572286"
+        },
+        {
+          "@type": "Thing",
+          "name": "Type 2 Diabetes",
+          "sameAs": "https://www.wikidata.org/wiki/Q3025883"
+        },
+        "Metabolic Health",
+        "Weight Management",
+        {
+          "@type": "Thing",
+          "name": "Endocrinology",
+          "sameAs": "https://www.wikidata.org/wiki/Q162606"
+        },
+        "Thyroid Disorders",
+        "Adrenal Disorders",
+        "Pituitary Disorders",
+        {
+          "@type": "Thing",
+          "name": "Semaglutide",
+          "sameAs": "https://www.wikidata.org/wiki/Q27261089"
+        },
+        {
+          "@type": "Thing",
+          "name": "Tirzepatide",
+          "sameAs": "https://www.wikidata.org/wiki/Q108324770"
+        },
+        {
+          "@type": "Thing",
+          "name": "Obesity",
+          "sameAs": "https://www.wikidata.org/wiki/Q12174"
+        }
+      ],
+      "alumniOf": [
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "University of Pennsylvania",
+          "sameAs": "https://www.upenn.edu/"
+        },
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "The Wharton School",
+          "sameAs": "https://www.wharton.upenn.edu/"
+        },
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "Rutgers Robert Wood Johnson Medical School",
+          "sameAs": "https://rwjms.rutgers.edu/"
+        },
+        {
+          "@type": "Hospital",
+          "name": "Thomas Jefferson University Hospital"
+        },
+        {
+          "@type": "Hospital",
+          "name": "NewYork-Presbyterian / Weill Cornell Medical Center"
+        },
+        {
+          "@type": "MedicalOrganization",
+          "name": "Memorial Sloan Kettering Cancer Center"
+        }
+      ],
+      "hasCredential": [
+        {
+          "@type": "EducationalOccupationalCredential",
+          "credentialCategory": "Board Certification",
+          "name": "Endocrinology, Diabetes & Metabolism",
+          "recognizedBy": {
+            "@type": "Organization",
+            "name": "American Board of Internal Medicine"
+          }
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "credentialCategory": "Board Certification",
+          "name": "Obesity Medicine",
+          "recognizedBy": {
+            "@type": "Organization",
+            "name": "American Board of Obesity Medicine"
+          }
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "credentialCategory": "Board Certification",
+          "name": "Internal Medicine",
+          "recognizedBy": {
+            "@type": "Organization",
+            "name": "American Board of Internal Medicine"
+          }
+        }
+      ],
+      "memberOf": [
+        {
+          "@type": "Organization",
+          "name": "Endocrine Society",
           "sameAs": [
-            "https://www.linkedin.com/in/michaelameerweintraub/",
-            "https://x.com/MWeintraubMD",
-            "https://www.instagram.com/mweintraubmd/",
-            "https://orcid.org/0000-0001-9599-9184",
-            "https://scholar.google.com/citations?user=G9qngpQAAAAJ&hl=en"
+            "https://www.endocrine.org/",
+            "https://www.wikidata.org/wiki/Q3520756"
           ]
         },
         {
-          "@type": "MedicalClinic",
-          "@id": "https://michaelweintraubmd.com/#clinic",
-          "name": "NYU Langone Diabetes & Endocrine Associates",
-          "parentOrganization": {
-            "@type": "MedicalOrganization",
-            "name": "NYU Langone Health",
-            "url": "https://nyulangone.org/"
-          },
-          "url": "https://michaelweintraubmd.com/#location",
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "222 East 41st Street, 23rd Floor",
-            "addressLocality": "New York",
-            "addressRegion": "NY",
-            "postalCode": "10017",
-            "addressCountry": "US"
-          },
-          "geo": {
-            "@type": "GeoCoordinates",
-            "latitude": 40.7499,
-            "longitude": -73.9742
-          },
-          "medicalSpecialty": ["Endocrine", "InternalMedicine"],
-          "physician": {"@id": "https://michaelweintraubmd.com/#michaelweintraub"},
-          "hasMap": "https://www.google.com/maps/search/?api=1&query=222+East+41st+Street+New+York+NY+10017"
+          "@type": "Organization",
+          "name": "American Association of Clinical Endocrinology",
+          "sameAs": [
+            "https://pro.aace.com/",
+            "https://www.wikidata.org/wiki/Q18148801"
+          ]
+        },
+        {
+          "@type": "Organization",
+          "name": "The Obesity Society",
+          "sameAs": [
+            "https://www.obesity.org/",
+            "https://www.wikidata.org/wiki/Q7754627"
+          ]
+        },
+        {
+          "@type": "Organization",
+          "name": "The Pituitary Society"
         }
-      ]
+      ],
+      "worksFor": {
+        "@id": "https://michaelweintraubmd.com/#clinic"
+      },
+      "workLocation": {
+        "@id": "https://michaelweintraubmd.com/#clinic"
+      },
+      "identifier": [
+        {
+          "@type": "PropertyValue",
+          "propertyID": "ORCID",
+          "value": "0000-0001-9599-9184"
+        },
+        {
+          "@type": "PropertyValue",
+          "propertyID": "NPI",
+          "value": "1346774015"
+        },
+        {
+          "@type": "PropertyValue",
+          "propertyID": "Wikidata",
+          "value": "Q63952934"
+        }
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/in/michaelameerweintraub/",
+        "https://x.com/MWeintraubMD",
+        "https://www.instagram.com/mweintraubmd/",
+        "https://orcid.org/0000-0001-9599-9184",
+        "https://scholar.google.com/citations?user=G9qngpQAAAAJ&hl=en",
+        "https://nyulangone.org/doctors/1346774015/michael-a-weintraub",
+        "https://www.doximity.com/pub/michael-weintraub-md-5bd02871",
+        "https://health.usnews.com/doctors/michael-weintraub-1193103",
+        "https://www.wikidata.org/wiki/Q63952934"
+      ],
+      "mainEntityOfPage": "https://michaelweintraubmd.com/"
+    },
+    {
+      "@type": "MedicalClinic",
+      "@id": "https://michaelweintraubmd.com/#clinic",
+      "name": "NYU Langone Diabetes & Endocrine Associates",
+      "parentOrganization": {
+        "@type": "MedicalOrganization",
+        "name": "NYU Langone Health",
+        "url": "https://nyulangone.org/"
+      },
+      "url": "https://michaelweintraubmd.com/#location",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "222 East 41st Street, 23rd Floor",
+        "addressLocality": "New York",
+        "addressRegion": "NY",
+        "postalCode": "10017",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 40.7499,
+        "longitude": -73.9742
+      },
+      "medicalSpecialty": [
+        "Endocrine",
+        "InternalMedicine"
+      ],
+      "physician": {
+        "@id": "https://michaelweintraubmd.com/#michaelweintraub"
+      },
+      "hasMap": "https://www.google.com/maps/search/?api=1&query=222+East+41st+Street+New+York+NY+10017"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://michaelweintraubmd.com/#website",
+      "url": "https://michaelweintraubmd.com/",
+      "name": "Michael A. Weintraub, MD",
+      "publisher": {
+        "@id": "https://michaelweintraubmd.com/#michaelweintraub"
+      },
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": "https://michaelweintraubmd.com/#webpage",
+      "url": "https://michaelweintraubmd.com/",
+      "name": "Dr. Michael A. Weintraub - Endocrinology & Obesity Medicine",
+      "description": "Dr. Michael A. Weintraub - Board-certified endocrinologist and obesity medicine specialist. Co-Chair of Endocrine Society Guidelines, NEJM Faculty, clinical researcher.",
+      "mainEntity": {
+        "@id": "https://michaelweintraubmd.com/#michaelweintraub"
+      },
+      "isPartOf": {
+        "@id": "https://michaelweintraubmd.com/#website"
+      },
+      "dateCreated": "2026-01-11",
+      "dateModified": "2026-10-10",
+      "inLanguage": "en-US"
     }
-    </script>
+  ]
+}</script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23042F33' width='100' height='100' rx='22'/><text x='50' y='69' font-family='-apple-system,Segoe UI,Helvetica,Arial,sans-serif' font-size='44' font-weight='700' fill='%235DCAA5' text-anchor='middle'>MW</text></svg>">
@@ -1935,314 +2078,6 @@
             }
         }
         
-        /* MySpace Mode Easter Egg */
-        body.myspace-mode {
-            background: url('data:image/svg+xml,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="20" fill="%23000066"/><circle cx="5" cy="5" r="2" fill="%230099ff"/></svg>') !important;
-            font-family: "Comic Sans MS", cursive, sans-serif !important;
-        }
-        
-        body.myspace-mode * {
-            font-family: "Comic Sans MS", cursive, sans-serif !important;
-        }
-        
-        body.myspace-mode .section {
-            background: rgba(255, 255, 255, 0.95) !important;
-            border: 3px solid #ff00ff !important;
-            box-shadow: 0 0 20px #00ffff !important;
-        }
-        
-        body.myspace-mode h1, 
-        body.myspace-mode h2 {
-            color: #ff00ff !important;
-            text-shadow: 2px 2px #00ffff !important;
-            font-family: Impact, fantasy !important;
-        }
-        
-        body.myspace-mode .nav-container {
-            background: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00) !important;
-            border-bottom: 5px solid #000 !important;
-        }
-        
-        body.myspace-mode .nav-link {
-            color: #fff !important;
-            text-shadow: 1px 1px #000 !important;
-            font-weight: bold !important;
-        }
-        
-        .myspace-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 102, 0.95);
-            z-index: 99999;
-            overflow-y: auto;
-            color: #fff;
-            padding: 20px;
-        }
-        
-        .myspace-overlay.active {
-            display: block;
-        }
-        
-        .myspace-profile {
-            max-width: 900px;
-            margin: 0 auto;
-            background: linear-gradient(180deg, #000066, #0099ff);
-            border: 5px ridge #00ffff;
-            padding: 20px;
-            box-shadow: 0 0 30px #ff00ff;
-        }
-        
-        .myspace-header {
-            text-align: center;
-            margin-bottom: 30px;
-            font-family: Impact, fantasy;
-        }
-        
-        .myspace-header h2 {
-            color: #ffff00;
-            text-shadow: 3px 3px #ff00ff;
-            font-size: 48px;
-            margin: 0;
-            animation: blink 1s infinite;
-        }
-        
-        @keyframes blink {
-            0%, 49% { opacity: 1; }
-            50%, 100% { opacity: 0.3; }
-        }
-        
-        .myspace-sections {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 20px;
-        }
-        
-        .myspace-box {
-            background: rgba(255, 255, 255, 0.1);
-            border: 3px outset #00ffff;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .myspace-box h3 {
-            color: #ffff00;
-            font-family: Impact, fantasy;
-            border-bottom: 2px solid #ff00ff;
-            padding-bottom: 5px;
-        }
-        
-        .top-friends {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        
-        .friend-box {
-            background: #000066;
-            border: 2px solid #00ffff;
-            padding: 10px;
-            text-align: center;
-            font-size: 12px;
-        }
-        
-        .visitor-counter {
-            background: #000;
-            color: #0f0;
-            padding: 5px 10px;
-            font-family: 'Courier New', monospace;
-            border: 2px solid #0f0;
-            display: inline-block;
-        }
-        
-        .profile-song {
-            background: #000;
-            color: #fff;
-            padding: 10px;
-            border: 2px solid #ff00ff;
-            text-align: center;
-        }
-        
-        .close-myspace {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #ff00ff;
-            color: #fff;
-            border: 3px outset #00ffff;
-            padding: 10px 20px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            font-family: Impact, fantasy;
-            z-index: 100000;
-        }
-        
-        .close-myspace:hover {
-            background: #00ffff;
-            color: #ff00ff;
-        }
-        
-        /* Scrolling marquee banner (classic 2006 MySpace flex) */
-        .myspace-marquee {
-            background: linear-gradient(90deg, #ff00ff 0%, #ffff00 25%, #00ffff 50%, #ff00ff 75%, #ffff00 100%);
-            background-size: 200% auto;
-            animation: myspace-rainbow 4s linear infinite;
-            color: #000;
-            font-weight: 900;
-            padding: 8px 0;
-            margin-bottom: 16px;
-            border-top: 3px solid #000;
-            border-bottom: 3px solid #000;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-        @keyframes myspace-rainbow {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
-        }
-        .myspace-marquee-inner {
-            display: inline-block;
-            animation: myspace-scroll 28s linear infinite;
-            padding-left: 100%;
-        }
-        @keyframes myspace-scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
-        }
-
-        /* Profile song fake progress bar */
-        .song-progress {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 11px;
-            margin-top: 6px;
-            color: #00ffff;
-            justify-content: center;
-        }
-        .song-progress-bar {
-            flex: 1;
-            max-width: 120px;
-            height: 6px;
-            background: #000066;
-            border: 1px solid #00ffff;
-            position: relative;
-        }
-        .song-progress-bar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 68%;
-            background: linear-gradient(90deg, #ff00ff, #ffff00, #00ffff);
-            animation: song-pulse 2s ease-in-out infinite alternate;
-        }
-        @keyframes song-pulse {
-            from { width: 68%; }
-            to { width: 72%; }
-        }
-        .song-visualizer {
-            display: block;
-            text-align: center;
-            font-size: 18px;
-            margin-top: 4px;
-            animation: visualizer 0.5s ease-in-out infinite alternate;
-            color: #ff00ff;
-        }
-        @keyframes visualizer {
-            from { letter-spacing: 0.05em; transform: scale(1); }
-            to   { letter-spacing: 0.15em; transform: scale(1.08); }
-        }
-
-        /* Bulletin board */
-        .bulletin {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 10px 12px;
-            margin-bottom: 10px;
-            border-left: 4px solid #ffff00;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-        .bulletin:nth-child(2n) { border-left-color: #ff00ff; }
-        .bulletin:nth-child(3n) { border-left-color: #00ffff; }
-        .bulletin-meta {
-            font-size: 10px;
-            color: #999;
-            margin-top: 4px;
-            font-family: 'Courier New', monospace;
-        }
-
-        /* Sparkle cursor trail (MySpace glitter cursor) */
-        .myspace-sparkle {
-            position: fixed;
-            pointer-events: none;
-            z-index: 100001;
-            font-size: 18px;
-            animation: myspace-sparkle-fade 900ms forwards;
-            user-select: none;
-        }
-        @keyframes myspace-sparkle-fade {
-            0%   { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
-            100% { opacity: 0; transform: translate(-50%, -90px) scale(0.2) rotate(360deg); }
-        }
-
-        /* MySpace Mobile Responsiveness */
-        @media (max-width: 768px) {
-            .myspace-profile {
-                padding: 10px;
-            }
-            
-            .myspace-header h2 {
-                font-size: 32px;
-            }
-            
-            .myspace-sections {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            
-            .myspace-box {
-                padding: 10px;
-                margin-bottom: 15px;
-            }
-            
-            .myspace-box h3 {
-                font-size: 16px;
-            }
-            
-            .myspace-box p {
-                font-size: 13px !important;
-            }
-            
-            .top-friends {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-            }
-            
-            .friend-box {
-                font-size: 10px;
-                padding: 8px;
-            }
-            
-            .close-myspace {
-                top: 10px;
-                right: 10px;
-                padding: 8px 15px;
-                font-size: 14px;
-            }
-            
-            .visitor-counter {
-                font-size: 12px;
-                padding: 4px 8px;
-            }
-        }
-        
         @media (max-width: 968px) {
             /* Mobile: always show the sticky nav at top so hamburger is reachable
                without scrolling. (Desktop still slides it in after 100px.) */
@@ -2761,7 +2596,7 @@
             .back-to-top, .scroll-progress, .theme-toggle,
             .trust-strip, .educator-tabs, .press-cta, .press-button,
             .educator-link, .location-link, .follow-cta,
-            .easter-egg-molecule, .easter-egg-message, .myspace-overlay,
+            .easter-egg-molecule, .easter-egg-message,
             .filter-bar, .filter-hidden, .featured-coverage,
             .post-link svg, .educator-link svg {
                 display: none !important;
@@ -3506,197 +3341,13 @@
                 </a>
             </div>
             <p style="font-size: 13px; opacity: 0.7; margin: 0;">
-                © <span id="easterEggTrigger" style="cursor: pointer; user-select: none; transition: opacity 0.1s;">2026</span> Dr. Michael A. Weintraub. All rights reserved.
+                © <span id="copyrightYear">2026</span> Dr. Michael A. Weintraub. All rights reserved.
             </p>
         </div>
     </footer>
     
-    <!-- MySpace Mode Easter Egg -->
-    <div class="myspace-overlay" id="myspaceMode">
-        <button class="close-myspace" onclick="toggleMySpaceMode()">✖ Close</button>
-        <div class="myspace-profile">
-            <div class="myspace-header">
-                <h2>✨ Dr. Michael's MySpace ✨</h2>
-                <p style="color: #00ffff; font-size: 14px;">www.myspace.com/dr_weintraub_md</p>
-                <div class="visitor-counter" id="myspaceVisitorCounter">👁️ Visitors: 420,069</div>
-                <p style="color: #ffff00; font-size: 12px; margin-top: 8px;">🟢 Online now · Last login: 2.5 min ago · 📍 The Hospital</p>
-            </div>
 
-            <div class="myspace-marquee">
-                <span class="myspace-marquee-inner">✨ WELCOME TO MY PAGE ✨ 🎉 UR IN MY TOP 8!!! 🎉 💊 NOW PRESCRIBING: EVIDENCE-BASED MEDICINE 💊 🔥 GLP-1 IS SO HOT RIGHT NOW 🔥 💯 THX 4 THA ADD 💯 📚 STUDYING 4 BOARDS AGAIN 😭 📚 🧬 OBESITY MEDICINE 4EVA 🧬 ✨ PIMP MY PROFILE??? ✨ &nbsp;</span>
-            </div>
-            
-            <div class="myspace-sections">
-                <!-- Left Column -->
-                <div>
-                    <div class="myspace-box">
-                        <h3>🎵 Profile Song (autoplay ON)</h3>
-                        <div class="profile-song">
-                            ♪ Now Playing:<br>
-                            <strong>"Pump It"</strong> · Black Eyed Peas (2006) 🔥🔥🔥
-                            <div class="song-progress">
-                                <span>2:34</span>
-                                <span class="song-progress-bar"></span>
-                                <span>3:34</span>
-                            </div>
-                            <span class="song-visualizer">♫ ♬ ♩ ♪ ♫ ♬ ♪ ♫</span>
-                            <small style="display:block; margin-top:6px; color:#ff00ff;">🔊 autoplay enabled · can't turn it off sry</small>
-                        </div>
-                    </div>
-
-                    <div class="myspace-box">
-                        <h3>💫 Top 8 Friends</h3>
-                        <div class="top-friends">
-                            <div class="friend-box">🏆 Tom<br><small>(MySpace Creator · ILU 4eva)</small></div>
-                            <div class="friend-box">🧬 Semaglutide<br><small>(OG GLP-1 bae)</small></div>
-                            <div class="friend-box">💊 Tirzepatide<br><small>(rebound 🔥)</small></div>
-                            <div class="friend-box">📚 NEJM<br><small>(the GOAT)</small></div>
-                            <div class="friend-box">🔬 Endocrine Society<br><small>(ride or die)</small></div>
-                            <div class="friend-box">🗽 NYC<br><small>(4eva home)</small></div>
-                            <div class="friend-box">🎓 Wharton<br><small>(college days 💼)</small></div>
-                            <div class="friend-box">📊 PubMed<br><small>(study buddy)</small></div>
-                        </div>
-                    </div>
-                    
-                    <div class="myspace-box">
-                        <h3>✉️ Contact</h3>
-                        <p style="font-size: 14px;">
-                            <a href="mailto:contact@michaelweintraubmd.com" style="color: #ffff00;">✉️ Send Message</a><br>
-                            <a href="mailto:contact@michaelweintraubmd.com" style="color: #00ffff;">➕ Add to Friends</a><br>
-                            <a href="mailto:contact@michaelweintraubmd.com" style="color: #ff00ff;">💬 Add Comment</a>
-                        </p>
-                    </div>
-                </div>
-                
-                <!-- Right Column -->
-                <div>
-                    <div class="myspace-box">
-                        <h3>📝 About Me</h3>
-                        <p style="font-size: 14px; line-height: 1.6;">
-                            <strong>Headline:</strong> Triple Board-Certified Doctor 💊 | Obesity Medicine Expert 🏆 | GLP-1 Enthusiast 🧬<br><br>
-                            
-                            Yo! Thanks for stopping by my page! 😎 I'm Dr. Michael and I'm all about that evidence-based medicine life. I'm out here fighting obesity and helping people live their best lives! 💪<br><br>
-                            
-                            Triple board certified because one just wasn't enough! 🎓🎓🎓 Currently obsessed with GLP-1 receptor agonists (they're SO hot right now 🔥).<br><br>
-                            
-                            If you want to collab on some research or just talk about metabolic health, hit me up! Always down for a good convo about diabetes and endocrine disorders. 🤓
-                        </p>
-                    </div>
-                    
-                    <div class="myspace-box">
-                        <h3>💭 Mood</h3>
-                        <p style="font-size: 24px; text-align: center;">
-                            😊 Clinically Optimistic
-                        </p>
-                    </div>
-                    
-                    <div class="myspace-box">
-                        <h3>📋 Details</h3>
-                        <table style="width: 100%; font-size: 13px; color: #fff;">
-                            <tr><td><strong>Status:</strong></td><td>Triple Board Certified 🎓</td></tr>
-                            <tr><td><strong>Occupation:</strong></td><td>Endocrinologist & Obesity Specialist</td></tr>
-                            <tr><td><strong>Location:</strong></td><td>New York, NY 🗽</td></tr>
-                            <tr><td><strong>Specialty:</strong></td><td>GLP-1 Therapies</td></tr>
-                            <tr><td><strong>Education:</strong></td><td>Wharton School → Cornell → NYU</td></tr>
-                            <tr><td><strong>Relationship:</strong></td><td>In a committed relationship with Evidence-Based Medicine ❤️</td></tr>
-                        </table>
-                    </div>
-                    
-                    <div class="myspace-box">
-                        <h3>🎯 Interests</h3>
-                        <p style="font-size: 13px;">
-                            <strong>General:</strong> Obesity pharmacotherapy, metabolic health, clinical guidelines, destroying diabetes, fighting obesity, GLP-1 receptor agonists, evidence-based everything<br><br>
-                            
-                            <strong>Music:</strong> Pump It by Black Eyed Peas (always pumped up 💪), medical conference keynote background music<br><br>
-                            
-                            <strong>Movies:</strong> Any documentary about metabolism, pharmaceutical commercials<br><br>
-                            
-                            <strong>Books:</strong> Endocrine Society Guidelines, NEJM articles, my own publications (lol jk... unless? 👀)
-                        </p>
-                    </div>
-                    
-                    <div class="myspace-box">
-                        <h3>💬 Latest Blog Post</h3>
-                        <p style="font-size: 13px; font-style: italic;">
-                            "just had the BEST case study today... patient response to GLP-1 therapy was 🔥🔥🔥 evidence-based medicine for the WIN!!!! #blessed #metabolism #doctorlife"
-                        </p>
-                        <p style="font-size: 11px; color: #999;">Posted: 2 days ago | 420 comments</p>
-                    </div>
-
-                    <div class="myspace-box">
-                        <h3>🤔 Who I'd Like to Meet</h3>
-                        <p style="font-size: 13px;">
-                            ⚗️ Whoever discovered GLP-1 (you changed the game 🙏)<br>
-                            🧠 Claude Bernard (original endocrinology dad)<br>
-                            📞 The Nobel committee (email me when u ready)<br>
-                            🎬 Tom (for the MySpace reunion tour 😤)<br>
-                            🤖 Whatever AI helped make this site ✨
-                        </p>
-                    </div>
-
-                    <div class="myspace-box">
-                        <h3>🎯 Quiz Results</h3>
-                        <p style="font-size: 13px; line-height: 1.7;">
-                            ✅ Which GLP-1 are u? → <strong style="color:#ffff00;">Semaglutide</strong> (the classic 🔥)<br>
-                            ✅ Which medical specialty r u? → <strong style="color:#ffff00;">Endocrinology (obvi)</strong><br>
-                            ✅ % evidence-based? → <strong style="color:#ffff00;">110%</strong><br>
-                            ✅ 2006 anthem? → <strong style="color:#ffff00;">Pump It 🎶</strong><br>
-                            ✅ Zodiac? → <strong style="color:#ffff00;">Endocrinus ♐</strong>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="myspace-box" style="margin-top: 20px;">
-                <h3>📢 Bulletin Board</h3>
-                <div class="bulletin">
-                    <strong style="color: #ffff00;">Tom:</strong> HEADS UP GUYS the site is down for maintenance 😤 we'll be back soooon!!!
-                    <div class="bulletin-meta">posted 2008 · 2,147 comments</div>
-                </div>
-                <div class="bulletin">
-                    <strong style="color: #ff00ff;">Obesity Medicine:</strong> PSA to all my friendz — new guidelines just dropped!!! go peep the Endocrine Society page for the full deets 💊 update ur practice 🙏
-                    <div class="bulletin-meta">posted yesterday · 69 comments</div>
-                </div>
-                <div class="bulletin">
-                    <strong style="color: #00ffff;">Dr. Mike:</strong> whoever wants to study 4 boards later w/ me hmu on AIM — my screen name is <em>EndoDoc2006</em> 😉 we'll pull an all-nighter and order pizza 🍕
-                    <div class="bulletin-meta">posted 3 hrs ago · 24 comments</div>
-                </div>
-            </div>
-            
-            <div class="myspace-box" style="margin-top: 20px;">
-                <h3>💬 Comments (Leave Me One!)</h3>
-                <div style="background: rgba(0,0,0,0.3); padding: 10px; margin: 10px 0; border-left: 3px solid #00ffff;">
-                    <strong style="color: #ffff00;">Tom from MySpace:</strong><br>
-                    <em>"Thanks for the add, Dr. Mike! Your profile is 🔥"</em>
-                </div>
-                <div style="background: rgba(0,0,0,0.3); padding: 10px; margin: 10px 0; border-left: 3px solid #ffff00;">
-                    <strong style="color: #ff00ff;">Dr. Science 🧪:</strong><br>
-                    <em>"LOVE the evidence-based vibes here! Let's collab on some research!! 🔬📊"</em>
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 30px; color: #00ffff; font-size: 12px;">
-                <p>✨ This page was created on MySpace.com ✨</p>
-                <p>Click "2026" in the footer 5 times to return to boring professional mode 😴</p>
-            </div>
-        </div>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <script>
+<script>
         // Sticky Navigation Functionality
         const stickyNav = document.getElementById('stickyNav');
         const socialIcons = document.getElementById('socialIcons');
@@ -3989,84 +3640,10 @@
         let typedKeys = '';
         let easterEggTimeout;
         
-        // MySpace Mode Toggle - Click "2026" 5 Times
-        let myspaceActive = false;
-        let clickCount = 0;
-        let clickTimer;
-        
-        // Add click listener to the year 2026
-        const easterEggTrigger = document.getElementById('easterEggTrigger');
-        if (easterEggTrigger) {
-            // Keep the copyright year current automatically
-            easterEggTrigger.textContent = new Date().getFullYear();
-            easterEggTrigger.addEventListener('click', (e) => {
-                e.preventDefault();
-                clickCount++;
-                
-                // Visual feedback - subtle flash
-                easterEggTrigger.style.opacity = '1';
-                setTimeout(() => {
-                    easterEggTrigger.style.opacity = '0.7';
-                }, 100);
-                
-                // Reset counter after 2 seconds of no clicks
-                clearTimeout(clickTimer);
-                clickTimer = setTimeout(() => {
-                    clickCount = 0;
-                }, 2000);
-                
-                // Activate after 5 clicks
-                if (clickCount === 5) {
-                    clickCount = 0;
-                    clearTimeout(clickTimer);
-                    toggleMySpaceMode();
-                }
-            });
-        }
-        
-        let myspaceCounterInterval = null;
-        let myspaceSparkleHandler = null;
-        function toggleMySpaceMode() {
-            myspaceActive = !myspaceActive;
-            const overlay = document.getElementById('myspaceMode');
+        // Keep the copyright year current automatically
+        const copyrightYear = document.getElementById('copyrightYear');
+        if (copyrightYear) { copyrightYear.textContent = new Date().getFullYear(); }
 
-            if (myspaceActive) {
-                overlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                // Visitor counter ticks up randomly — "live" profile views
-                const counterEl = document.getElementById('myspaceVisitorCounter');
-                let count = 420069;
-                if (counterEl) counterEl.textContent = '👁️ Visitors: ' + count.toLocaleString();
-                myspaceCounterInterval = setInterval(() => {
-                    count += 1 + Math.floor(Math.random() * 4);
-                    if (counterEl) counterEl.textContent = '👁️ Visitors: ' + count.toLocaleString();
-                }, 2800);
-                // Sparkle cursor trail (throttled)
-                let lastSparkle = 0;
-                const sparkleChars = ['✨','⭐','💫','🌟','💖','🎀'];
-                myspaceSparkleHandler = (e) => {
-                    const now = Date.now();
-                    if (now - lastSparkle < 90) return;
-                    lastSparkle = now;
-                    const sp = document.createElement('div');
-                    sp.className = 'myspace-sparkle';
-                    sp.textContent = sparkleChars[Math.floor(Math.random() * sparkleChars.length)];
-                    sp.style.left = e.clientX + 'px';
-                    sp.style.top = e.clientY + 'px';
-                    document.body.appendChild(sp);
-                    setTimeout(() => sp.remove(), 900);
-                };
-                document.addEventListener('mousemove', myspaceSparkleHandler);
-            } else {
-                overlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
-                if (myspaceCounterInterval) { clearInterval(myspaceCounterInterval); myspaceCounterInterval = null; }
-                if (myspaceSparkleHandler) { document.removeEventListener('mousemove', myspaceSparkleHandler); myspaceSparkleHandler = null; }
-                // Remove any lingering sparkles
-                document.querySelectorAll('.myspace-sparkle').forEach(el => el.remove());
-            }
-        }
-        
         // GLP-1 typing easter egg
         document.addEventListener('keypress', (e) => {
             // Clear previous timeout
