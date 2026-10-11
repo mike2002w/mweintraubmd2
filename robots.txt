@@ -1,4 +1,55 @@
 User-agent: *
 Allow: /
 
+# /nanny is a household app, not part of the professional site. The page itself
+# carries noindex; Googlebot and Bingbot stay allowed so they can read that tag.
+# AI crawlers are kept out of it here because several ignore noindex.
+User-agent: GPTBot
+Disallow: /nanny/
+
+User-agent: ChatGPT-User
+Disallow: /nanny/
+
+User-agent: OAI-SearchBot
+Disallow: /nanny/
+
+User-agent: ClaudeBot
+Disallow: /nanny/
+
+User-agent: anthropic-ai
+Disallow: /nanny/
+
+User-agent: Claude-Web
+Disallow: /nanny/
+
+User-agent: PerplexityBot
+Disallow: /nanny/
+
+User-agent: Perplexity-User
+Disallow: /nanny/
+
+User-agent: Google-Extended
+Disallow: /nanny/
+
+User-agent: CCBot
+Disallow: /nanny/
+
+User-agent: Bytespider
+Disallow: /nanny/
+
+User-agent: Applebot-Extended
+Disallow: /nanny/
+
+User-agent: meta-externalagent
+Disallow: /nanny/
+
+User-agent: Amazonbot
+Disallow: /nanny/
+
+User-agent: cohere-ai
+Disallow: /nanny/
+
+User-agent: DuckAssistBot
+Disallow: /nanny/
+
 Sitemap: https://michaelweintraubmd.com/sitemap.xml
