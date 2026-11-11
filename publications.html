@@ -841,6 +841,17 @@
             font-size: 16px;
             color: #6b7280;
         }
+        header p + p {
+            margin-top: 12px;
+        }
+        header p a {
+            color: #0E8377;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        header p a:hover { color: #042F33; }
+        [data-theme="dark"] header p a { color: #2DD4BF; }
+        [data-theme="dark"] header p a:hover { color: #e2f0f1; }
 
         /* Researcher identity badges */
         .researcher-ids {
