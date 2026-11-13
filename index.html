@@ -288,7 +288,7 @@
         "@id": "https://michaelweintraubmd.com/#website"
       },
       "dateCreated": "2026-01-11",
-      "dateModified": "2026-10-10",
+      "dateModified": "2026-11-12",
       "inLanguage": "en-US"
     }
   ]
@@ -1767,6 +1767,40 @@
             margin-top: 4px;
             line-height: 1.35;
         }
+        /* Citation panel: used where the post links to a paper and has no
+           image of its own. Same 4:3 box as .post-media so rows stay aligned. */
+        .post-cite {
+            margin: 15px 0;
+            border-radius: 8px;
+            aspect-ratio: 4 / 3;
+            background: #042F33;
+            padding: 28px 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .post-cite-label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #2DD4BF;
+            margin-bottom: 14px;
+        }
+        .post-cite-title {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #ffffff;
+        }
+        .post-cite-source {
+            font-size: 13px;
+            line-height: 1.45;
+            color: #cfe8e3;
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(207, 232, 227, 0.25);
+        }
         
         .post-title {
             font-size: 20px;
@@ -2283,6 +2317,15 @@
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
+
+            /* Single column: no row to align with, so let the panel fit its text */
+            .post-cite {
+                aspect-ratio: auto;
+                padding: 24px 20px;
+            }
+            .post-cite-title {
+                font-size: 20px;
+            }
             
             .educator-category-grid {
                 grid-template-columns: 1fr;
@@ -2394,7 +2437,8 @@
             color: #b8c5c8;
         }
         [data-theme="dark"] .pub-title a,
-        [data-theme="dark"] .educator-link {
+        [data-theme="dark"] .educator-link,
+        [data-theme="dark"] .post-link {
             color: #2DD4BF;
         }
         [data-theme="dark"] .pub-journal,
@@ -2415,6 +2459,10 @@
         }
         [data-theme="dark"] .post-stats {
             background: #0b1c1f;
+        }
+        [data-theme="dark"] .post-cite {
+            background: #0b1c1f;
+            border: 1px solid #2a3d43;
         }
         /* Logo slots get a slightly lighter background in dark mode */
         [data-theme="dark"] .card-heading-row .logo-inline {
@@ -3182,19 +3230,21 @@
                             </svg>
                             <span>Twitter/X</span>
                         </div>
-                        <div class="post-date">August 2026</div>
+                        <div class="post-date">November 2026</div>
                     </div>
-                    <h3 class="post-title">Tirzepatide Adds a Cardiovascular Indication</h3>
+                    <h3 class="post-title">GLP-1 Discontinuation and Cardiovascular Events</h3>
                     <p class="post-excerpt">
-                        Today, the FDA adds an indication to Mounjaro's label. The FDA approved Mounjaro (tirzepatide) to &quot;lower the risk of major adverse cardiovascular events, including cardiovascular death, non-fatal heart attack, or non-fatal stroke in adults with type 2 diabetes at high risk for these events.&quot; This doesn't expand the treatment population as Mounjaro is already approved for glycemic control in type 2 diabetes.
+                        GLP-1 discontinuation associated with doubling in heart attack, stroke, death compared to continuation in T2D.<br><br>
+                        Interestingly, the change in cardiovascular risk factors was modest after discontinuation, not in proportion to the cardiovascular event rise.<br><br>
+                        Could the direct GLP-1 effect on cardiovascular protection beyond traditional risk factors be at play here?
                     </p>
                     <div class="post-media">
-                        <img src="images/post-mounjaro-cvot.jpg" alt="Eli Lilly announcement of the FDA cardiovascular indication for Mounjaro (tirzepatide)" loading="lazy" width="800" height="600">
+                        <img src="images/post-glp1-discontinuation-cv.jpg" alt="Cumulative incidence curves for the primary end point in people with type 2 diabetes who discontinued versus continued GLP-1 receptor agonist therapy, from The Lancet Regional Health Europe" loading="lazy" width="1000" height="750">
                     </div>
                     <div class="post-meta">
-                        <span class="post-engagement">31K+ views · FDA label update</span>
+                        <span class="post-engagement">17K+ views · The Lancet Regional Health Europe</span>
                     </div>
-                    <a href="https://x.com/MWeintraubMD/status/2093320573334008219" class="post-link" target="_blank">
+                    <a href="https://x.com/MWeintraubMD/status/2120507840540410351" class="post-link" target="_blank">
                         View Thread
                         <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
@@ -3211,23 +3261,23 @@
                             </svg>
                             <span>LinkedIn</span>
                         </div>
-                        <div class="post-date">August 2026</div>
+                        <div class="post-date">October 2026</div>
                     </div>
-                    <h3 class="post-title">Ranking the GLP-1s Across 58 Trials</h3>
+                    <h3 class="post-title">Obesity and Low Testosterone</h3>
                     <p class="post-excerpt">
-                        Today, a network meta-analysis in BMJ Medicine pooled 58 randomized trials and 24,214 adults with overweight or obesity (without diabetes), comparing GLP-1 based drugs for weight loss.<br><br>
-                        Top-line placebo-adjusted weight loss:<br>
-                        Retatrutide: 22.10% (95% CI -25.60 to -18.60)<br>
-                        Tirzepatide: 19.28% (-20.39 to -18.16)<br>
-                        CagriSema: 17.32% (-19.32 to -15.32)
+                        The relationship between obesity and low testosterone.<br><br>
+                        Weight gain and resulting excess adiposity suppresses testosterone production:<br><br>
+                        &bull; Increased leptin -&gt; decreased gonadotropin releasing hormone (GnRH), resistance to gonadotropin mediated testosterone production<br>
+                        &bull; Increased estrogen production -&gt; negative feedback onto hypothalamic neurons to produce LH, FSH<br><br>
+                        In those with low testosterone and obesity, the solution isn&#39;t testosterone supplementation rather effectively treating the underlying weight gain.
                     </p>
                     <div class="post-media">
-                        <img src="images/post-bmj-nma.jpg" alt="Forest plot from the BMJ Medicine network meta-analysis ranking GLP-1 based drugs by placebo-adjusted weight loss" loading="lazy" width="800" height="600">
+                        <img src="images/post-obesity-testosterone.jpg" alt="Schematic of how excess adiposity suppresses testosterone production through leptin, insulin, and estrogen effects on the hypothalamic-pituitary-gonadal axis" loading="lazy" width="1000" height="750">
                     </div>
                     <div class="post-meta">
-                        <span class="post-engagement">15K impressions · BMJ Medicine</span>
+                        <span class="post-engagement">7.8K impressions · 129 reactions</span>
                     </div>
-                    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7498842371925823490/" class="post-link" target="_blank">
+                    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7515268101253259264/" class="post-link" target="_blank">
                         Read Full Post
                         <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
@@ -3244,19 +3294,28 @@
                             </svg>
                             <span>Twitter/X</span>
                         </div>
-                        <div class="post-date">August 2026</div>
+                        <div class="post-date">September 2026</div>
                     </div>
-                    <h3 class="post-title">Inside the New VA/DoD Obesity Guideline</h3>
+                    <h3 class="post-title">Endocrine Society Statement on Obesity Science</h3>
                     <p class="post-excerpt">
-                        The 2025 VA/Department of Defense Clinical Practice Guideline on Adult Overweight and Obesity Management has been published in Annals of Internal Medicine. The first major update since 2020 and reflects a lot of changes in the field. 23 clinical recommendations total: 8 new, 4 reviewed and replaced, 7 amended, 4 unchanged. Key updates across screening, behavioral interventions, pharmacotherapy, and procedures.
+                        Today the Endocrine Society published a Scientific Statement highlighting the opportunities and research gaps within obesity medicine.<br><br>
+                        Essential points:<br>
+                        &bull; The pathophysiology of obesity with a focus on body fat regulation/defended fat mass<br>
+                        &bull; The heterogeneity of obesity with a focus on treatment response<br>
+                        &bull; Redefining treatment targets beyond percent total body weight loss<br>
+                        &bull; The physiology of phases of treatment response to pharmacotherapy<br>
+                        &bull; Health outcomes with pharmacotherapy<br>
+                        &bull; Safety of pharmacotherapy
                     </p>
-                    <div class="post-media">
-                        <img src="images/post-vadod-guideline.jpg" alt="First page of the 2025 VA/DoD adult overweight and obesity guideline in Annals of Internal Medicine" loading="lazy" width="800" height="600">
+                    <div class="post-cite">
+                        <div class="post-cite-label">Endocrine Reviews · Scientific Statement</div>
+                        <div class="post-cite-title">Obesity science, research gaps, and opportunities in the new era of obesity medicines</div>
+                        <div class="post-cite-source">An Endocrine Society Scientific Statement · Published September 9, 2026</div>
                     </div>
                     <div class="post-meta">
-                        <span class="post-engagement">2.5K+ views · Annals of Internal Medicine</span>
+                        <span class="post-engagement">38K+ views · Endocrine Reviews</span>
                     </div>
-                    <a href="https://x.com/MWeintraubMD/status/2092368134548193742" class="post-link" target="_blank">
+                    <a href="https://x.com/MWeintraubMD/status/2097828804513218954" class="post-link" target="_blank">
                         View Thread
                         <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
@@ -3273,19 +3332,24 @@
                             </svg>
                             <span>LinkedIn</span>
                         </div>
-                        <div class="post-date">August 2026</div>
+                        <div class="post-date">September 2026</div>
                     </div>
-                    <h3 class="post-title">Mazdutide&#39;s First US Trial</h3>
+                    <h3 class="post-title">CT-388 Phase 2 Top-Line Results</h3>
                     <p class="post-excerpt">
-                        Phase 2 data for mazdutide, a once-weekly GLP-1/glucagon receptor dual agonist, in adults with obesity or overweight without T2D (N=179). This is the first US-based trial where previous studies including phase 3 were conducted in China. 22.3% weight loss at 48 weeks with those who adhered to the highest dose. However the in-trial group (intention-to-treat) had 16.3% weight reduction- the main difference due to the high discontinuation rate owing to GI side effects.
+                        CT-388 posts exciting top-line phase 2 results.<br><br>
+                        2.65% a1c reduction in 48 weeks in adults with T2D and obesity in the highest dose arm. This level of glucose control is among the leaders of GLP1 medicines, when indirectly comparing similar trials.<br><br>
+                        Trials of GLP1s semaglutide, tirzepatide and even retatrutide top out at 1.6%, 2.1%, 1.9% a1c reduction respectively with a similar T2D and obesity population with baseline a1c ~8%.<br><br>
+                        I must emphasize these are indirect comparisons in different populations in different trials, different background anti-hyperglycemic meds, estimand (very unfair of me to do this!), but still eye-opening to see the potential of this dual GLP-1/GIP agonist.<br><br>
+                        Weight reduction 15.5% at 48 weeks<br>
+                        Treatment discontinuation rate due to adverse events was 2.0% enicepatide, 0% placebo
                     </p>
                     <div class="post-media">
-                        <img src="images/post-mazdutide.jpg" alt="Results figure from the mazdutide phase 2 US trial in Lancet Diabetes and Endocrinology" loading="lazy" width="800" height="600">
+                        <img src="images/post-ct388-phase2.jpg" alt="Table comparing HbA1c reduction at the highest dose of retatrutide, semaglutide, tirzepatide, and CT-388 in selected type 2 diabetes trials" loading="lazy" width="1000" height="750">
                     </div>
                     <div class="post-meta">
-                        <span class="post-engagement">3K+ impressions · Lancet Diabetes &amp; Endocrinology</span>
+                        <span class="post-engagement">7.5K impressions · Phase 2 top-line data</span>
                     </div>
-                    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7498333605014786048/" class="post-link" target="_blank">
+                    <a href="https://www.linkedin.com/feed/update/urn:li:activity:7508140526689325057/" class="post-link" target="_blank">
                         Read Full Post
                         <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
