@@ -54,7 +54,7 @@
       "about": {
         "@id": "https://michaelweintraubmd.com/#michaelweintraub"
       },
-      "dateModified": "2026-09-18",
+      "dateModified": "2026-11-18",
       "inLanguage": "en-US",
       "dateCreated": "2026-01-11"
     },
@@ -970,6 +970,12 @@
             line-height: 1.5;
         }
         
+        /* Links inside entry details (DOIs, course pages) were browser-default
+           blue, which is unreadable on the dark theme. */
+        .pub-item-details a {
+            color: #0E8377;
+        }
+
         .pub-item-details em {
             font-style: italic;
             color: #6b7280;
@@ -1139,6 +1145,7 @@
         [data-theme="dark"] .pub-item-title a:hover { color: #2DD4BF; }
         [data-theme="dark"] .pub-item-details { color: #b8c5c8; }
         [data-theme="dark"] .pub-item-details em { color: #9aacb0; }
+        [data-theme="dark"] .pub-item-details a { color: #2DD4BF; }
         [data-theme="dark"] footer { background: #050f11 !important; }
 
         /* Theme toggle button */
@@ -2139,6 +2146,15 @@
                 </div>
                 <div class="pub-item-details">
                     American Association of Clinical Endocrinology Obesity Learning Modules. 2024.
+                </div>
+            </div>
+
+            <div class="pub-item">
+                <div class="pub-item-title">
+                    Preparing for change: Amylin science and emerging hormone-based obesity therapies (online CME course, faculty)
+                </div>
+                <div class="pub-item-details">
+                    American Association of Clinical Endocrinology CME Course. Five-module, case-based online course. November 2026. <a href="https://pro.aace.com/education-and-event/product/preparing-change-amylin-science-and-emerging-hormone-based-obesity" target="_blank" rel="noopener">View course</a>
                 </div>
             </div>
         </section>

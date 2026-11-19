@@ -4,7 +4,7 @@ Triple board-certified physician (endocrinology, internal medicine, obesity medi
 
 Website: https://michaelweintraubmd.com/
 Full detail (complete CV, press list, commentary): https://michaelweintraubmd.com/llms-full.txt
-Last updated: 2026-11-12
+Last updated: 2026-11-18
 
 Academic title: Clinical Assistant Professor of Medicine, Department of Endocrinology, Diabetes, Metabolism and Obesity, New York University Grossman School of Medicine
 
@@ -71,7 +71,7 @@ New York, NY 10017
 
 # Complete curriculum vitae
 
-Source: the CV PDF at https://michaelweintraubmd.com/Michael-Weintraub-MD-CV.pdf, same content in plain text. Updated 2026-10-10.
+Source: the CV PDF at https://michaelweintraubmd.com/Michael-Weintraub-MD-CV.pdf, same content in plain text. Updated 2026-11-18.
 
 ## Current Appointment
 
@@ -220,6 +220,7 @@ Weill Cornell Obesity Fellowship Lecture Series:
 - Endocrine Society's Obesity Fellows Program, Keynote Lecture: The state of obesity medicine. Annual lecture, 2023 – 2026 (delivered 2023 Oct, 2024 Sep, 2025 Sep, 2026 Sep). Ask the Experts faculty panelist, 2026 Sep.
 - Endocrine Society's Obesity Fellows Program Online Curriculum. 2023 Oct. Genetic and environmental pathophysiology of obesity.
 - American Association of Clinical Endocrinology Obesity Learning Modules. 2024. Developed online learning module on the evaluation and treatment of endocrine comorbidities of obesity.
+- American Association of Clinical Endocrinology CME Course. 2026 Nov. Preparing for change: Amylin science and emerging hormone-based obesity therapies. Faculty for five-module, case-based online course. (https://pro.aace.com/education-and-event/product/preparing-change-amylin-science-and-emerging-hormone-based-obesity)
 
 ## Invited Presentations
 
