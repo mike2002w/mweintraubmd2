@@ -308,7 +308,7 @@ Co-founded Wharton's first health care club to provide undergraduates exposure t
 
 - Metabolic Care Today. "ADA 2026 obesity drug updates: Retatrutide, CagriSema, and oral GLP-1s." 2026 Jul. https://www.docwirenews.com/post/ada-2026-obesity-drug-updates-retatrutide-cagrisema-and-oral-glp-1s
 - Endocrine News Podcast. "Compounded obesity medications." 2025 Dec. https://www.endocrine.org/podcast/enp107
-- New York Post. "This dangerous condition can sneak up on you — how GLP-1 drugs can help." 2026 Jan. https://nypost.com/2026/01/19/health/dangerous-condition-can-sneak-up-on-you-how-glp-1-drugs-can-help/
+- New York Post. "This dangerous condition can sneak up on you: how GLP-1 drugs can help." 2026 Jan. https://nypost.com/2026/01/19/health/dangerous-condition-can-sneak-up-on-you-how-glp-1-drugs-can-help/
 - ClearView Convos. "The emerging obesity landscape." 2025 Dec. https://www.youtube.com/watch?v=FrRb7SOi50k
 - The Downsized. Podcast interview. 2025 Dec. https://www.youtube.com/watch?v=lCxSKE1pDW0
 - Metabolic Care Today. "Complex obesity care management." 2025 Oct.
@@ -334,7 +334,7 @@ Co-founded Wharton's first health care club to provide undergraduates exposure t
 - Medscape. "Retatrutide expanded access draws mixed clinician views." 2026 Aug 5. https://www.medscape.com/viewarticle/retatrutide-expanded-access-draws-mixed-clinician-views-2026a1000qn1
 - Medscape. "Ginger dietary supplement may ease GLP-1-related nausea." 2026 Apr 14. https://www.medscape.com/viewarticle/ginger-dietary-supplement-may-ease-glp-1-related-nausea-2026a1000bk9
 - Reuters. "Americans want weight-loss pills for cost and convenience." 2026 Apr 6. https://www.reuters.com/business/healthcare-pharmaceuticals/americans-want-weight-loss-pills-cost-convenience-2026-04-06/
-- Forbes Health. "Wegovy 'HD' dose is here — how to find GLP-1 medications and compare costs." 2026 Apr. https://www.forbes.com/health/weight-loss/wegovy-hd-dose-find-glp1-medications-compare-costs-lmandp5/
+- Forbes Health. "Wegovy 'HD' dose is here: how to find GLP-1 medications and compare costs." 2026 Apr. https://www.forbes.com/health/weight-loss/wegovy-hd-dose-find-glp1-medications-compare-costs-lmandp5/
 - HCPLive. "GLP-1 discontinuation results in significant weight regain, with Michael Weintraub, MD." 2026 Jan. https://www.hcplive.com/view/glp-1-discontinuation-results-in-significant-weight-regain-with-michael-weintraub-md
 - The Verge. "The wellness wild west is back on its bullshit with unapproved weight loss drugs." 2025 Dec. https://www.theverge.com/column/846406/optimizer-wellness-wild-west-glp-3-retatrutide
 - Medscape. "Over half regain weight after stopping GLP-1s." 2025 Nov. https://www.medscape.com/viewarticle/over-half-regain-weight-after-stopping-glp-1s-2025a1000vmt
@@ -354,7 +354,7 @@ Co-founded Wharton's first health care club to provide undergraduates exposure t
 - Medscape. "How are endos handling weight-loss drug shortages?" 2024 Mar. https://www.medscape.com/viewarticle/how-are-endos-handling-weight-loss-drug-shortages-2024a10004a6
 - Engineering. "Effective anti-obesity medications make losing weight a big deal." 2024 Sep 12.
 - Reuters. "US psychiatrists prescribe Wegovy to battle medication-induced weight gain." 2023 Aug 3. https://www.reuters.com/business/healthcare-pharmaceuticals/us-psychiatrists-prescribe-wegovy-battle-medication-induced-weight-gain-2023-08-03/
-- Business Insider. "Berberine is being called 'nature's Ozempic' — here's what the supplement actually does to your body." 2023 Jun. https://www.insider.com/what-is-berberine-this-supplement-isnt-natures-ozempic-2023-6
+- Business Insider. "Berberine is being called 'nature's Ozempic': here's what the supplement actually does to your body." 2023 Jun. https://www.insider.com/what-is-berberine-this-supplement-isnt-natures-ozempic-2023-6
 - Wired Magazine. "A pill version of Ozempic is coming." 2023 May. https://www.wired.com/story/a-pill-version-of-ozempic-is-coming/
 - Medscape. "Does Ozempic cause hair loss?" 2023 May. https://www.medscape.com/viewarticle/992377
 - Public Good News. "Understanding the Ozempic shortage and how to navigate it." 2023 Mar. https://publicgoodnews.com/2023/03/22/ozempic-wegovy-shortage-what-is-how-it-works
@@ -386,7 +386,7 @@ The Pituitary Society, 2021 – present
 - 2026-09-08: Medscape. "Shifting the Weight-Loss Focus: More Than Pounds Lost". https://www.medscape.com/viewarticle/shifting-focus-weight-loss-quality-and-quantity-both-matter-2026a1000x84
 - 2026-08: Medscape. "Retatrutide Expanded Access Draws Mixed Clinician Views". https://www.medscape.com/viewarticle/retatrutide-expanded-access-draws-mixed-clinician-views-2026a1000qn1
 - 2026-07: Metabolic Care Today. "ADA 2026 Obesity Drug Updates: Retatrutide, CagriSema, and Oral GLP-1s". https://www.docwirenews.com/post/ada-2026-obesity-drug-updates-retatrutide-cagrisema-and-oral-glp-1s
-- 2026-04: Forbes. "Wegovy 'HD' Dose Is Here — How To Find GLP-1 Medications And Compare Costs". https://www.forbes.com/health/weight-loss/wegovy-hd-dose-find-glp1-medications-compare-costs-lmandp5/
+- 2026-04: Forbes. "Wegovy 'HD' Dose Is Here: How To Find GLP-1 Medications And Compare Costs". https://www.forbes.com/health/weight-loss/wegovy-hd-dose-find-glp1-medications-compare-costs-lmandp5/
 - 2026-04: Medscape. "Ginger Dietary Supplement May Ease GLP-1-Related Nausea". https://www.medscape.com/viewarticle/ginger-dietary-supplement-may-ease-glp-1-related-nausea-2026a1000bk9
 - 2026-04: Reuters. "Americans want weight-loss pills for cost and convenience". https://www.reuters.com/business/healthcare-pharmaceuticals/americans-want-weight-loss-pills-cost-convenience-2026-04-06/
 - 2026-01: New York Post. "This dangerous condition can sneak up on you – how GLP-1 drugs can help". https://nypost.com/2026/01/19/health/dangerous-condition-can-sneak-up-on-you-how-glp-1-drugs-can-help/

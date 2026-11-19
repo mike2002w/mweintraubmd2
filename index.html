@@ -38,10 +38,10 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:alt" content="Dr. Michael A. Weintraub, MD — Endocrinology and Obesity Medicine">
+    <meta property="og:image:alt" content="Dr. Michael A. Weintraub, MD, Endocrinology and Obesity Medicine">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://michaelweintraubmd.com/images/og-card.jpg">
-    <meta name="twitter:image:alt" content="Dr. Michael A. Weintraub, MD — Endocrinology and Obesity Medicine">
+    <meta name="twitter:image:alt" content="Dr. Michael A. Weintraub, MD, Endocrinology and Obesity Medicine">
 
     <!-- Structured data: Physician + practice clinic -->
     <script type="application/ld+json">{
@@ -549,7 +549,7 @@
         .stagger-3 { animation-delay: 0.15s; opacity: 0; animation-fill-mode: forwards; }
         .stagger-4 { animation-delay: 0.2s;  opacity: 0; animation-fill-mode: forwards; }
 
-        /* Scroll-triggered fade-in animations — snappier than the previous 0.8s/30px defaults */
+        /* Scroll-triggered fade-in animations: snappier than the previous 0.8s/30px defaults */
         .fade-in-section {
             opacity: 0;
             transform: translateY(15px);
@@ -578,7 +578,7 @@
         .delay-4 { transition-delay: 0.2s; }
         .delay-5 { transition-delay: 0.25s; }
 
-        /* Respect prefers-reduced-motion — skip all decorative animations */
+        /* Respect prefers-reduced-motion: skip all decorative animations */
         @media (prefers-reduced-motion: reduce) {
                         .animate-slide-in-left, .animate-slide-in-right {
                 animation: none;
@@ -1325,7 +1325,7 @@
             gap: 25px;
         }
 
-        /* Speaking & Booking CTA — subtle inline strip below the tabbed
+        /* Speaking & Booking CTA: subtle inline strip below the tabbed
            cards. Visible regardless of tab. */
         .speaking-cta {
             margin-top: 36px;
@@ -1376,7 +1376,7 @@
                 gap: 10px;
             }
         }
-        /* Dark mode — flip text/border colors so the CTA stays readable
+        /* Dark mode: flip text/border colors so the CTA stays readable
            on the dark page background. */
         [data-theme="dark"] .speaking-cta {
             background: rgba(20, 184, 166, 0.10);
@@ -2117,13 +2117,13 @@
                without scrolling. (Desktop still slides it in after 100px.) */
             .nav-container {
                 top: 0 !important;
-                /* Remove backdrop-filter on mobile — it creates a containing block
+                /* Remove backdrop-filter on mobile: it creates a containing block
                    that traps the position: fixed .nav-menu inside this small
                    nav bar instead of filling the viewport. */
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
             }
-            /* Hide the floating social-icons on mobile — they collide with the hamburger */
+            /* Hide the floating social-icons on mobile: they collide with the hamburger */
             .social-icons-top {
                 display: none !important;
             }
@@ -2415,7 +2415,7 @@
             border-color: #283138 !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
         }
-        /* Select Publications + Contribution tiles — brighter for emphasis */
+        /* Select Publications + Contribution tiles: brighter for emphasis */
         [data-theme="dark"] .publication-item,
         [data-theme="dark"] .educator-card {
             background: #1e2f35 !important;
@@ -2520,7 +2520,7 @@
         [data-theme="dark"] .about-text {
             color: #b8c5c8;
         }
-        /* Education table — dark row striping + hover */
+        /* Education table: dark row striping + hover */
         [data-theme="dark"] .education-table tr:nth-child(odd) {
             background: #132228;
         }
@@ -2561,7 +2561,7 @@
         [data-theme="dark"] .pub-title a:hover {
             color: #5EEAD4;
         }
-        /* Press button / CTAs remain dark teal — still legible */
+        /* Press button / CTAs remain dark teal, still legible */
         [data-theme="dark"] .press-button,
         [data-theme="dark"] .nav-cta,
         [data-theme="dark"] .location-link {
@@ -2588,16 +2588,16 @@
         [data-theme="dark"] .about-text.about-first::first-letter {
             color: #2DD4BF;
         }
-        /* Footer stays dark — tweak for slightly different shade vs body */
+        /* Footer stays dark: tweak for slightly different shade vs body */
         [data-theme="dark"] footer {
             background: #050f11 !important;
         }
-        /* Lead paragraphs — override inline color for dark mode readability */
+        /* Lead paragraphs: override inline color for dark mode readability */
         [data-theme="dark"] .hero-lead,
         [data-theme="dark"] .cta-lead {
             color: #e2f0f1 !important;
         }
-        /* Board Certifications title — brighter in dark mode */
+        /* Board Certifications title: brighter in dark mode */
         [data-theme="dark"] .certification-title-modern {
             color: #8fd6cc;
         }
@@ -2635,7 +2635,7 @@
         [data-theme="dark"] .theme-icon-moon { display: none; }
 
         /* ============================================
-           PRINT STYLESHEET — optimized for pharma review,
+           PRINT STYLESHEET: optimized for pharma review,
            CV printing, and hard-copy bio sharing.
            ============================================ */
         @media print {
@@ -2701,12 +2701,12 @@
             }
             .container { max-width: 100% !important; padding: 0 !important; }
             .section { padding: 10pt 0 !important; }
-            /* Hero image — constrain for print, center on page */
+            /* Hero image: constrain for print, center on page */
             .profile-image { max-width: 140px !important; margin: 0 auto 14pt !important; }
             .profile-image img { width: 100% !important; height: auto !important; }
             /* Skip-link doesn't belong in print */
             .skip-to-content { display: none !important; }
-            /* Iframes (maps) would print as a big blank box — hide */
+            /* Iframes (maps) would print as a big blank box: hide */
             iframe { display: none !important; }
             /* Flagship badge stays but simpler */
             .flagship-badge { background: #000 !important; color: white !important; }
@@ -2814,7 +2814,7 @@
                     <picture>
                         <source type="image/webp" srcset="images/weintraub-headshot-400.webp 400w, images/weintraub-headshot-800.webp 800w" sizes="(max-width: 768px) 350px, 500px">
                         <source type="image/jpeg" srcset="images/weintraub-headshot-400.jpg 400w, images/weintraub-headshot-800.jpg 800w" sizes="(max-width: 768px) 350px, 500px">
-                        <img src="images/weintraub-headshot-800.jpg" alt="Dr. Michael A. Weintraub, MD — Endocrinologist & Obesity Medicine Specialist" width="800" height="800" loading="eager" fetchpriority="high" decoding="async">
+                        <img src="images/weintraub-headshot-800.jpg" alt="Dr. Michael A. Weintraub, MD, Endocrinologist & Obesity Medicine Specialist" width="800" height="800" loading="eager" fetchpriority="high" decoding="async">
                     </picture>
                 </div>
             </div>
@@ -3050,13 +3050,13 @@
             <ol class="education-timeline fade-in-element delay-1">
                 <li class="education-timeline-item">
                     <span class="education-timeline-marker" aria-hidden="true"></span>
-                    <h3 class="education-timeline-degree">Fellowship — Endocrinology, Diabetes & Metabolism</h3>
+                    <h3 class="education-timeline-degree">Fellowship: Endocrinology, Diabetes & Metabolism</h3>
                     <div class="education-timeline-institution">Cornell NewYork-Presbyterian Hospital</div>
                     <div class="education-timeline-institution">Memorial Sloan Kettering Cancer Center</div>
                 </li>
                 <li class="education-timeline-item">
                     <span class="education-timeline-marker" aria-hidden="true"></span>
-                    <h3 class="education-timeline-degree">Residency — Internal Medicine</h3>
+                    <h3 class="education-timeline-degree">Residency: Internal Medicine</h3>
                     <div class="education-timeline-institution">Thomas Jefferson University Hospital</div>
                 </li>
                 <li class="education-timeline-item">
@@ -3502,7 +3502,7 @@
             document.body.classList.toggle('menu-open', isOpen);
         });
 
-        // Theme toggle — cycles light <-> dark, persists to localStorage
+        // Theme toggle: cycles light <-> dark, persists to localStorage
         (function() {
             const toggle = document.getElementById('themeToggle');
             if (!toggle) return;
